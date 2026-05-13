@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>5.4 · System Overview — AI Claims Agent Workbench</title>
+  <style>
+    :root {
+      --bg: #f7f8f5;
+      --ink: #181818;
+      --ink-2: #555555;
+      --ink-3: #8a8a86;
+      --line: #dfe0db;
+      --line-strong: #c2c3bd;
+      --card: #ffffff;
+      --card-muted: #eef0ea;
+      --accent: #0f4c4a;
+      --accent-soft: #e5efed;
+      --accent-edge: #cee0dd;
+      --accent-2: #4a5a64;
+      --accent-2-soft: #ebedef;
+      --accent-2-edge: #d5d8da;
+      --chip-bg: #f1f3ed;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: flex; justify-content: center; align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    /* 16:9 slide */
+    .slide {
+      width: 1600px;
+      height: 900px;
+      background: var(--bg);
+      padding: 30px 56px 28px;
+      position: relative;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .eyebrow {
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    h1 {
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: -0.01em;
+      margin: 0;
+      line-height: 1.1;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: var(--ink-2);
+      margin: 4px 0 0;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+    .subtitle em {
+      font-style: normal;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Canvas wraps everything below the title */
+    .canvas {
+      flex: 1;
+      display: flex; flex-direction: column;
+      margin-top: 16px;
+      min-height: 0;
+    }
+
+    /* Top row: main stack */
+    .top-row {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+
+    .stack {
+      display: flex; flex-direction: column;
+      gap: 8px;
+      min-height: 0;
+      flex: 1;
+    }
+
+    /* Main layer card */
+    .layer {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: grid;
+      grid-template-columns: 30px 1fr auto;
+      column-gap: 16px;
+      align-items: center;
+      flex: 1;
+      min-height: 0;
+    }
+    .layer-num {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600;
+    }
+    .layer-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0 0 2px 0;
+      letter-spacing: -0.005em;
+    }
+    .layer-tagline {
+      font-size: 11px;
+      color: var(--ink-2);
+      margin: 0;
+      line-height: 1.4;
+      max-width: 600px;
+    }
+    .chips {
+      display: flex; flex-wrap: wrap;
+      gap: 4px;
+      justify-content: flex-end;
+      max-width: 480px;
+    }
+    .chip {
+      font-size: 10.5px;
+      color: var(--ink);
+      background: var(--chip-bg);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 9px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    /* Agentic Suite (Layer 3) — grid + anatomy strip */
+    .layer.agents {
+      grid-template-columns: 30px 1fr;
+      grid-template-rows: auto auto auto;
+      row-gap: 8px;
+      padding: 12px 18px;
+      flex: 1.65;
+    }
+    .layer.agents .layer-head { grid-column: 2; }
+    .agent-grid {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+    }
+    .agent {
+      font-size: 10.5px;
+      color: var(--ink);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-edge);
+      border-radius: 5px;
+      padding: 5px 8px;
+      display: flex; align-items: center;
+      gap: 6px;
+      min-height: 24px;
+    }
+    .agent .dot {
+      width: 4.5px; height: 4.5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex: none;
+    }
+
+    /* Anatomy strip — compact */
+    .anatomy {
+      grid-column: 2;
+      margin-top: 2px;
+      display: flex; align-items: center;
+      gap: 12px;
+      padding: 6px 12px;
+      background: rgba(15, 76, 74, 0.05);
+      border-radius: 6px;
+    }
+    .anatomy-label {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      flex: none;
+    }
+    .anatomy-flow {
+      display: flex; align-items: center;
+      gap: 7px;
+      flex: 1;
+    }
+    .anatomy-step {
+      font-size: 10.5px;
+      color: var(--ink);
+      background: #ffffff;
+      border: 1px solid var(--accent-edge);
+      border-radius: 4px;
+      padding: 4px 9px;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    .anatomy-step.llm {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      font-weight: 500;
+      display: inline-flex; align-items: center;
+      gap: 8px;
+    }
+    .anatomy-step.llm .sub {
+      font-size: 9.5px;
+      font-weight: 400;
+      opacity: 0.92;
+      border-left: 1px solid rgba(255,255,255,0.4);
+      padding-left: 8px;
+      letter-spacing: 0.02em;
+    }
+    .anatomy-arrow {
+      font-size: 11px;
+      color: var(--ink-3);
+      flex: none;
+    }
+
+    /* Boundary between above- and below-the-line */
+    .boundary {
+      display: flex; align-items: center;
+      gap: 14px;
+      margin: 12px 0 8px;
+    }
+    .boundary-line {
+      flex: 1;
+      border-top: 1px dashed var(--line-strong);
+    }
+    .boundary-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      font-weight: 700;
+    }
+
+    /* External tier (below the line) */
+    .external {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 16px;
+      min-height: 0;
+    }
+    .ext-card {
+      background: var(--card-muted);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 16px;
+      display: flex; flex-direction: column;
+      min-height: 0;
+    }
+    .ext-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-2);
+      margin: 0 0 2px;
+    }
+    .ext-sub {
+      font-weight: 400;
+      color: var(--ink-3);
+      font-size: 11px;
+    }
+    .ext-tagline {
+      font-size: 10.5px;
+      color: var(--ink-2);
+      margin: 0 0 6px;
+      line-height: 1.4;
+    }
+    .ext-card .chips {
+      justify-content: flex-start;
+      max-width: none;
+      margin-top: auto;
+    }
+    .ext-card .chip {
+      background: #ffffff;
+      color: var(--ink-2);
+    }
+
+    /* Monitoring band */
+    .monitoring {
+      margin-top: 10px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-top: 2px solid var(--accent-2);
+      border-radius: 8px;
+      padding: 9px 18px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 20px;
+      align-items: center;
+    }
+    .mon-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0;
+      display: flex; gap: 10px;
+      align-items: baseline;
+    }
+    .mon-title .tag {
+      font-size: 11px;
+      color: var(--ink-2);
+      font-weight: 400;
+    }
+    .monitoring .chips {
+      max-width: none;
+      justify-content: flex-end;
+    }
+
+    @media print {
+      body { background: var(--bg); }
+      @page { size: 1600px 900px; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <section class="slide" aria-label="System Overview — AI Claims Agent Workbench">
+    <div class="eyebrow">5.4 · System overview</div>
+    <h1>The AI Claims Agent Workbench</h1>
+    <p class="subtitle">An operational layer <em>on top of</em> what you already have — no CMS replacement required.</p>
+
+    <div class="canvas">
+      <!-- ABOVE THE LINE: main stack + cross-cutting sidecar -->
+      <div class="top-row">
+        <div class="stack">
+          <!-- Layer 1 -->
+          <div class="layer">
+            <div class="layer-num">1</div>
+            <div>
+              <div class="layer-title">Adjuster Workbench</div>
+              <p class="layer-tagline">Single interface where adjusters review agent output and make decisions.</p>
+            </div>
+            <div class="chips">
+              <span class="chip">Coverage</span>
+              <span class="chip">Documents</span>
+              <span class="chip">Fraud</span>
+              <span class="chip">Deadlines</span>
+              <span class="chip">Reserves</span>
+            </div>
+          </div>
+
+          <!-- Layer 2 -->
+          <div class="layer">
+            <div class="layer-num">2</div>
+            <div>
+              <div class="layer-title">Orchestrator</div>
+              <p class="layer-tagline">Receives claim events, dispatches agents, sequences their work.</p>
+            </div>
+            <div class="chips">
+              <span class="chip">Event handling</span>
+              <span class="chip">Agent dispatch</span>
+              <span class="chip">Deadline alerts</span>
+            </div>
+          </div>
+
+          <!-- Layer 3 -->
+          <div class="layer agents">
+            <div class="layer-num">3</div>
+            <div class="layer-head">
+              <div class="layer-title">Agentic Suite — 12 specialized agents</div>
+              <p class="layer-tagline">Twelve specialized agents, each handling a single claims task.</p>
+            </div>
+            <div class="agent-grid">
+              <div class="agent"><span class="dot"></span>FNOL Intake</div>
+              <div class="agent"><span class="dot"></span>Coverage Verification</div>
+              <div class="agent"><span class="dot"></span>Damage Assessment</div>
+              <div class="agent"><span class="dot"></span>Document Consistency</div>
+              <div class="agent"><span class="dot"></span>Fraud Triage</div>
+              <div class="agent"><span class="dot"></span>Reserve Recommendation</div>
+              <div class="agent"><span class="dot"></span>Compliance &amp; Deadlines</div>
+              <div class="agent"><span class="dot"></span>Subrogation</div>
+              <div class="agent"><span class="dot"></span>Estimate Review</div>
+              <div class="agent"><span class="dot"></span>Customer Communication</div>
+              <div class="agent"><span class="dot"></span>Settlement &amp; Payment</div>
+              <div class="agent"><span class="dot"></span>Litigation Risk</div>
+            </div>
+            <div class="anatomy">
+              <span class="anatomy-label">Inside each agent</span>
+              <div class="anatomy-flow">
+                <span class="anatomy-step">System prompt</span>
+                <span class="anatomy-arrow">→</span>
+                <span class="anatomy-step llm">
+                  <span>LLM core</span>
+                  <span class="sub">Tools · RAG · Memory</span>
+                </span>
+                <span class="anatomy-arrow">→</span>
+                <span class="anatomy-step">Schema-validated output</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Layer 4 -->
+          <div class="layer">
+            <div class="layer-num">4</div>
+            <div>
+              <div class="layer-title">Integration Layer</div>
+              <p class="layer-tagline">Single gateway connecting agents to carrier systems and external data.</p>
+            </div>
+            <div class="chips">
+              <span class="chip">ACORD</span>
+              <span class="chip">Carrier adapters</span>
+              <span class="chip">PII controls</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Boundary -->
+      <div class="boundary" aria-hidden="true">
+        <span class="boundary-line"></span>
+        <span class="boundary-label">below the line — what we connect to</span>
+        <span class="boundary-line"></span>
+      </div>
+
+      <!-- BELOW THE LINE: external systems -->
+      <div class="external">
+        <div class="ext-card">
+          <div class="ext-title">Carrier Stack <span class="ext-sub">— your existing systems</span></div>
+          <p class="ext-tagline">Reached through the Integration Layer.</p>
+          <div class="chips">
+            <span class="chip">Policy admin</span>
+            <span class="chip">Claims mgmt</span>
+            <span class="chip">Document store</span>
+          </div>
+        </div>
+        <div class="ext-card">
+          <div class="ext-title">External Data Sources <span class="ext-sub">— third-party</span></div>
+          <p class="ext-tagline">Reached through the Integration Layer.</p>
+          <div class="chips">
+            <span class="chip">Weather</span>
+            <span class="chip">Property data</span>
+            <span class="chip">ClaimSearch</span>
+            <span class="chip">LexisNexis</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monitoring band -->
+      <div class="monitoring" aria-label="Monitoring and analysis">
+        <div class="mon-title">
+          Monitoring &amp; Analysis
+          <span class="tag">Traces and metrics for every agent call and decision.</span>
+        </div>
+        <div class="chips">
+          <span class="chip">Traces</span>
+          <span class="chip">Metrics</span>
+          <span class="chip">Quality scoring</span>
+          <span class="chip">Drift detection</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

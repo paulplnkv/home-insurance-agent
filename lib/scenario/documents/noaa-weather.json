@@ -1,0 +1,39 @@
+{
+  "id": "noaa-weather",
+  "kind": "weather_verification",
+  "title": "NOAA Weather Verification — Storm Events Database Query",
+  "filename": "NOAA_StormEvents_75024_2026-04.json",
+  "metadata": {
+    "data_source": "NOAA NCEI Storm Events Database (synthetic facsimile for claim verification)",
+    "query_zip": "75024",
+    "query_radius_miles": 5,
+    "query_date_range": { "from": "2026-04-15", "to": "2026-04-25" },
+    "query_perils": ["Hail"],
+    "queried_at": "2026-04-27T14:02:11Z",
+    "operator": "Maria Wells (Adjuster)"
+  },
+  "events": [
+    {
+      "event_id": "STM-NCEI-2026-TX-001942",
+      "event_type": "Hail",
+      "begin_date_local": "2026-04-19",
+      "begin_time_local": "16:42 CDT",
+      "end_time_local": "17:11 CDT",
+      "max_hail_size_inches": 1.5,
+      "narrative": "Severe thunderstorm produced hail to 1.5 inches diameter across northern Plano, including ZIP 75024. Multiple reports of vehicle and roof damage in the Oak Ridge / Custer Ridge corridor. Public reports submitted via Skywarn between 16:48 and 17:30 CDT.",
+      "verified_zip_within_radius": ["75024", "75025", "75093"]
+    }
+  ],
+  "queried_date_of_loss": "2026-04-22",
+  "events_on_queried_date_of_loss": [],
+  "match_summary": {
+    "qualifying_event_on_reported_date": false,
+    "nearest_qualifying_event": {
+      "event_id": "STM-NCEI-2026-TX-001942",
+      "date": "2026-04-19",
+      "delta_days_from_reported_loss": 3,
+      "max_hail_size_inches": 1.5
+    },
+    "notes": "No qualifying hail event recorded in ZIP 75024 (or within 5 mi) on 2026-04-22, the reported date of loss. The nearest qualifying hail event was 2026-04-19, three days earlier. Recommend confirming date of loss with insured before proceeding with coverage determination."
+  }
+}

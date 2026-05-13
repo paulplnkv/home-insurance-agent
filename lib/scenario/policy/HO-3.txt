@@ -1,0 +1,424 @@
+HOMEOWNERS 3 — SPECIAL FORM
+ISO HO 00 03 (10/00)
+
+This policy contains all the terms, conditions, and limitations of the homeowners insurance contract between the named insured and the company. In return for payment of the premium and subject to the terms of this policy, we provide the insurance described in this policy. Please read this policy carefully and keep it with your important records.
+
+DECLARATIONS PAGE
+
+Policy Number: HO-2025-0915-44217
+Policy Form: HO-3 (ISO HO 00 03 10/00) Special Form
+
+Named Insured: Maria Chen
+Mailing Address: 4521 Oak Ridge Dr, Plano, TX 75024
+Residence Premises: 4521 Oak Ridge Dr, Plano, TX 75024
+
+Policy Period: From 2025-09-15 12:01 AM to 2026-09-15 12:01 AM, standard time at the residence premises.
+
+Section I — Property Coverages and Limits of Liability:
+1. Coverage A — Dwelling: $480,000
+2. Coverage B — Other Structures: $48,000
+3. Coverage C — Personal Property: $240,000
+4. Coverage D — Loss of Use: $96,000
+
+Section I Deductibles:
+- All Other Perils (AOP) Deductible: $1,000
+- Windstorm or Hail Percentage Deductible: 2% of the Coverage A limit of liability ($9,600 on the policy effective date), applicable to direct physical loss to property covered under Section I caused by the Peril of Windstorm or Hail. See Endorsement HE-7 attached.
+
+Section II — Liability Coverages and Limits of Liability:
+1. Coverage E — Personal Liability: $300,000 each occurrence
+2. Coverage F — Medical Payments to Others: $5,000 each person
+
+Forms and Endorsements Attached:
+- HO 00 03 10/00 — Homeowners 3 Special Form (this policy)
+- HE-7 — Windstorm or Hail Percentage Deductible
+- HO 04 90 — Ordinance or Law Coverage (10% of Coverage A additional amount)
+- HO 04 41 — Limited Fungi, Wet or Dry Rot, or Bacteria Coverage ($10,000 aggregate sublimit)
+
+Premium Summary:
+- Section I Property Coverages: $1,842
+- Section II Liability Coverages: $124
+- Endorsement HE-7 (Wind/Hail): $214
+- Endorsement HO 04 90 (Ordinance or Law): $138
+- Endorsement HO 04 41 (Limited Mold): $98
+- Total Annual Premium: $2,416
+
+Mortgagee: Plano Federal Savings Bank, ISAOA, 2200 W Parker Rd, Plano, TX 75023, Loan No. PFS-2018-0049217.
+
+DEFINITIONS
+
+In this policy, **you** and **your** refer to the named insured shown in the Declarations and the spouse if a resident of the same household. **We**, **us**, and **our** refer to the company providing this insurance. In addition, certain words and phrases are defined as follows:
+
+1. **Aircraft Liability**, **Hovercraft Liability**, **Motor Vehicle Liability**, and **Watercraft Liability**, subject to the provisions in paragraph 6 below, mean the following:
+   a. Liability for **bodily injury** or **property damage** arising out of the ownership, maintenance, occupancy, operation, use, loading or unloading, of an aircraft, hovercraft, motor vehicle, or watercraft owned, operated, or rented by an **insured**;
+   b. Vicarious liability, whether or not statutorily imposed, for the actions of a child or minor using such aircraft, hovercraft, motor vehicle, or watercraft.
+
+2. **Bodily injury** means bodily harm, sickness, or disease, including required care, loss of services and death that results.
+
+3. **Business** means:
+   a. A trade, profession, or occupation engaged in on a full-time, part-time, or occasional basis; or
+   b. Any other activity engaged in for money or other compensation, except certain enumerated activities of mutual exchange or volunteer work.
+
+4. **Employee** means an employee of an **insured**, or an employee leased to an **insured** by a labor leasing firm under an agreement between the **insured** and the labor leasing firm, whose duties are other than those performed by a **residence employee**.
+
+5. **Insured** means **you** and residents of **your** household who are: your relatives; or other persons under the age of 21 and in the care of any person named above. Under Section II, **insured** also means, with respect to vehicles to which this policy applies: persons while engaged in **your** employment or the employment of any other **insured**; or any person or organization legally responsible for animals or watercraft owned by an **insured**.
+
+6. **Insured location** means:
+   a. The **residence premises**;
+   b. That part of other premises, other structures, and grounds used by **you** as a residence and which is shown in the Declarations;
+   c. Any premises used by **you** in connection with a premises in 6.a or 6.b above;
+   d. Any part of a premises not owned by an **insured** but where an **insured** is temporarily residing;
+   e. Vacant land, other than farm land, owned by or rented to an **insured**;
+   f. Land owned by or rented to an **insured** on which a one or two family dwelling is being built as a residence for an **insured**;
+   g. Individual or family cemetery plots or burial vaults of an **insured**.
+
+7. **Occurrence** means an accident, including continuous or repeated exposure to substantially the same general harmful conditions, which results, during the policy period, in: bodily injury; or property damage.
+
+8. **Property damage** means physical injury to, destruction of, or loss of use of tangible property.
+
+9. **Residence employee** means: an employee of an **insured**, or an employee leased to an **insured** by a labor leasing firm, whose duties are related to the maintenance or use of the **residence premises**, including household or domestic services; or one who performs similar duties elsewhere not related to the **business** of an **insured**.
+
+10. **Residence premises** means: the one family dwelling where **you** reside; the two, three, or four family dwelling where **you** reside in at least one of the family units; or that part of any other building where **you** reside; and which is shown as the **residence premises** in the Declarations. **Residence premises** also includes other structures and grounds at that location.
+
+11. **Actual Cash Value** means the cost to repair or replace property at the time of loss, less depreciation reflecting age, condition, wear and tear, and useful life remaining. Where applicable, **actual cash value** for roof surfacing materials shall be determined as set forth in Section I — Conditions, Loss Settlement.
+
+12. **Replacement Cost Value** means the cost, at the time of loss, to repair or replace damaged property with new materials of like kind and quality, without deduction for depreciation.
+
+13. **Windstorm** means atmospheric disturbance accompanied by wind of sufficient violence to cause direct damage to property covered by this policy. **Hail** means precipitation in the form of pellets or balls of ice falling from the atmosphere. For purposes of the deductible specified in Endorsement HE-7, **Windstorm** and **Hail** include any direct loss caused by such atmospheric conditions, whether occurring as a single event or as part of a tropical or convective storm system.
+
+14. **Ordinance or Law** means any ordinance or law: regulating the construction, repair, or demolition of a building or other structure, the requirements of which are enforced after the time of loss; or requiring the demolition of a building or other structure, including the cost of removing its debris, the requirements of which are enforced after the time of loss.
+
+15. **Building** means a structure with walls and a roof, but does not mean any structure or property contained within a structure that is intended to be portable. **Building** includes the dwelling, additions in contact with the dwelling, and other structures on the **residence premises** as described in Coverages A and B.
+
+16. **Earthquake** means a shaking or trembling of the earth caused by underground volcanic, tectonic, or other geological forces, including any associated land shock waves, tremors, or aftershocks. **Earthquake** does not include man-made events such as blasting, mining, or vibration from construction equipment, regardless of whether the resulting loss is otherwise excluded under this policy.
+
+17. **Flood** means a general and temporary condition of partial or complete inundation of normally dry land areas from: overflow of inland or tidal waters; unusual and rapid accumulation or runoff of surface waters from any source; or mudflow caused by accumulations of water on or under the ground. Coverage for **flood** is not provided under this policy and may be available through the National Flood Insurance Program or a private flood policy.
+
+18. **Pollutants** means any solid, liquid, gaseous, or thermal irritant or contaminant, including smoke, vapor, soot, fumes, acids, alkalis, chemicals, and waste. Waste includes materials to be recycled, reconditioned, or reclaimed.
+
+19. **Property Damage** to roof surfacing materials means physical loss to the outermost covering of the roof, distinguishable from loss to the underlying decking, framing, or interior of the dwelling. Where loss to roof surfacing materials results in ensuing loss to the interior of the dwelling, each component shall be settled under the loss settlement provision applicable to that component as set forth in Section I — Conditions, Loss Settlement.
+
+20. **Reasonable Repairs** means measures **you** take only to protect the property from further damage. If the measures taken involve repair to other damaged property, we will pay for those measures only if that property is covered under this policy and the damage to that property is caused by a Peril Insured Against. **Reasonable repairs** are part of the loss; the cost of **reasonable repairs** does not increase the limit of liability that applies to the property being repaired.
+
+21. **Peril Insured Against** means a cause of loss that is covered under this policy, as set forth in Section I — Perils Insured Against and subject to all applicable exclusions, conditions, and limitations.
+
+22. **Vacant** means a building that contains no contents pertaining to operations or activities customary to its occupancy, except for vacancies of less than 60 consecutive days immediately preceding the date of loss. A building under construction is not considered **vacant**.
+
+23. **Loss** means direct physical injury to or destruction of property covered under this policy, occurring during the policy period and caused by a Peril Insured Against. **Loss** does not include consequential loss, loss of value, or any indirect or remote loss not specifically provided for under this policy.
+
+24. **Replacement Cost** for purposes of Coverage A and Coverage B means the cost, at the time of loss, to repair or rebuild the damaged property using new materials of like kind and quality, including the cost of labor, materials, supervision, contractor's overhead, and contractor's profit, in accordance with applicable building practices and codes in effect at the policy effective date, and without deduction for depreciation. **Replacement Cost** does not include any increased cost arising from the enforcement of any **Ordinance or Law**, except as provided under Endorsement HO 04 90.
+
+SECTION I — PROPERTY COVERAGES
+
+COVERAGE A — DWELLING
+
+1. We cover:
+   a. The dwelling on the **residence premises** shown in the Declarations, including structures attached to the dwelling; and
+   b. Materials and supplies located on or next to the **residence premises** used to construct, alter, or repair the dwelling or other structures on the **residence premises**.
+
+2. We do not cover land, including the land on which the dwelling is located.
+
+3. The Coverage A limit of liability shown in the Declarations is the most we will pay for any one loss, before application of the applicable deductible and subject to the Loss Settlement provisions in Section I — Conditions. The Coverage A limit applies separately to the dwelling described in Coverage A.1.a and to materials and supplies described in Coverage A.1.b.
+
+4. Coverage A includes the cost to repair or replace the roof surfacing materials, subject to the loss settlement basis described in Section I — Conditions, Loss Settlement, paragraph 2 (ACV/RCV roof provision).
+
+COVERAGE B — OTHER STRUCTURES
+
+1. We cover other structures on the **residence premises** set apart from the dwelling by clear space. This includes structures connected to the dwelling by only a fence, utility line, or similar connection.
+
+2. We do not cover:
+   a. Land, including the land on which the other structures are located;
+   b. Other structures rented or held for rental to any person not a tenant of the dwelling, unless used solely as a private garage;
+   c. Other structures from which any **business** is conducted; or
+   d. Other structures used to store **business** property. However, we do cover a structure that contains **business** property solely owned by an **insured** or a tenant of the dwelling provided that **business** property does not include gaseous or liquid fuel, other than fuel in a permanently installed fuel tank of a vehicle or craft parked or stored in the structure.
+
+3. The Coverage B limit of liability is shown in the Declarations and is the most we will pay in any one loss, before application of the applicable deductible.
+
+COVERAGE C — PERSONAL PROPERTY
+
+1. We cover personal property owned or used by an **insured** while it is anywhere in the world. After a loss, and at **your** request, we will cover personal property owned by: others while the property is on the part of the **residence premises** occupied by an **insured**; or a guest or a **residence employee**, while the property is in any residence occupied by an **insured**.
+
+2. The Coverage C limit of liability is shown in the Declarations. Our limit of liability for personal property usually located at an **insured's** residence, other than the **residence premises**, is 10% of the Coverage C limit, or $1,000, whichever is greater.
+
+3. Special limits of liability apply to certain categories of personal property, including but not limited to: $200 on money, bank notes, bullion, gold and silver other than goldware and silverware, and platinum; $1,500 on securities, accounts, deeds, evidences of debt, letters of credit, manuscripts, personal records, passports, tickets, and stamps; $1,500 on watercraft of all types; $1,500 on trailers not used with watercraft; $1,500 for loss by theft of jewelry, watches, furs, precious and semi-precious stones; $2,500 for loss by theft of firearms and related equipment; $2,500 for loss by theft of silverware, silver-plated ware, goldware, gold-plated ware, and pewterware.
+
+4. We do not cover: articles separately described and specifically insured in this or any other insurance; animals, birds, or fish; motor vehicles (except as provided in Coverage C, paragraph 5 below); aircraft and parts; property of roomers, boarders, and other tenants not related to an **insured**; property in an apartment regularly rented or held for rental to others by an **insured**, except as provided in Section I — Property Coverages; property rented or held for rental to others off the **residence premises**; **business** data, including such data stored in books of account, drawings or other paper records, computers and electronic data processing tape, wire, recording disc, drum, cell, or other data processing devices, except in certain limited circumstances; and credit cards, electronic fund transfer cards, or access devices used solely for deposit, withdrawal, or transfer of funds, except as provided in Section I — Property Coverages, Additional Coverages.
+
+COVERAGE D — LOSS OF USE
+
+The Coverage D limit of liability is the total limit for the coverages described below.
+
+1. If a loss covered under Section I makes that part of the **residence premises** where **you** reside not fit to live in, we cover, at **your** choice, either:
+   a. **Additional Living Expense**, meaning any necessary increase in living expenses incurred by **you** so that **your** household can maintain its normal standard of living; or
+   b. **Fair Rental Value**, meaning the fair rental value of that part of the **residence premises** where **you** reside, less any expenses that do not continue while the premises is not fit to live in.
+
+2. If a loss not covered under Section I causes a civil authority to prohibit **your** use of the **residence premises** as a result of direct damage to neighboring premises by a Peril Insured Against, we cover the loss as provided in 1.a and 1.b above for no more than two weeks.
+
+3. The periods of time under 1.a, 1.b, and 2 above are not limited by expiration of this policy.
+
+We do not cover loss or expense due to cancellation of a lease or agreement.
+
+SECTION I — PERILS INSURED AGAINST
+
+COVERAGES A AND B
+
+We insure against direct physical loss to property described in Coverages A and B, except as set forth below. We do not insure, however, for loss:
+
+1. Excluded under Section I — Exclusions;
+
+2. Involving collapse, except as provided in Section I — Property Coverages, Additional Coverages;
+
+3. Caused by:
+   a. Freezing of a plumbing, heating, air conditioning, or automatic fire protective sprinkler system, or of a household appliance, or by discharge, leakage, or overflow from within the system or appliance caused by freezing, while the dwelling is vacant, unoccupied, or being constructed, unless **you** have used reasonable care to maintain heat in the building, or shut off the water supply and drain all systems and appliances of water;
+   b. Freezing, thawing, pressure, or weight of water or ice, whether driven by wind or not, to certain enumerated property;
+   c. Theft in or to a dwelling under construction, or of materials and supplies for use in the construction;
+   d. Vandalism and malicious mischief, and any ensuing loss caused by any intentional and wrongful act, if the dwelling has been vacant for more than 60 consecutive days immediately before the loss;
+   e. Mold, fungus, or wet rot, except as provided in Endorsement HO 04 41;
+   f. Any of the following: wear and tear, marring, or deterioration; mechanical breakdown, latent defect, inherent vice, or any quality in property that causes it to damage or destroy itself; smog, rust, or other corrosion, or dry rot; smoke from agricultural smudging or industrial operations; discharge, dispersal, seepage, migration, release, or escape of pollutants, unless caused by a Peril Insured Against; settling, shrinking, bulging, or expansion of pavements, patios, foundations, walls, floors, roofs, or ceilings; birds, vermin, rodents, or insects; or animals owned or kept by an **insured**.
+
+Open Perils Coverage Statement: Subject to the exclusions and limitations stated above and in Section I — Exclusions, Coverage A and Coverage B insure against direct physical loss caused by all perils, including but not limited to fire, lightning, windstorm, hail, explosion, riot or civil commotion, aircraft, vehicles, smoke, vandalism, theft (subject to the limitations above), falling objects, weight of ice, snow, or sleet, accidental discharge or overflow of water or steam, sudden and accidental tearing apart, cracking, burning, or bulging of a steam, hot water, air conditioning, or automatic fire protective sprinkler system, freezing (subject to the limitations above), sudden and accidental damage from artificially generated electrical current, and volcanic eruption (other than loss caused by earthquake, land shock waves, or tremors).
+
+COVERAGE C
+
+We insure for direct physical loss to the property described in Coverage C caused by the following Perils Insured Against, subject to the exclusions and conditions of this policy:
+
+1. **Fire or lightning.**
+2. **Windstorm or hail**, but excluding loss to: property contained in a building, caused by rain, snow, sleet, sand, or dust unless the direct force of wind or hail makes an opening in the roof or wall and the rain, snow, sleet, sand, or dust enters through this opening; watercraft of all types and their trailers, furnishings, equipment, and outboard engines or motors, unless inside a fully enclosed building; or trees, shrubs, or plants.
+3. **Explosion.**
+4. **Riot or civil commotion.**
+5. **Aircraft**, including self-propelled missiles and spacecraft.
+6. **Vehicles.**
+7. **Smoke**, meaning sudden and accidental damage from smoke, but excluding loss caused by smoke from agricultural smudging or industrial operations.
+8. **Vandalism or malicious mischief.**
+9. **Theft**, including attempted theft and loss of property from a known place when it is likely the property has been stolen, with certain enumerated limitations.
+10. **Falling objects**, but excluding loss to property contained in a building unless the roof or an outside wall of the building is first damaged by a falling object.
+11. **Weight of ice, snow, or sleet** which causes damage to property contained in a building.
+12. **Accidental discharge or overflow of water or steam** from within a plumbing, heating, air conditioning, or automatic fire protective sprinkler system, or from within a household appliance.
+13. **Sudden and accidental tearing apart, cracking, burning, or bulging** of a steam or hot water heating system, an air conditioning or automatic fire protective sprinkler system, or an appliance for heating water.
+14. **Freezing of a plumbing, heating, air conditioning, or automatic fire protective sprinkler system**, or of a household appliance, subject to the limitations stated in Coverages A and B above.
+15. **Sudden and accidental damage from artificially generated electrical current.**
+16. **Volcanic eruption** other than loss caused by earthquake, land shock waves, or tremors.
+
+SECTION I — EXCLUSIONS
+
+A. ANTI-CONCURRENT CAUSATION CLAUSE.
+
+We do not insure for loss caused directly or indirectly by any of the following. Such loss is excluded regardless of any other cause or event contributing concurrently or in any sequence to the loss. These exclusions apply whether or not the loss event results in widespread damage or affects a substantial area.
+
+1. **Ordinance or Law**, meaning any ordinance or law: regulating the construction, repair, or demolition of a building or other structure, unless specifically provided under this policy; or requiring the tearing down of any building or other structure, including the costs of removing its debris. This Exclusion A.1 does not apply to the amount of coverage that may be provided for in Section I — Property Coverages, Additional Coverages, Ordinance or Law, or where additional coverage is purchased through Endorsement HO 04 90.
+
+2. **Earth Movement**, meaning earthquake, including land shock waves or tremors before, during, or after a volcanic eruption; landslide, mudslide, or mudflow; subsidence or sinkhole; or any other earth movement including earth sinking, rising, or shifting. This Exclusion A.2 does not apply to direct loss by fire or explosion that ensues.
+
+3. **Water Damage**, meaning: flood, surface water, waves, tidal water, overflow of a body of water, or spray from any of these, whether or not driven by wind; water or water-borne material which backs up through sewers or drains, or which overflows or is discharged from a sump, sump pump, or related equipment; or water or water-borne material below the surface of the ground, including water which exerts pressure on or seeps or leaks through a building, sidewalk, driveway, foundation, swimming pool, or other structure. Direct loss by fire, explosion, or theft resulting from water damage is covered.
+
+4. **Power Failure**, meaning the failure of power or other utility service if the failure takes place off the **residence premises**. But, if the failure of power or other utility service results in a loss, from a Peril Insured Against on the **residence premises**, we will pay for the loss caused by that Peril Insured Against.
+
+5. **Neglect**, meaning neglect of an **insured** to use all reasonable means to save and preserve property at and after the time of a loss.
+
+6. **War**, including the following and any consequence of any of the following: undeclared war, civil war, insurrection, rebellion, or revolution; warlike act by a military force or military personnel; or destruction, seizure, or use for a military purpose. Discharge of a nuclear weapon shall be deemed a warlike act even if accidental.
+
+7. **Nuclear Hazard**, to the extent set forth in the Nuclear Hazard Clause of Section I — Conditions.
+
+8. **Intentional Loss**, meaning any loss arising out of any act an **insured** commits or conspires to commit with the intent to cause a loss.
+
+9. **Governmental Action**, meaning the destruction, confiscation, or seizure of property described in Coverage A, B, or C by order of any governmental or public authority. This exclusion does not apply to such acts ordered by any governmental or public authority that are taken at the time of a fire to prevent its spread, if the loss caused by fire would be covered under this policy.
+
+B. ADDITIONAL EXCLUSIONS APPLICABLE TO COVERAGES A AND B.
+
+We do not insure for loss to property described in Coverages A and B caused by any of the following. However, any ensuing loss to property described in Coverages A and B not precluded by any other provision in this policy is covered.
+
+1. Weather conditions, but only if weather conditions contribute in any way with a cause or event excluded in Paragraph A above to produce the loss;
+
+2. Acts or decisions, including the failure to act or decide, of any person, group, organization, or governmental body;
+
+3. Faulty, inadequate, or defective: planning, zoning, development, surveying, siting; design, specifications, workmanship, repair, construction, renovation, remodeling, grading, compaction; materials used in repair, construction, renovation, or remodeling; or maintenance of part or all of any property whether on or off the **residence premises**.
+
+SECTION I — CONDITIONS
+
+1. **Insurable Interest and Limit of Liability.** Even if more than one person has an insurable interest in the property covered, we will not be liable in any one loss to: an **insured**, for more than the amount of such **insured's** interest at the time of loss; or for more than the applicable limit of liability.
+
+2. **Loss Settlement.**
+
+   a. **Property at Replacement Cost.** Covered property losses are settled as follows. Buildings under Coverage A or B at replacement cost without deduction for depreciation, subject to the following:
+      (1) If, at the time of loss, the amount of insurance in this policy on the damaged building is 80% or more of the full replacement cost of the building immediately before the loss, we will pay the cost to repair or replace, after application of any deductible and without deduction for depreciation, but not more than the least of the following amounts:
+         (a) The limit of liability under this policy that applies to the building;
+         (b) The replacement cost of that part of the building damaged with material of like kind and quality and for like use; or
+         (c) The necessary amount actually spent to repair or replace the damaged building.
+
+      (2) If, at the time of loss, the amount of insurance is less than 80% of the full replacement cost of the building immediately before the loss, we will pay the greater of the following amounts, but not more than the limit of liability under this policy that applies to the building:
+         (a) The actual cash value of that part of the building damaged; or
+         (b) That proportion of the cost to repair or replace, after application of any deductible and without deduction for depreciation, that part of the building damaged, which the total amount of insurance in this policy on the damaged building bears to 80% of the replacement cost of the building.
+
+   b. **Roof Surfacing Materials — Actual Cash Value Loss Settlement.** Notwithstanding paragraph 2.a above, loss to roof surfacing materials caused by the Peril of Windstorm or Hail shall be settled on the following basis:
+
+      (1) Where the roof surfacing materials are 10 years old or less at the time of loss, settlement shall be on a Replacement Cost Value (RCV) basis, without deduction for depreciation, subject to the limit of liability and applicable deductible.
+
+      (2) Where the roof surfacing materials are more than 10 years old at the time of loss, settlement shall be on an Actual Cash Value (ACV) basis. Actual Cash Value shall be determined by applying depreciation to the replacement cost based on the age of the roof surfacing materials, the condition of the roof at the time of loss, and the expected useful life of the roof surfacing materials. For asphalt composition shingles, the expected useful life is 25 years. Depreciation shall be calculated by multiplying the replacement cost by the ratio of the age of the roof to its expected useful life, with adjustment for observed condition. The applicable deductible shall be applied to the actual cash value figure.
+
+      (3) For purposes of this provision, "roof surfacing materials" means the outermost covering of the roof, including but not limited to asphalt composition shingles, wood shake or shingle, tile, slate, metal panels, and modified bitumen membrane, together with related underlayment, flashing, drip edge, and ridge cap. Roof decking, trusses, and structural framing are not roof surfacing materials and shall be settled under paragraph 2.a above.
+
+      (4) Where damage to roof surfacing materials triggers replacement of decking, framing, insulation, or interior finishes due to ensuing water intrusion, those replacement costs shall be settled under paragraph 2.a above, regardless of the age of the roof surfacing materials.
+
+   c. **Personal Property and Structures That Are Not Buildings.** Personal property and structures that are not buildings are settled at actual cash value at the time of loss, but not more than the amount required to repair or replace.
+
+3. **Loss to a Pair or Set.** In case of loss to a pair or set we may elect to: repair or replace any part to restore the pair or set to its value before the loss; or pay the difference between actual cash value of the property before and after the loss.
+
+4. **Appraisal.** If you and we fail to agree on the amount of loss, either may demand an appraisal of the loss. In this event, each party will choose a competent and impartial appraiser within 20 days after receiving a written request from the other.
+
+5. **Other Insurance and Service Agreement.** If a loss covered by this policy is also covered by other insurance or a service agreement, we will pay only the proportion of the loss that the limit of liability that applies under this policy bears to the total amount of insurance covering the loss.
+
+6. **Suit Against Us.** No action can be brought against us unless there has been full compliance with all of the terms under Section I of this policy and the action is started within two years after the date of loss.
+
+7. **Our Option.** If we give you written notice within 30 days after we receive your signed, sworn proof of loss, we may repair or replace any part of the damaged property with material or property of like kind and quality.
+
+8. **Loss Payment.** We will adjust all losses with you. We will pay you unless some other person is named in the policy or is legally entitled to receive payment.
+
+9. **Abandonment of Property.** We need not accept any property abandoned by an **insured**.
+
+10. **Mortgage Clause.** If a mortgagee is named in this policy, any loss payable under Coverage A or B will be paid to the mortgagee and you, as interests appear.
+
+11. **No Benefit to Bailee.** We will not recognize any assignment or grant any coverage that benefits a person or organization holding, storing, or moving property for a fee regardless of any other provision of this policy.
+
+12. **Nuclear Hazard Clause.** Nuclear Hazard means any nuclear reaction, radiation, or radioactive contamination, all whether controlled or uncontrolled or however caused, or any consequence of any of these. Loss caused by the nuclear hazard will not be considered loss caused by fire, explosion, or smoke, whether these perils are specifically named in or otherwise included within the Perils Insured Against in Section I.
+
+13. **Recovered Property.** If you or we recover any property for which we have made payment under this policy, you or we will notify the other of the recovery.
+
+14. **Volcanic Eruption Period.** One or more volcanic eruptions that occur within a 72-hour period will be considered as one volcanic eruption.
+
+SECTION II — LIABILITY COVERAGES
+
+COVERAGE E — PERSONAL LIABILITY
+
+If a claim is made or a suit is brought against an **insured** for damages because of **bodily injury** or **property damage** caused by an **occurrence** to which this coverage applies, we will:
+
+1. Pay up to our limit of liability for the damages for which an **insured** is legally liable. Damages include prejudgment interest awarded against an **insured**; and
+
+2. Provide a defense at our expense by counsel of our choice, even if the suit is groundless, false, or fraudulent. We may investigate and settle any claim or suit that we decide is appropriate. Our duty to settle or defend ends when our limit of liability for the **occurrence** has been exhausted by payment of a judgment or settlement.
+
+The limit of liability for Coverage E is shown in the Declarations and applies to each **occurrence**, regardless of the number of **insureds**, claims made, or persons injured. All **bodily injury** and **property damage** resulting from any one accident or from continuous or repeated exposure to substantially the same general harmful conditions shall be considered to be the result of one **occurrence**.
+
+COVERAGE F — MEDICAL PAYMENTS TO OTHERS
+
+We will pay the necessary medical expenses that are incurred or medically ascertained within three years from the date of an accident causing **bodily injury**. Medical expenses means reasonable charges for medical, surgical, x-ray, dental, ambulance, hospital, professional nursing, prosthetic devices, and funeral services. This coverage does not apply to **you** or regular residents of **your** household, except **residence employees**. As to others, this coverage applies only to a person on the **insured location** with the permission of an **insured**, or off the **insured location** if the **bodily injury**: arises out of a condition on the **insured location** or the ways immediately adjoining; is caused by the activities of an **insured**; is caused by a **residence employee** in the course of the **residence employee's** employment by an **insured**; or is caused by an animal owned by or in the care of an **insured**.
+
+The limit of liability for Coverage F is shown in the Declarations and applies to each person, regardless of the number of **insureds**, claims made, or persons injured.
+
+SECTION II — EXCLUSIONS
+
+A. **Motor Vehicle Liability**, **Watercraft Liability**, **Aircraft Liability**, and **Hovercraft Liability**. Coverage E and Coverage F do not apply to liability arising out of the ownership, maintenance, occupancy, operation, use, loading, or unloading of motor vehicles, watercraft of certain horsepower or length, aircraft, or hovercraft, subject to the standard exceptions for vehicles in dead storage on the **insured location**, vehicles used to service the **insured location**, and certain recreational vehicles.
+
+B. Coverage E and Coverage F do not apply to **bodily injury** or **property damage**:
+
+1. Which is expected or intended by an **insured**, even if the resulting **bodily injury** or **property damage** is of a different kind, quality, or degree than initially expected or intended; or is sustained by a different person, entity, real or personal property, than initially expected or intended;
+
+2. Arising out of or in connection with a **business** conducted from an **insured location** or engaged in by an **insured**;
+
+3. Arising out of the rental or holding for rental of any part of any premises by an **insured**, with limited exceptions for occasional rental of part of the **residence premises**;
+
+4. Arising out of the rendering of or failure to render professional services;
+
+5. Arising out of a premises owned, rented, or rented to others by an **insured** that is not an **insured location**;
+
+6. Arising out of: the transmission of a communicable disease by an **insured**; sexual molestation, corporal punishment, or physical or mental abuse; or the use, sale, manufacture, delivery, transfer, or possession by any person of a controlled substance.
+
+C. Coverage E does not apply to: liability for any loss assessment charged against **you** as a member of an association, corporation, or community of property owners, except as provided under Section II — Additional Coverages; liability under any contract or agreement entered into by an **insured**, except certain enumerated written agreements; **property damage** to property owned by an **insured**; **property damage** to property rented to, occupied or used by, or in the care of an **insured**, with limited exceptions; **bodily injury** to any person eligible to receive benefits required to be provided or voluntarily provided by an **insured** under any workers' compensation, non-occupational disability, or occupational disease law; **bodily injury** or **property damage** for which an **insured** under this policy is also an **insured** under a nuclear energy liability policy.
+
+D. Coverage F does not apply to **bodily injury**: to a **residence employee** if the **bodily injury** occurs off the **insured location** and does not arise out of or in the course of the **residence employee's** employment by an **insured**; to any person eligible to receive benefits required to be provided or voluntarily provided under any workers' compensation, non-occupational disability, or occupational disease law; from any nuclear reaction, radiation, or radioactive contamination, all whether controlled or uncontrolled or however caused, or any consequence of any of these; or to any person, other than a **residence employee** of an **insured**, regularly residing on any part of the **insured location**.
+
+SECTION II — CONDITIONS
+
+1. **Limit of Liability.** Our total liability under Coverage E for all damages resulting from any one **occurrence** will not be more than the Coverage E limit of liability shown in the Declarations. This limit is the same regardless of the number of **insureds**, claims made, or persons injured.
+
+2. **Severability of Insurance.** This insurance applies separately to each **insured**. This condition will not increase our limit of liability for any one **occurrence**.
+
+3. **Duties After Occurrence.** In case of an **occurrence**, **you** or another **insured** will perform the following duties that apply: give written notice to us or our agent as soon as is practical; cooperate with us in the investigation, settlement, or defense of any claim or suit; promptly forward to us every notice, demand, or summons relating to the **occurrence**; at our request, help us in the conduct of suits, including attendance at trial; and submit, as often as we reasonably require, to physical examinations by physicians selected by us.
+
+4. **Duties of an Injured Person — Coverage F.** The injured person, or someone acting for the injured person, will: give us written proof of claim, under oath if required, as soon as is practical; authorize us to obtain copies of medical reports and records; and submit to physical examinations by a physician selected by us.
+
+5. **Payment of Claim — Coverage F.** Payment under this coverage is not an admission of liability by an **insured** or us.
+
+6. **Suit Against Us.** No action shall be brought against us unless there has been compliance with the policy provisions. No one shall have the right to join us as a party to any action against an **insured**.
+
+7. **Bankruptcy of an Insured.** Bankruptcy or insolvency of an **insured** will not relieve us of our obligations under this policy.
+
+8. **Other Insurance.** This insurance is excess over other valid and collectible insurance except insurance written specifically to cover as excess over the limits of liability that apply in this policy.
+
+SECTIONS I AND II — CONDITIONS
+
+1. **Policy Period.** This policy applies only to loss in Section I or **bodily injury** or **property damage** in Section II which occurs during the policy period.
+
+2. **Concealment or Fraud.** With respect to all **insureds** covered under this policy, we provide no coverage for loss under Section I or **bodily injury** or **property damage** under Section II if, whether before or after a loss, an **insured** has: intentionally concealed or misrepresented any material fact or circumstance; engaged in fraudulent conduct; or made false statements relating to this insurance.
+
+3. **Liberalization Clause.** If we make a change which broadens coverage under this edition of our policy without additional premium charge, that change will automatically apply to **your** insurance as of the date we implement the change in **your** state, provided the change is implemented during the policy period or within 60 days before the policy period.
+
+4. **Waiver or Change of Policy Provisions.** A waiver or change of any provision of this policy must be in writing by us to be valid. Our request for an appraisal or examination will not waive any of our rights.
+
+5. **Cancellation.** **You** may cancel this policy at any time by returning it to us or by letting us know in writing of the date cancellation is to take effect. We may cancel only for the reasons stated below by letting **you** know in writing of the date cancellation takes effect, with the notice period and grounds prescribed by applicable state law.
+
+6. **Nonrenewal.** We may elect not to renew this policy. We may do so by delivering to **you**, or mailing to **you** at **your** mailing address shown in the Declarations, written notice at least 30 days before the expiration date of this policy. Proof of mailing will be sufficient proof of notice.
+
+7. **Assignment.** Assignment of this policy will not be valid unless we give our written consent.
+
+8. **Subrogation.** An **insured** may waive in writing before a loss all rights of recovery against any person. If not waived, we may require an assignment of rights of recovery for a loss to the extent that payment is made by us.
+
+9. **Death.** If any person named in the Declarations or the spouse, if a resident of the same household, dies, the following apply: we insure the legal representative of the deceased, but only with respect to the premises and property of the deceased covered under the policy at the time of death; and **insured** includes any member of **your** household who is an **insured** at the time of **your** death, but only while a resident of the **residence premises**, and the person having proper temporary custody of the property until appointment and qualification of a legal representative.
+
+ENDORSEMENTS
+
+HE-7 WIND/HAIL PERCENTAGE DEDUCTIBLE
+
+This endorsement modifies the policy to which it is attached. All other terms and conditions of the policy remain unchanged.
+
+1. **Application of Deductible.** The deductible amount applicable to direct physical loss to property covered under Section I caused by the Peril of **Windstorm** or **Hail** is changed from the All Other Perils (AOP) deductible amount shown in the Declarations to a percentage deductible equal to the percentage of the Coverage A limit of liability shown in the Declarations as the "Windstorm or Hail Percentage Deductible."
+
+2. **Calculation.** The Windstorm or Hail Percentage Deductible amount is calculated by multiplying the percentage stated in the Declarations by the Coverage A limit of liability in effect at the time of loss. On the policy effective date, this percentage is **2%** of the Coverage A limit of $480,000, producing a Windstorm or Hail Percentage Deductible of **$9,600**. If the Coverage A limit of liability is changed during the policy period, the deductible amount changes accordingly as of the effective date of the change.
+
+3. **Trigger.** This deductible applies to any loss to property covered under Section I — Property Coverages where the Peril of **Windstorm** or **Hail** is a covered cause of loss, in whole or in part. Where loss is caused by **Windstorm** or **Hail** and one or more other perils, the Windstorm or Hail Percentage Deductible applies to the entire loss.
+
+4. **Per Occurrence.** The Windstorm or Hail Percentage Deductible applies separately to each **occurrence** of **Windstorm** or **Hail**. For purposes of this endorsement, all loss caused by **Windstorm** or **Hail** during a continuous 72-hour period shall be deemed a single **occurrence**.
+
+5. **Replacement of AOP Deductible.** Where this endorsement applies, the AOP deductible shown in the Declarations does not apply to the same loss. Only the Windstorm or Hail Percentage Deductible is applied. Where the Peril of **Windstorm** or **Hail** does not contribute to the loss, the AOP deductible applies in the manner provided in the policy.
+
+6. **Adjuster Disclosure.** Where the Windstorm or Hail Percentage Deductible applies, the adjuster shall disclose to **you** in writing the calculation of the deductible, the percentage applied, the Coverage A limit of liability used in the calculation, and the resulting dollar amount, prior to issuance of any settlement payment under Section I.
+
+HO 04 90 ORDINANCE OR LAW COVERAGE
+
+This endorsement modifies the policy to which it is attached. All other terms and conditions of the policy remain unchanged.
+
+1. **Coverage Provided.** We provide an additional amount of insurance, equal to **10% of the Coverage A limit of liability** shown in the Declarations, for the increased cost **you** incur due to the enforcement of any **Ordinance or Law** that:
+   a. Requires or regulates the construction, demolition, remodeling, renovation, or repair of that part of a covered building damaged by a Peril Insured Against;
+   b. The requirements of which are in force at the time of loss; and
+   c. Results in **your** incurring increased cost that **you** would not have incurred in the absence of the ordinance or law.
+
+2. **Calculation of Additional Amount.** On the policy effective date, the additional amount of insurance under this endorsement is **$48,000** (10% of the $480,000 Coverage A limit). This amount is in addition to the Coverage A limit of liability and is not reduced by payment of any other Section I covered loss except as provided in paragraph 5 below.
+
+3. **Application.** This endorsement applies only to the increased cost **you** incur due to the enforcement of an **Ordinance or Law** in connection with a loss caused by a Peril Insured Against under this policy. It does not apply to any cost **you** would have incurred in the absence of the ordinance or law, nor to any cost incurred to comply with any **Ordinance or Law** **you** were required to comply with before the loss.
+
+4. **Examples of Covered Costs.** Costs covered under this endorsement include, but are not limited to: increased cost to upgrade portions of the dwelling damaged by a Peril Insured Against to current building code standards; cost to demolish and remove undamaged portions of the dwelling required to be demolished due to enforcement of any **Ordinance or Law**; cost of removing debris of demolished portions; and cost of additional construction required to bring undamaged portions into compliance with current code where partial damage triggers a code-compliance requirement applicable to the entire structure.
+
+5. **Limitations.** This endorsement does not increase the Coverage B, C, or D limits of liability and does not apply to:
+   a. The cost of complying with any **Ordinance or Law** that requires any **insured** or others to test for, monitor, clean up, remove, contain, treat, detoxify, or neutralize, or in any way respond to, or assess the effects of, pollutants;
+   b. The increased cost resulting from enforcement of any **Ordinance or Law** that **you** were required to comply with before the loss, even when the dwelling was undamaged;
+   c. Loss due to any **Ordinance or Law** that **you** were required to comply with, but failed to comply with.
+
+6. **Anti-Concurrent Causation Modification.** Notwithstanding Section I — Exclusions, paragraph A.1 (**Ordinance or Law**), the additional amount of insurance provided under this endorsement is available regardless of any other cause or event contributing concurrently or in any sequence to the increased cost. The exclusion in Section I — Exclusions A.1 is modified to the extent of the additional amount of insurance provided under this endorsement, and only to that extent.
+
+HO 04 41 LIMITED FUNGI, WET OR DRY ROT, OR BACTERIA COVERAGE
+
+This endorsement modifies the policy to which it is attached. All other terms and conditions of the policy remain unchanged.
+
+1. **Coverage Provided.** We provide a limited additional coverage for the costs to:
+   a. Remove **fungi**, **wet rot**, **dry rot**, or **bacteria** from property covered under Section I;
+   b. Treat, contain, or dispose of **fungi**, **wet rot**, **dry rot**, or **bacteria** beyond that which is required to repair or replace property covered under Section I;
+   c. Test the air or property to confirm the absence, presence, or level of **fungi**, **wet rot**, **dry rot**, or **bacteria**, whether performed prior to, during, or after removal, repair, restoration, or replacement.
+
+2. **Aggregate Sublimit.** The total amount of coverage provided under this endorsement during the annual policy period is **$10,000**, regardless of: the number of locations covered under this policy; the number of **occurrences**; or the number of insureds claiming under this policy.
+
+3. **Conditions.** This coverage applies only when the **fungi**, **wet rot**, **dry rot**, or **bacteria** is the result of a Peril Insured Against under Section I — Perils Insured Against, and only to the extent the cost of removal, treatment, or testing is reasonable and necessary.
+
+4. **Definitions Applicable to This Endorsement.** **Fungi** means any type or form of fungus, including mold or mildew, and any mycotoxins, spores, scents, or by-products produced or released by fungi. **Wet rot** and **dry rot** mean a fungus-induced deterioration of wood. **Bacteria** means any bacterium, including the by-products produced or released by bacteria.
+
+5. **Exclusions.** This endorsement does not provide coverage for: any **fungi**, **wet rot**, **dry rot**, or **bacteria** present in **residence premises** prior to the policy effective date; loss arising from continuous or repeated seepage or leakage of water over a period of 14 days or more; or loss arising from flood or other excluded perils under Section I — Exclusions, except where ensuing fungi loss is otherwise covered.
+
+6. **Section II Application.** This endorsement also provides a sublimit of $50,000 under Section II — Liability for **bodily injury** or **property damage** arising out of or aggravated by **fungi**, **wet rot**, **dry rot**, or **bacteria**, subject to all other Section II terms.
+
+END OF POLICY
