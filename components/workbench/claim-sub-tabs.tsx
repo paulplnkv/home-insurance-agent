@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { CLAIM } from '@/lib/scenario/claim';
 
 const TABS: ReadonlyArray<{ label: string; href?: string }> = [
-  { label: 'Summary', href: '/' },
+  { label: 'Summary', href: `/claims/${CLAIM.claim_number}` },
   { label: 'Coverages', href: '/agents/coverage' },
   { label: 'Damages', href: '/agents/damage' },
   { label: 'Documents', href: '/agents/documents' },
@@ -14,7 +15,6 @@ const TABS: ReadonlyArray<{ label: string; href?: string }> = [
 
 function isActive(pathname: string, href: string | undefined): boolean {
   if (!href) return false;
-  if (href === '/') return pathname === '/';
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
