@@ -132,17 +132,10 @@ function ToolRow({
 
   const pendingVerb =
     calls.length > 1 ? (label.verbPlural ?? label.verb) : label.verb;
-  const doneVerb = label.describeResult?.(calls) ?? pendingVerb;
-  // Live count is only meaningful while calls are still in flight; once
-  // every call has settled, the past-tense result label carries the
-  // number ("Read 6 documents"), so the N/N badge would be redundant.
   // Prefer the tool's declared total (e.g. 60 photos) over calls.length
   // — the latter climbs as the model streams more parallel calls.
   const total = declaredTotal ?? calls.length;
-  const count =
-    overallState === 'pending' && total > 1
-      ? `${doneCount}/${total}`
-      : null;
+  const count = total > 1 ? `${doneCount}/${total}` : null;
 
   const subtitle = describeCalls(event.toolName, calls);
   const errorText = calls.find((c) => c.errorText)?.errorText;
@@ -161,15 +154,22 @@ function ToolRow({
           <span
             className={cn(
               'text-sm font-medium leading-snug',
-              overallState === 'error' && 'text-destructive'
+              overallState === 'error'
+                ? 'text-destructive'
+                : 'text-muted-foreground'
             )}
           >
-            {overallState === 'error' ? pendingVerb : doneVerb}
+            {pendingVerb}
           </span>
         )}
         {count ? (
           <span className="text-[10px] uppercase tracking-wide text-muted-foreground/70">
             {count}
+          </span>
+        ) : null}
+        {overallState === 'done' ? (
+          <span className="text-[10px] uppercase tracking-wide text-muted-foreground/70">
+            Done
           </span>
         ) : null}
         {subtitle ? (
@@ -191,9 +191,14 @@ function NarrationRow({ event }: { event: NarrationEvent }) {
   return (
     <div className="py-0.5">
       {event.done ? (
-        <span className="text-sm font-medium leading-snug">
-          {event.text}
-        </span>
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+          <span className="text-sm font-medium leading-snug text-muted-foreground">
+            {stripTrailingEllipsis(event.text)}
+          </span>
+          <span className="text-[10px] uppercase tracking-wide text-muted-foreground/70">
+            Done
+          </span>
+        </div>
       ) : (
         <Shimmer as="span" className="text-sm font-medium leading-snug">
           {event.text}
@@ -201,6 +206,10 @@ function NarrationRow({ event }: { event: NarrationEvent }) {
       )}
     </div>
   );
+}
+
+function stripTrailingEllipsis(text: string): string {
+  return text.replace(/…$/, '');
 }
 
 // Build a human subtitle out of a tool group's calls.

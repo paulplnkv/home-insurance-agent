@@ -40,9 +40,6 @@ export interface NarrationEvent {
 export interface ToolLabel {
   verb: string;
   verbPlural?: string;
-  // Past-tense result label rendered once every call has settled.
-  // Receives the full call list so it can sum hits / count items.
-  describeResult?: (calls: ToolCall[]) => string;
   // Static denominator for the "N/total" count badge. Without this,
   // the badge falls back to calls.length — which climbs as the model
   // streams more parallel calls. Use this when the agent inspects a
@@ -50,51 +47,27 @@ export interface ToolLabel {
   totalCount?: () => number;
 }
 
-function countOutputItems(call: ToolCall | undefined): number {
-  return Array.isArray(call?.output) ? call.output.length : 0;
-}
-
-function pluralize(n: number, singular: string, plural: string): string {
-  return `${n} ${n === 1 ? singular : plural}`;
-}
-
 export const TOOL_LABELS: Record<string, ToolLabel> = {
   list_documents: {
     verb: 'Listing documents',
-    describeResult: (calls) =>
-      `Found ${pluralize(countOutputItems(calls[0]), 'document', 'documents')}`,
   },
   read_document: {
     verb: 'Reading document',
     verbPlural: 'Reading documents',
-    describeResult: (calls) => {
-      const n = calls.filter((c) => c.state === 'done').length;
-      return `Read ${pluralize(n, 'document', 'documents')}`;
-    },
   },
 
   search_policy: {
     verb: 'Searching policy',
     verbPlural: 'Searching policy',
-    describeResult: (calls) => {
-      const hits = calls.reduce((sum, c) => sum + countOutputItems(c), 0);
-      return `Found ${pluralize(hits, 'policy clause', 'policy clauses')}`;
-    },
   },
 
   list_photos: {
     verb: 'Listing photos',
-    describeResult: (calls) =>
-      `Found ${pluralize(countOutputItems(calls[0]), 'photo', 'photos')}`,
   },
   inspect_photo: {
     verb: 'Inspecting photo',
     verbPlural: 'Inspecting photos',
     totalCount: () => PHOTO_MANIFEST.length,
-    describeResult: (calls) => {
-      const n = calls.filter((c) => c.state === 'done').length;
-      return `Inspected ${pluralize(n, 'photo', 'photos')}`;
-    },
   },
 };
 
@@ -119,11 +92,9 @@ export function isFinalizeTool(toolName: string): boolean {
 // Per-finalize-tool human narration for each top-level field of its
 // structured input. Order matters — narrations appear in the order
 // declared here. As later fields begin streaming, earlier fields are
-// considered done and flip from the present-tense `pending` label to
-// the past-tense `done` label.
+// considered done; rendering greys the label and appends a Done chip.
 export interface NarrationLabel {
   pending: string;
-  done: string;
 }
 
 export const FINALIZE_FIELD_NARRATIONS: Record<
@@ -131,66 +102,24 @@ export const FINALIZE_FIELD_NARRATIONS: Record<
   Record<string, NarrationLabel>
 > = {
   report_findings: {
-    document_inventory: {
-      pending: 'Classifying documents…',
-      done: 'Classified documents',
-    },
-    findings: {
-      pending: 'Cross-referencing documents…',
-      done: 'Cross-referenced documents',
-    },
-    routing: {
-      pending: 'Determining routing decision…',
-      done: 'Determined routing decision',
-    },
-    summary_markdown: {
-      pending: 'Drafting file summary…',
-      done: 'Drafted file summary',
-    },
+    document_inventory: { pending: 'Classifying documents…' },
+    findings: { pending: 'Cross-referencing documents…' },
+    routing: { pending: 'Determining routing decision…' },
+    summary_markdown: { pending: 'Drafting file summary…' },
   },
   report_position: {
-    position: {
-      pending: 'Choosing coverage position…',
-      done: 'Chose coverage position',
-    },
-    confidence: {
-      pending: 'Scoring confidence…',
-      done: 'Scored confidence',
-    },
-    applicable_deductible: {
-      pending: 'Identifying applicable deductible…',
-      done: 'Identified applicable deductible',
-    },
-    cited_clauses: {
-      pending: 'Citing policy clauses…',
-      done: 'Cited policy clauses',
-    },
-    flags: {
-      pending: 'Surfacing review flags…',
-      done: 'Surfaced review flags',
-    },
-    memo_markdown: {
-      pending: 'Drafting coverage memo…',
-      done: 'Drafted coverage memo',
-    },
+    position: { pending: 'Choosing coverage position…' },
+    confidence: { pending: 'Scoring confidence…' },
+    applicable_deductible: { pending: 'Identifying applicable deductible…' },
+    cited_clauses: { pending: 'Citing policy clauses…' },
+    flags: { pending: 'Surfacing review flags…' },
+    memo_markdown: { pending: 'Drafting coverage memo…' },
   },
   report_assessment: {
-    classifications: {
-      pending: 'Classifying photos…',
-      done: 'Classified photos',
-    },
-    zones: {
-      pending: 'Grouping into damage zones…',
-      done: 'Grouped into damage zones',
-    },
-    peril_consistency: {
-      pending: 'Assessing peril consistency…',
-      done: 'Assessed peril consistency',
-    },
-    estimate_line_items: {
-      pending: 'Building Xactimate estimate…',
-      done: 'Built Xactimate estimate',
-    },
+    classifications: { pending: 'Classifying photos…' },
+    zones: { pending: 'Grouping into damage zones…' },
+    peril_consistency: { pending: 'Assessing peril consistency…' },
+    estimate_line_items: { pending: 'Building Xactimate estimate…' },
   },
 };
 
@@ -228,7 +157,7 @@ export function narrationsForFinalize(
     result.push({
       kind: 'narration',
       id: `narr-${toolName}-${field}`,
-      text: isDone ? fieldMap[field].done : fieldMap[field].pending,
+      text: fieldMap[field].pending,
       done: isDone,
     });
   }
