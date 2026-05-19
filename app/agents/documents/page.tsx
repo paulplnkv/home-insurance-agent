@@ -2,15 +2,15 @@
 
 import { AppBar } from '@/components/workbench/app-bar';
 import { Breadcrumb } from '@/components/workbench/breadcrumb';
-import { ClaimHeader } from '@/components/workbench/claim-header';
 import { ClaimSubTabs } from '@/components/workbench/claim-sub-tabs';
+import { ActivityFeed } from '@/components/workbench/activity-feed';
 import { AgentPageBody } from '@/components/workbench/agent-page';
 import { documentsAgentConfig } from '@/components/workbench/documents-agent-panel';
 import { DocumentsOutput } from '@/components/workbench/documents-output';
-import { usePersistedAgent } from '@/hooks/use-persisted-agent';
+import { useAgentChat } from '@/hooks/use-agent-chat';
 
 export default function DocumentsAgentPage() {
-  const agent = usePersistedAgent({
+  const agent = useAgentChat({
     api: documentsAgentConfig.api,
     schema: documentsAgentConfig.schema,
     storageKey: documentsAgentConfig.storageKey,
@@ -22,7 +22,6 @@ export default function DocumentsAgentPage() {
       <ClaimSubTabs />
       <Breadcrumb />
       <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 px-6 py-4">
-        <ClaimHeader />
         <AgentPageBody
           title={documentsAgentConfig.title}
           description={documentsAgentConfig.description}
@@ -34,6 +33,13 @@ export default function DocumentsAgentPage() {
           onRun={agent.submit}
           onStop={agent.stop}
           onReset={agent.reset}
+          activity={
+            <ActivityFeed
+              events={agent.events}
+              isStreaming={agent.state === 'running'}
+              pendingCopy="Listing the claim file…"
+            />
+          }
         >
           <DocumentsOutput
             key={agent.resetKey}

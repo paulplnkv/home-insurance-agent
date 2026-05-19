@@ -60,7 +60,7 @@ export function CoverageOutput({
       <DeductibleRow deductible={object?.applicable_deductible} />
 
       {hasClauses || hasMemo || hasFlags ? (
-        <Accordion multiple>
+        <Accordion multiple defaultValue={['clauses', 'memo', 'flags']}>
           {hasClauses ? (
             <AccordionItem value="clauses">
               <AccordionTrigger className="text-xs uppercase tracking-wide text-muted-foreground">

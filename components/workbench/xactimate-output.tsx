@@ -95,7 +95,7 @@ export function XactimateOutput({
     isStreaming && priced.line_count < Math.max(streamedCount, 4);
 
   return (
-    <Accordion>
+    <Accordion defaultValue={['estimate']}>
       <AccordionItem value="estimate">
         <AccordionTrigger className="text-xs uppercase tracking-wide text-muted-foreground hover:no-underline">
           <span className="flex items-center gap-2">

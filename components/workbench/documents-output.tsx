@@ -286,7 +286,7 @@ function FileSummary({
     ) : null;
   }
   return (
-    <Accordion>
+    <Accordion defaultValue={['summary']}>
       <AccordionItem value="summary" className="border-b-0">
         <AccordionTrigger className="text-xs uppercase tracking-wide text-muted-foreground">
           File summary

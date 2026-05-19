@@ -4,12 +4,17 @@ export interface PersistedAgentResult<T> {
   object: T;
   startedAt: number;
   endedAt: number;
+  // Opaque to the storage layer. Consumers that care (the agent-chat
+  // hook) cast to their own event type; consumers that don't (the older
+  // hook) simply ignore the field.
+  events?: unknown[];
 }
 
 const envelopeSchema = z.object({
   object: z.unknown(),
   startedAt: z.number(),
   endedAt: z.number(),
+  events: z.array(z.unknown()).optional(),
 });
 
 export function loadAgentResult<T>(
@@ -45,6 +50,7 @@ export function loadAgentResult<T>(
     object: object.data,
     startedAt: envelope.data.startedAt,
     endedAt: envelope.data.endedAt,
+    events: envelope.data.events,
   };
 }
 

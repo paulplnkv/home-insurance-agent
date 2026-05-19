@@ -1,14 +1,16 @@
 'use client';
 
-import { usePersistedAgent } from '@/hooks/use-persisted-agent';
+import { useAgentChat } from '@/hooks/use-agent-chat';
 import { damageAgentOutputSchema } from '@/lib/agents/photos/schema';
+import { ActivityFeed } from './activity-feed';
 import { AgentPanel } from './agent-panel';
 import { DamageOutput } from './damage-output';
 
 export const damageAgentConfig = {
   api: '/api/agents/photos',
   schema: damageAgentOutputSchema,
-  storageKey: 'home-ins:damage:v2',
+  // v4 — event shape changed (tool calls now grouped + narration rows).
+  storageKey: 'home-ins:damage:v4',
   title: 'Damage Assessment',
   description:
     'Photo classification · zone manifest · Xactimate estimate',
@@ -16,7 +18,7 @@ export const damageAgentConfig = {
 } as const;
 
 export function DamageAgentPanel() {
-  const agent = usePersistedAgent({
+  const agent = useAgentChat({
     api: damageAgentConfig.api,
     schema: damageAgentConfig.schema,
     storageKey: damageAgentConfig.storageKey,
@@ -34,6 +36,13 @@ export function DamageAgentPanel() {
       onRun={agent.submit}
       onStop={agent.stop}
       onReset={agent.reset}
+      activity={
+        <ActivityFeed
+          events={agent.events}
+          isStreaming={agent.state === 'running'}
+          pendingCopy="Pulling the photo manifest…"
+        />
+      }
     >
       <DamageOutput
         key={agent.resetKey}

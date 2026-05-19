@@ -34,12 +34,15 @@ interface AgentPageBodyProps {
   onRun: () => void;
   onStop?: () => void;
   onReset?: () => void;
+  // Live-activity slot rendered as a sticky sidebar on the left at lg+.
+  activity?: React.ReactNode;
   children?: React.ReactNode;
 }
 
-// Full-page agent layout used on /agents/<name>. Mirrors the toolbar
-// portion of <AgentPanel> but renders the output flush in the main
-// column instead of inside a Collapsible.
+// Full-page agent layout used on /agents/<name>. Top row carries the
+// title and toolbar; below it the activity feed is pinned to a sticky
+// left column at lg+ while the streaming output fills the right
+// column. On narrower screens both stack vertically.
 export function AgentPageBody({
   title,
   description,
@@ -51,6 +54,7 @@ export function AgentPageBody({
   onRun,
   onStop,
   onReset,
+  activity,
   children,
 }: AgentPageBodyProps) {
   const [now, setNow] = useState(() => Date.now());
@@ -70,65 +74,83 @@ export function AgentPageBody({
       : STATE_LABEL[state];
 
   return (
-    <Card>
-      <div className="flex flex-wrap items-start justify-between gap-3 border-b px-6 py-4">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-base font-semibold leading-tight">{title}</h1>
-          <p className="text-xs text-muted-foreground">{description}</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {state !== 'complete' ? (
-            <Badge
-              variant={STATE_VARIANT[state]}
-              className="font-medium uppercase tracking-wide"
-            >
-              {pillLabel}
-            </Badge>
-          ) : null}
-          {state === 'running' ? (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onStop}
-              disabled={!onStop}
-            >
-              Stop
-            </Button>
-          ) : state === 'complete' ? (
-            <>
-              <Button variant="outline" size="sm" onClick={onRun}>
-                Run
+    <div className="flex flex-col gap-4">
+      <Card>
+        <div className="flex flex-wrap items-start justify-between gap-3 px-6 py-4">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-base font-semibold leading-tight">{title}</h1>
+            <p className="text-xs text-muted-foreground">{description}</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {state !== 'complete' ? (
+              <Badge
+                variant={STATE_VARIANT[state]}
+                className="font-medium uppercase tracking-wide"
+              >
+                {pillLabel}
+              </Badge>
+            ) : null}
+            {state === 'running' ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onStop}
+                disabled={!onStop}
+              >
+                Stop
               </Button>
-              {onReset ? (
-                <Button variant="ghost" size="sm" onClick={onReset}>
-                  Reset
+            ) : state === 'complete' ? (
+              <>
+                <Button variant="outline" size="sm" onClick={onRun}>
+                  Run
                 </Button>
-              ) : null}
-            </>
-          ) : state === 'error' ? (
-            <Button variant="outline" size="sm" onClick={onReset ?? onRun}>
-              Reset
-            </Button>
-          ) : (
-            <Button size="sm" onClick={onRun}>
-              Run analysis
-            </Button>
-          )}
+                {onReset ? (
+                  <Button variant="ghost" size="sm" onClick={onReset}>
+                    Reset
+                  </Button>
+                ) : null}
+              </>
+            ) : state === 'error' ? (
+              <Button variant="outline" size="sm" onClick={onReset ?? onRun}>
+                Reset
+              </Button>
+            ) : (
+              <Button size="sm" onClick={onRun}>
+                Run analysis
+              </Button>
+            )}
+          </div>
         </div>
+      </Card>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(300px,360px)_1fr] lg:items-start">
+        {activity ? (
+          <Card className="lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
+            <CardContent className="py-4">
+              <div className="flex items-center gap-2 pb-2 text-[10px] uppercase tracking-wide text-muted-foreground/80">
+                <span>Live activity</span>
+              </div>
+              {activity}
+            </CardContent>
+          </Card>
+        ) : null}
+
+        <Card>
+          <CardContent className="py-4">
+            {state === 'error' && error ? (
+              <p className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+                {title} failed: {error.message}
+              </p>
+            ) : state === 'idle' ? (
+              <p className="text-sm italic text-muted-foreground">
+                {idlePlaceholder}
+              </p>
+            ) : (
+              children
+            )}
+          </CardContent>
+        </Card>
       </div>
-      <CardContent className="pt-4">
-        {state === 'error' && error ? (
-          <p className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
-            {title} failed: {error.message}
-          </p>
-        ) : state === 'idle' ? (
-          <p className="text-sm italic text-muted-foreground">
-            {idlePlaceholder}
-          </p>
-        ) : (
-          children
-        )}
-      </CardContent>
-    </Card>
+    </div>
   );
 }

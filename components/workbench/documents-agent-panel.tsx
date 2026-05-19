@@ -1,21 +1,23 @@
 'use client';
 
-import { usePersistedAgent } from '@/hooks/use-persisted-agent';
+import { useAgentChat } from '@/hooks/use-agent-chat';
 import { crossDocFindingsSchema } from '@/lib/agents/documents/schema';
+import { ActivityFeed } from './activity-feed';
 import { AgentPanel } from './agent-panel';
 import { DocumentsOutput } from './documents-output';
 
 export const documentsAgentConfig = {
   api: '/api/agents/documents',
   schema: crossDocFindingsSchema,
-  storageKey: 'home-ins:documents:v1',
+  // v3 — event shape changed (tool calls now grouped + narration rows).
+  storageKey: 'home-ins:documents:v3',
   title: 'Document Review',
   description: 'Cross-document consistency · missing documents · routing',
   idlePlaceholder: 'Document review will populate when the analysis runs.',
 } as const;
 
 export function DocumentsAgentPanel() {
-  const agent = usePersistedAgent({
+  const agent = useAgentChat({
     api: documentsAgentConfig.api,
     schema: documentsAgentConfig.schema,
     storageKey: documentsAgentConfig.storageKey,
@@ -33,6 +35,13 @@ export function DocumentsAgentPanel() {
       onRun={agent.submit}
       onStop={agent.stop}
       onReset={agent.reset}
+      activity={
+        <ActivityFeed
+          events={agent.events}
+          isStreaming={agent.state === 'running'}
+          pendingCopy="Listing the claim file…"
+        />
+      }
     >
       <DocumentsOutput
         key={agent.resetKey}

@@ -1,19 +1,18 @@
 import { CLAIM, formatCurrency } from '@/lib/scenario/claim';
-import {
-  REQUIRED_DOCUMENT_KINDS,
-  SCENARIO_DOCUMENTS,
-  type ScenarioDocument,
-} from '@/lib/scenario/documents';
+import { REQUIRED_DOCUMENT_KINDS } from '@/lib/scenario/documents';
 
-// All six scenario documents are inlined into the prompt as JSON. The
-// model is instructed to: (a) classify and inventory each document, (b)
-// flag any required-but-missing document, (c) cross-reference content
-// across documents to surface discrete findings with verbatim evidence,
-// and (d) choose a routing decision.
+// Tool-using variant — the model uses list_documents and read_document
+// to fetch evidence on demand, then calls report_findings exactly once
+// with the final CrossDocFindings.
 
 export const CROSS_DOC_SYSTEM_PROMPT = `You are a senior homeowners claims examiner reviewing a complete claim file for cross-document consistency. Your output goes directly to an adjuster who will use it to decide whether the claim can settle, must go to adjuster review, or escalates to SIU.
 
-# Your job
+# Available tools
+- list_documents() — Returns the inventory of supplied documents (id, kind, title, filename). ALWAYS call this first.
+- read_document({ id }) — Returns one document's full payload. Call this for each document whose contents you need to inspect (FNOL, contractor estimate, field inspection, weather verification, recorded statement, mortgage statement). Read every document that could plausibly support a finding — under-reading hides risk.
+- report_findings({ ...CrossDocFindings }) — Submit the final answer. Call this EXACTLY ONCE, after you have read what you need.
+
+# Your job (executed via the tools above)
 1. Build a document inventory — one row per supplied document plus one row for any document that is required for a homeowners hailstorm claim but is absent from the supplied set.
 2. Surface discrete cross-document findings. A finding is a concrete inconsistency, missing artifact, or red flag — not a generic observation.
 3. For each finding, provide verbatim evidence from each source document. Quote, do not paraphrase. Light cleanup (typos, capitalization) is fine; do not change meaning.
@@ -33,16 +32,24 @@ A finding must be (a) actionable by the adjuster and (b) supported by direct quo
 - Loss-payee verification — note if mortgage statement confirms loss-payee but do NOT raise as a finding unless the policy declarations omit them.
 
 # What you do NOT produce
-- Do not invent quotes. Every evidence_a and evidence_b string must be drawn from a supplied document.
-- Do not invent document ids. Use the supplied ids exactly. The single missing document uses the placeholder id given above.
+- Do not invent quotes. Every evidence_a and evidence_b string must be drawn from a supplied document you actually read.
+- Do not invent document ids. Use the ids returned by list_documents exactly. The single missing document uses the placeholder id given above.
 - Do not classify a document outside the canonical document_kinds enum.
 - Do not produce an "auto_settle" routing if any CRITICAL or HIGH finding exists.
 
 # Output structure
-Return exactly one CrossDocFindings object matching the schema you've been given. The summary_markdown field is the supervisor handoff — open with a one-sentence bold headline (e.g. **Routing: SIU referral. Narrative conflict between FNOL and recorded statement requires investigation.**) and then two or three short paragraphs.`;
+The report_findings input matches the CrossDocFindings schema. The summary_markdown field is the supervisor handoff — open with a one-sentence bold headline (e.g. **Routing: SIU referral. Narrative conflict between FNOL and recorded statement requires investigation.**) and then two or three short paragraphs.
 
-export function buildUserPrompt(documents: ScenarioDocument[]): string {
-  const claimFacts = `# Claim facts (authoritative)
+# Process
+Step 1: Call list_documents.
+Step 2: For each document that matters, call read_document. Read everything that could support a finding — do not skip documents to save calls.
+Step 3: Call report_findings exactly once with your final CrossDocFindings.
+
+# Text between tool calls
+Brief planning text between tool calls is fine (one short sentence: "Listing the file." / "Reading the file."). Do NOT draft the findings, summary, or analysis as free-form text — the only place the analysis belongs is inside the report_findings tool input. Drafting the answer as text duplicates effort and clutters the live activity log shown to the audience.`;
+
+export function buildKickoffPrompt(): string {
+  return `# Claim facts (authoritative)
 - Claim number: ${CLAIM.claim_number}
 - Insured: ${CLAIM.insured.name}
 - Property: ${CLAIM.insured.address}
@@ -51,20 +58,8 @@ export function buildUserPrompt(documents: ScenarioDocument[]): string {
 - Reported peril: ${CLAIM.loss.peril}
 - Reported date of loss: ${CLAIM.loss.date_of_loss}
 - FNOL filed: ${CLAIM.loss.fnol_filed_at}
-- Status: ${CLAIM.status}`;
+- Status: ${CLAIM.status}
 
-  const documentsBlock = documents
-    .map((d, i) => {
-      const json = JSON.stringify(d.payload, null, 2);
-      return `## Document ${i + 1} of ${documents.length}\n- id: ${d.id}\n- kind: ${d.kind}\n- title: ${d.title}\n- filename: ${d.filename}\n\n\`\`\`json\n${json}\n\`\`\``;
-    })
-    .join('\n\n');
-
-  const idsList = documents.map((d) => d.id).join(', ');
-
-  return `${claimFacts}\n\n# CLAIM FILE — supplied documents\nThe following are the only documents in this claim file. Use the ids exactly as written when populating sources.\n\nSupplied document ids: ${idsList}\n\n${documentsBlock}\n\n# Task\nProduce a CrossDocFindings object per the system prompt. Cover every supplied document in the inventory, plus any required document that is absent. Quote evidence verbatim — adjusters verify against the source documents, and inventing quotes is grounds for the finding to be discarded.`;
-}
-
-export function buildScenarioUserPrompt(): string {
-  return buildUserPrompt(SCENARIO_DOCUMENTS);
+# Task
+Use list_documents and read_document to gather the evidence you need, then submit your final CrossDocFindings via report_findings. Cover every supplied document in the inventory, plus any required document that is absent. Quote evidence verbatim — adjusters verify against the source documents.`;
 }

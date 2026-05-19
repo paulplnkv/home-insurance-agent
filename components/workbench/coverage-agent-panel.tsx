@@ -1,14 +1,16 @@
 'use client';
 
-import { usePersistedAgent } from '@/hooks/use-persisted-agent';
+import { useAgentChat } from '@/hooks/use-agent-chat';
 import { coveragePositionSchema } from '@/lib/agents/coverage/schema';
+import { ActivityFeed } from './activity-feed';
 import { AgentPanel } from './agent-panel';
 import { CoverageOutput } from './coverage-output';
 
 export const coverageAgentConfig = {
   api: '/api/agents/coverage',
   schema: coveragePositionSchema,
-  storageKey: 'home-ins:coverage:v1',
+  // v3 — event shape changed (tool calls now grouped + narration rows).
+  storageKey: 'home-ins:coverage:v3',
   title: 'Coverage Verification',
   description:
     'HO-3 policy review · applicable deductible · cited clauses · streaming memo',
@@ -17,7 +19,7 @@ export const coverageAgentConfig = {
 } as const;
 
 export function CoverageAgentPanel() {
-  const agent = usePersistedAgent({
+  const agent = useAgentChat({
     api: coverageAgentConfig.api,
     schema: coverageAgentConfig.schema,
     storageKey: coverageAgentConfig.storageKey,
@@ -35,6 +37,13 @@ export function CoverageAgentPanel() {
       onRun={agent.submit}
       onStop={agent.stop}
       onReset={agent.reset}
+      activity={
+        <ActivityFeed
+          events={agent.events}
+          isStreaming={agent.state === 'running'}
+          pendingCopy="Reaching for the policy…"
+        />
+      }
     >
       <CoverageOutput key={agent.resetKey} object={agent.object} />
     </AgentPanel>

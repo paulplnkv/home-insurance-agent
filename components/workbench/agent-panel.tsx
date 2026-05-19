@@ -47,6 +47,7 @@ export function AgentPanel({
   onRun,
   onStop,
   onReset,
+  activity,
   children,
 }: {
   title: string;
@@ -59,6 +60,9 @@ export function AgentPanel({
   onRun: () => void;
   onStop?: () => void;
   onReset?: () => void;
+  // Optional live-activity slot rendered above the agent output. Used
+  // to show tool-call timelines while the agent runs.
+  activity?: React.ReactNode;
   children?: React.ReactNode;
 }) {
   // Live elapsed counter — only ticks while running so we don't burn
@@ -137,7 +141,8 @@ export function AgentPanel({
           </div>
         </div>
         <CollapsibleContent>
-          <CardContent className="border-t pt-4">
+          <CardContent className="flex flex-col gap-4 border-t pt-4">
+            {activity && state !== 'idle' ? activity : null}
             {state === 'error' && error ? (
               <p className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
                 {title} failed: {error.message}

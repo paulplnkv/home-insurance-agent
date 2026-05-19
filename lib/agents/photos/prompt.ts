@@ -1,14 +1,13 @@
-import type { ModelMessage } from 'ai';
-import type { ScenarioPhoto } from '@/lib/scenario/photos';
 import {
   CATALOG_BY_SELECTOR,
   ZONE_CANDIDATES,
   ZONE_NAMES,
 } from '@/lib/xactimate/catalog';
 
-// Photos arrive as raw bytes — the model sees only the image and the
-// photo ID. Ground-truth labels never appear in the prompt; that
-// asymmetry is what makes the demo's classifications meaningful.
+// Photos arrive via inspect_photo tool calls — the model sees the image
+// and the id it asked for. Ground-truth labels never appear in the
+// prompt; that asymmetry is what makes the demo's classifications
+// meaningful.
 
 function buildCatalogTable(): string {
   const lines: string[] = [];
@@ -29,7 +28,12 @@ const CATALOG_TABLE = buildCatalogTable();
 
 export const DAMAGE_SYSTEM_PROMPT = `You are a property damage analyst reviewing a field photo set for a homeowners hailstorm claim. The adjuster will use your output to scope repairs and prioritize negotiation with the contractor. Be precise. Do not invent damage that is not visible.
 
-# Your job
+# Available tools
+- list_photos() — Returns the photo manifest (id and filename). ALWAYS call this first.
+- inspect_photo({ id }) — Pulls a single photo's image content into the conversation so you can classify it. You must inspect EVERY photo you intend to classify; you cannot judge from filename alone. You may call inspect_photo in parallel within a single step to speed things up.
+- report_assessment({ ...DamageAgentOutput }) — Submit the final answer. Call this EXACTLY ONCE, after you have inspected the photos you need.
+
+# Your job (executed via the tools above)
 1. Classify every supplied photo with one of: \`hail_damage\`, \`scale_reference\`, \`near_duplicate\`, \`unrelated\`.
    - \`hail_damage\`: photo shows damage consistent with hail impact — granule loss, dents, cracked skylights, dented gutters, water staining traceable to a roof breach.
    - \`scale_reference\`: photo includes a coin, tape measure, or other reference object next to a hail impact crater.
@@ -59,36 +63,18 @@ Pick selectors only from the catalog below, scoped to the zone they belong to.${
 - Do not emit dollar amounts or unit prices anywhere — pricing is computed downstream from the catalog.
 - Do not invent zones or selector codes outside the listed values.
 - Do not classify a photo as \`hail_damage\` if you cannot identify the dwelling element it belongs to.
+- Do not classify a photo you have not actually called inspect_photo on.
 
 # Output
-Return exactly one DamageAgentOutput object matching the schema you've been given. Cover every supplied photo ID under \`classifications\`. Emit \`estimate_line_items\` only for zones you flagged with a severity. Confidence reflects how confident you are in the label given what's visible.`;
+The report_assessment input matches the DamageAgentOutput schema. Cover every supplied photo ID under \`classifications\`. Emit \`estimate_line_items\` only for zones you flagged with a severity. Confidence reflects how confident you are in the label given what's visible.
 
-export function buildUserMessage(
-  items: { photo: ScenarioPhoto; bytes: Buffer }[]
-): ModelMessage[] {
-  const idIndex = items
-    .map((it, i) => `${i + 1}. ${it.photo.id} (${it.photo.filename})`)
-    .join('\n');
+# Process
+Step 1: Call list_photos.
+Step 2+: Call inspect_photo for every photo in the manifest. You can fire several in parallel within a single step. Continue until every photo is inspected.
+Final step: Call report_assessment once with your DamageAgentOutput. Every id from list_photos must appear in classifications.
 
-  // Discriminated union; the SDK will validate at call time.
-  const content: Array<
-    { type: 'text'; text: string } | { type: 'image'; image: Buffer }
-  > = [
-    {
-      type: 'text',
-      text: `# Field photo set\nThe field adjuster pulled these from the inspection. Each photo below is keyed to an ID. Reference photos by ID in your output.\n\nIDs (in the order images appear):\n${idIndex}`,
-    },
-  ];
+# Text between tool calls
+Brief planning text between tool calls is fine (one short sentence). Do NOT draft the classifications, zones, or estimate as free-form text — the only place the assessment belongs is inside the report_assessment tool input. Drafting the answer as text duplicates effort and clutters the live activity log shown to the audience.`;
 
-  for (const it of items) {
-    content.push({ type: 'text', text: `Photo ID: ${it.photo.id}` });
-    content.push({ type: 'image', image: it.bytes });
-  }
-
-  content.push({
-    type: 'text',
-    text: `# Task\nProduce a DamageAgentOutput that classifies every photo, groups hail damage into zones with severity, and assesses peril consistency. Apply the rules from the system prompt strictly.`,
-  });
-
-  return [{ role: 'user', content }];
-}
+export const KICKOFF_USER_PROMPT = `# Field photo set
+The field adjuster pulled photos from the property inspection. Use list_photos to discover the manifest, then inspect every photo (in parallel where possible). When you have classified all of them, submit your final DamageAgentOutput via report_assessment.`;

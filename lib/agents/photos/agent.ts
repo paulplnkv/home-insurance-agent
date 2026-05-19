@@ -1,50 +1,29 @@
 // Damage Assessment agent. Per PRD §Modules: a deep module wrapping
-// prompt construction, the AI SDK call, and schema validation. The route
-// handler is a thin streaming adapter on top.
-import { Output, streamText } from 'ai';
-import { readFile } from 'node:fs/promises';
-import sharp from 'sharp';
+// prompt construction, the AI SDK call, and schema validation. The
+// route handler is a thin streaming adapter on top.
+//
+// Tool-using variant — the model calls list_photos, then inspect_photo
+// for each image it wants to evaluate, then report_assessment with the
+// final structured manifest. Tool-call events stream to the UI as a
+// live activity feed; the audience sees the agent walk the photo set
+// one image at a time rather than receiving an opaque blob upfront.
+import { stepCountIs, streamText } from 'ai';
 import { SONNET_MODEL } from '@/lib/ai/models';
-import {
-  PHOTO_MANIFEST,
-  photoFilesystemPath,
-  type ScenarioPhoto,
-} from '@/lib/scenario/photos';
-import { buildUserMessage, DAMAGE_SYSTEM_PROMPT } from './prompt';
-import { damageAgentOutputSchema } from './schema';
+import { DAMAGE_SYSTEM_PROMPT, KICKOFF_USER_PROMPT } from './prompt';
+import { photosTools } from './tools';
 
-// Source files in /public/photos can be multi-megabyte PNGs (gpt-image-1.5
-// returns ~4MB each). 30 raw photos blow the Vercel AI Gateway request
-// size limit. Downscale to a width that's still rich enough for Sonnet's
-// vision to classify hail damage, then JPEG-encode — typically ~100–200KB
-// per image, ~4MB total for the full set.
-const MAX_IMAGE_WIDTH = 1024;
-const JPEG_QUALITY = 80;
+// Generous step ceiling — the photo manifest has up to 60 entries and
+// the model may inspect many of them in parallel. 30 steps is enough
+// to inspect a full set serially without overshooting on stage.
+const MAX_STEPS = 30;
 
-async function loadPhotoBytes(): Promise<
-  { photo: ScenarioPhoto; bytes: Buffer }[]
-> {
-  return Promise.all(
-    PHOTO_MANIFEST.map(async (photo) => {
-      const raw = await readFile(photoFilesystemPath(photo));
-      const bytes = await sharp(raw)
-        .resize({ width: MAX_IMAGE_WIDTH, withoutEnlargement: true })
-        .jpeg({ quality: JPEG_QUALITY })
-        .toBuffer();
-      return { photo, bytes };
-    })
-  );
-}
-
-export async function streamPhotosAgent() {
-  const items = await loadPhotoBytes();
-  const messages = buildUserMessage(items);
-
+export function streamPhotosAgent() {
   return streamText({
     model: SONNET_MODEL,
     system: DAMAGE_SYSTEM_PROMPT,
     temperature: 0.2,
-    output: Output.object({ schema: damageAgentOutputSchema }),
-    messages,
+    tools: photosTools,
+    stopWhen: stepCountIs(MAX_STEPS),
+    prompt: KICKOFF_USER_PROMPT,
   });
 }

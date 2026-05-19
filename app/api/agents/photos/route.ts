@@ -3,10 +3,12 @@
 // node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/route.md.
 import { streamPhotosAgent } from '@/lib/agents/photos/agent';
 
-// Multimodal calls with 12 photos take longer than text-only.
-export const maxDuration = 60;
+// Tool-using agent with multimodal inspect_photo calls (potentially
+// many) plus a final structured report. Generous duration ceiling for
+// the long-tail of inspect calls during the demo.
+export const maxDuration = 120;
 
 export async function POST() {
-  const result = await streamPhotosAgent();
-  return result.toTextStreamResponse();
+  const result = streamPhotosAgent();
+  return result.toUIMessageStreamResponse();
 }
