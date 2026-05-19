@@ -26,6 +26,17 @@ import {
   type PrimaryClassification,
   type ShotTypeTag,
 } from '@/lib/agents/photos/schema';
+import {
+  COMPONENT_LABEL,
+  FINDING_LABEL,
+  MATERIAL_LABEL,
+  NON_PERIL_LABEL,
+  NO_DAMAGE_LABEL,
+  PERIL_LABEL,
+  SHOT_TYPE_LABEL,
+  ZONE_LABELS,
+} from '@/lib/agents/photos/labels';
+import { PhotoDetailDialog } from '@/components/workbench/photo-detail-dialog';
 import { cn } from '@/lib/utils';
 
 type DeepPartial<T> = T extends object
@@ -46,88 +57,6 @@ const SHOT_TYPE_SET = new Set<ShotTypeTag>(SHOT_TYPE_TAGS);
 const FINDING_SET = new Set<FindingTag>(FINDING_TAGS);
 const ZONE_SET = new Set<DamageZone>(DAMAGE_ZONES);
 const PRIMARY_SET = new Set<PrimaryClassification>(PRIMARY_CLASSIFICATIONS);
-
-const PERIL_LABEL: Record<PerilTag, string> = {
-  hail: 'Hail',
-  wind: 'Wind',
-  debris_impact: 'Debris impact',
-  water_intrusion: 'Water intrusion',
-};
-
-const NON_PERIL_LABEL: Record<NonPerilTag, string> = {
-  wear_and_tear: 'Wear & age',
-  deferred_maintenance: 'Deferred maintenance',
-  mechanical_damage: 'Mechanical',
-  improper_installation: 'Improper installation',
-  rust_corrosion: 'Rust / corrosion',
-  foot_traffic: 'Foot-traffic',
-};
-
-const NO_DAMAGE_LABEL: Record<NoDamageTag, string> = {
-  no_damage_confirmed: 'No damage',
-  na_component_absent: 'Out of scope',
-};
-
-const COMPONENT_LABEL: Record<ComponentTag, string> = {
-  primary_slope_field: 'Slope field',
-  ridge_cap: 'Ridge cap',
-  valley: 'Valley',
-  hip: 'Hip',
-  flashing_step: 'Step flashing',
-  flashing_pipe_boot: 'Pipe-boot flashing',
-  vent_turbine: 'Turbine vent',
-  dormer_face: 'Dormer face',
-  gutter_trough: 'Gutter trough',
-  downspout: 'Downspout',
-  soffit: 'Soffit',
-  fascia: 'Fascia',
-  skylight_glazing: 'Skylight glazing',
-  skylight_frame: 'Skylight frame',
-  siding_field: 'Siding field',
-  window_screen: 'Window screen',
-  garage_door_panel: 'Garage door panel',
-  hvac_condenser_fins: 'HVAC fins',
-  ceiling_drywall: 'Ceiling drywall',
-};
-
-const MATERIAL_LABEL: Record<MaterialTag, string> = {
-  asphalt_architectural: 'Asphalt arch.',
-  asphalt_3tab: 'Asphalt 3-tab',
-  metal_galvanized: 'Galv. metal',
-  aluminum: 'Aluminum',
-  vinyl_siding: 'Vinyl siding',
-  vinyl_soffit: 'Vinyl soffit',
-  glass_glazing: 'Glass',
-  steel_panel: 'Steel',
-};
-
-const SHOT_TYPE_LABEL: Record<ShotTypeTag, string> = {
-  overview: 'Overview',
-  mid_range: 'Mid-range',
-  close_up: 'Close-up',
-  macro: 'Macro',
-  scale_reference_in_frame: 'Scale ref.',
-  ground_level_context: 'Ground-level',
-  redundant_view: 'Redundant view',
-};
-
-const FINDING_LABEL: Record<FindingTag, string> = {
-  bruise_spatter_mark: 'Bruise / spatter',
-  granule_displacement: 'Granule loss',
-  fractured_tab: 'Fractured tab',
-  dent_metal: 'Dent (metal)',
-  dent_vinyl: 'Dent (vinyl)',
-  pitting: 'Pitting',
-  cracked_glazing: 'Cracked glazing',
-  lifted_creased_shingle: 'Lifted shingle',
-  exposed_nail_heads: 'Exposed nails',
-  water_stain_active: 'Water stain (active)',
-  water_stain_prior: 'Water stain (prior)',
-  displaced_panel: 'Displaced panel',
-  puncture: 'Puncture',
-  cracked_sealant: 'Cracked sealant',
-  paint_chipping: 'Paint chipping',
-};
 
 // Only the meaningful shot-type tags get a chip — overview/mid-range/
 // close-up/macro/ground-level are inferred from the image already and
@@ -153,20 +82,6 @@ const PERIL_CONSISTENCY_BADGE: Record<
   consistent: { variant: 'default', label: 'Consistent with reported peril' },
   inconsistent: { variant: 'destructive', label: 'Inconsistent with peril' },
   inconclusive: { variant: 'secondary', label: 'Peril match inconclusive' },
-};
-
-const ZONE_LABELS: Record<DamageZone, string> = {
-  roof_south_slope: 'Roof — south slope',
-  roof_west_slope: 'Roof — west slope',
-  gutter_front: 'Front gutter',
-  soffit_fascia: 'Soffit & fascia',
-  skylight_kitchen: 'Kitchen skylight',
-  elevation_siding: 'Elevation — siding',
-  opening_garage_door: 'Garage door',
-  opening_window: 'Window opening',
-  system_hvac_exterior: 'HVAC condenser',
-  interior_ceiling: 'Interior ceiling',
-  property_overview: 'Property overview',
 };
 
 export function DamageOutput({
@@ -273,39 +188,42 @@ function PhotoGrid({
         const isRedundant = shotTypes.includes('redundant_view');
 
         return (
-          <li
-            key={p.id}
-            className={cn(
-              'flex flex-col gap-1.5 overflow-hidden rounded-md border bg-card p-2 transition-opacity',
-              isOutOfScope && 'opacity-50 grayscale',
-              !isOutOfScope && isRedundant && 'opacity-75'
-            )}
-          >
-            <div className="relative aspect-[4/3] overflow-hidden rounded">
-              <Image
-                src={p.publicUrl}
-                alt={p.id}
-                fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-cover"
-              />
-            </div>
-            <div className="flex items-center justify-between gap-2">
-              <code className="truncate font-mono text-[10px] text-muted-foreground">
-                {p.id}
-              </code>
-              {typeof c?.confidence === 'number' ? (
-                <span className="text-[10px] tabular-nums text-muted-foreground">
-                  {(c.confidence * 100).toFixed(0)}%
+          <li key={p.id} className="contents">
+            <PhotoDetailDialog
+              photo={p}
+              rationale={typeof c?.rationale === 'string' ? c.rationale : undefined}
+              triggerClassName={cn(
+                'flex w-full flex-col gap-1.5 overflow-hidden rounded-md border bg-card p-2 transition-all hover:border-foreground/30',
+                isOutOfScope && 'opacity-50 grayscale',
+                !isOutOfScope && isRedundant && 'opacity-75'
+              )}
+            >
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded">
+                <Image
+                  src={p.publicUrl}
+                  alt={p.id}
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <code className="truncate font-mono text-[10px] text-muted-foreground">
+                  {p.id}
+                </code>
+                {typeof c?.confidence === 'number' ? (
+                  <span className="text-[10px] tabular-nums text-muted-foreground">
+                    {(c.confidence * 100).toFixed(0)}%
+                  </span>
+                ) : null}
+              </div>
+              <PhotoChips classification={c} streaming={streaming} />
+              {c?.rationale ? (
+                <span className="line-clamp-2 block text-[11px] leading-snug text-muted-foreground">
+                  {c.rationale}
                 </span>
               ) : null}
-            </div>
-            <PhotoChips classification={c} streaming={streaming} />
-            {c?.rationale ? (
-              <p className="line-clamp-2 text-[11px] leading-snug text-muted-foreground">
-                {c.rationale}
-              </p>
-            ) : null}
+            </PhotoDetailDialog>
           </li>
         );
       })}
