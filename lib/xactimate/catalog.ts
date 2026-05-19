@@ -14,6 +14,9 @@ export const XACT_CATEGORIES = [
   'RFG',
   'GUTTER',
   'SKLT',
+  'EXT',
+  'MECH',
+  'INT',
   'DMO',
   'GENERAL',
 ] as const;
@@ -27,7 +30,8 @@ export interface XactCatalogEntry {
   category: XactCategory;
 }
 
-// Roofing, gutter, skylight, demolition. Prices in USD.
+// Roofing, gutter, skylight, exterior cladding, openings, mechanical,
+// interior, demolition. Prices in USD.
 export const XACT_CATALOG: readonly XactCatalogEntry[] = [
   // Roof — composition shingle replacement
   {
@@ -130,6 +134,21 @@ export const XACT_CATALOG: readonly XactCatalogEntry[] = [
     unit_price: 3.2,
     category: 'GUTTER',
   },
+  // Soffit & fascia
+  {
+    selector: 'SOFFIT VINYL',
+    description: 'Soffit - vinyl - vented',
+    unit: 'LF',
+    unit_price: 8.95,
+    category: 'EXT',
+  },
+  {
+    selector: 'FASCIA AL',
+    description: 'Fascia - aluminum wrap on wood, 6"',
+    unit: 'LF',
+    unit_price: 7.4,
+    category: 'EXT',
+  },
   // Skylight
   {
     selector: 'SKLT MED',
@@ -151,6 +170,51 @@ export const XACT_CATALOG: readonly XactCatalogEntry[] = [
     unit: 'EA',
     unit_price: 410.0,
     category: 'SKLT',
+  },
+  // Exterior cladding (siding) & openings
+  {
+    selector: 'EXT VINYL',
+    description: 'Vinyl siding - replace panel',
+    unit: 'SF',
+    unit_price: 6.85,
+    category: 'EXT',
+  },
+  {
+    selector: 'EXT GDR',
+    description: 'Garage door panel - steel - replace',
+    unit: 'EA',
+    unit_price: 420.0,
+    category: 'EXT',
+  },
+  {
+    selector: 'EXT WIN SCRN',
+    description: 'Window screen - re-screen / replace',
+    unit: 'EA',
+    unit_price: 65.0,
+    category: 'EXT',
+  },
+  // Mechanical — HVAC condenser hail damage
+  {
+    selector: 'MECH ACFIN',
+    description: 'HVAC condenser fin comb / straighten',
+    unit: 'HR',
+    unit_price: 95.0,
+    category: 'MECH',
+  },
+  // Interior — drywall & paint (water-stain repair under skylight)
+  {
+    selector: 'INT DWR',
+    description: 'Drywall patch - small to medium hole, finish + texture',
+    unit: 'SF',
+    unit_price: 5.25,
+    category: 'INT',
+  },
+  {
+    selector: 'INT PNT',
+    description: 'Paint ceiling - two coats',
+    unit: 'SF',
+    unit_price: 1.45,
+    category: 'INT',
   },
   // General labor (rarely chosen, but available as fallback)
   {
@@ -197,7 +261,15 @@ export const ZONE_CANDIDATES: Readonly<
     'RFG LBR',
   ],
   gutter_front: ['GUTTER 6A', 'GUTTER DSP', 'GUTTER GUARD', 'GUTTER DR'],
+  soffit_fascia: ['SOFFIT VINYL', 'FASCIA AL'],
   skylight_kitchen: ['SKLT MED', 'SKLT FL', 'SKLT DOME'],
+  elevation_siding: ['EXT VINYL'],
+  opening_garage_door: ['EXT GDR'],
+  opening_window: ['EXT WIN SCRN'],
+  system_hvac_exterior: ['MECH ACFIN'],
+  interior_ceiling: ['INT DWR', 'INT PNT'],
+  // Overview is for orientation photos only — never bills.
+  property_overview: [],
 };
 
 export const ZONE_NAMES: Readonly<
@@ -206,7 +278,14 @@ export const ZONE_NAMES: Readonly<
   roof_south_slope: 'Roof - South Slope',
   roof_west_slope: 'Roof - West Slope',
   gutter_front: 'Front Gutter',
+  soffit_fascia: 'Soffit & Fascia',
   skylight_kitchen: 'Kitchen Skylight',
+  elevation_siding: 'Elevation - Siding',
+  opening_garage_door: 'Garage Door',
+  opening_window: 'Window Opening',
+  system_hvac_exterior: 'HVAC Condenser (Exterior)',
+  interior_ceiling: 'Interior Ceiling',
+  property_overview: 'Property Overview',
 };
 
 // Pricing metadata for the estimate. Real Xactimate price lists are
@@ -223,8 +302,11 @@ export const PROFIT_RATE = 0.1; // 10% applied after overhead
 export const DEPRECIATION_RATE = 0.15; // flat across materials lines (demo)
 
 // Categories considered "materials" for depreciation + tax math.
+// Mechanical (fin combing) and General (labor) are pure-labor lines.
 export const MATERIAL_CATEGORIES: ReadonlySet<XactCategory> = new Set([
   'RFG',
   'GUTTER',
   'SKLT',
+  'EXT',
+  'INT',
 ]);

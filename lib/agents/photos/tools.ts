@@ -27,7 +27,7 @@ async function loadDownscaledJpeg(filename: string): Promise<Buffer> {
 export const photosTools = {
   list_photos: tool({
     description:
-      'List every field photo by id and filename. Returns the full manifest. Call this first; the filenames hint at what each photo depicts (e.g., roof-south-1, gutter-3, skylight-1, scale-coin-1, neighbor-fence-1) so you can plan which photos to inspect.',
+      'List every field photo by id and filename. Returns the full manifest. Call this first; the filenames hint at what each photo depicts (e.g., roof-south-1, gutter-3, skylight-1, siding-1, garage-door-1, ac-condenser-1, interior-water-1, scale-coin-1, neighbor-fence-1) so you can plan which photos to inspect.',
     inputSchema: z.object({}),
     execute: async () => {
       return PHOTO_MANIFEST.map((p) => ({

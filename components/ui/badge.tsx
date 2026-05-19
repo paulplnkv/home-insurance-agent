@@ -19,6 +19,16 @@ const badgeVariants = cva(
         ghost:
           "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
         link: "text-primary underline-offset-4 hover:underline",
+        // Homeowners adjuster photo taxonomy palette — used by the
+        // Damage Assessment photo cards.
+        peril: "bg-[#B5D4F4] text-[#0C447C]",
+        non_peril: "bg-[#FAC775] text-[#633806]",
+        no_damage: "bg-[#C0DD97] text-[#27500A]",
+        material: "bg-[#CECBF6] text-[#3C3489]",
+        shot: "bg-[#D3D1C7] text-[#444441]",
+        component: "bg-[#9FE1CB] text-[#085041]",
+        finding: "bg-[#F4C0D1] text-[#72243E]",
+        metadata: "bg-[#F5C4B3] text-[#712B13]",
       },
     },
     defaultVariants: {

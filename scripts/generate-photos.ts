@@ -25,7 +25,7 @@
 // Seeds are hardcoded per ID so re-runs are deterministic. The three
 // near-duplicate slots reuse the south-slope prompt with seed offsets
 // so they read as "same view, slightly different shot" — exactly what
-// the Damage agent should classify as near_duplicate.
+// the Damage agent should tag with shot_types: ['redundant_view'].
 //
 // Output bytes are written with the manifest's original filename. The
 // gateway typically returns PNG; the .jpg extension is preserved so the
