@@ -20,7 +20,7 @@ const POLICY_PDF_URL = '/documents/policy-ho3.pdf';
 // material once the panels populate.
 export function ClaimFile() {
   return (
-    <section className="grid gap-6 lg:grid-cols-[3fr_2fr]">
+    <section className="grid gap-4">
       <Card>
         <CardHeader className="gap-4 pb-4">
           <CardTitle className="text-base">Documents in this file</CardTitle>
@@ -48,7 +48,7 @@ export function ClaimFile() {
           <CardTitle className="text-base">
             Field photos ({PHOTO_MANIFEST.length})
           </CardTitle>
-          <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4">
+          <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6">
             {PHOTO_MANIFEST.map((p) => (
               <li key={p.id}>
                 <Link
