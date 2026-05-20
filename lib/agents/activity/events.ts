@@ -125,7 +125,13 @@ export const FINALIZE_FIELD_NARRATIONS: Record<
 
 // Build the narration events that correspond to the current partial
 // input of a finalize tool. `finished` flips the last in-progress row
-// to done when the tool's output-available arrives.
+// to done once the finalize tool's input has been fully streamed —
+// i.e. the model is done writing the structured answer. We do not key
+// off the tool's output-available because the finalize execute is
+// identity (`async (input) => input`) and the output-available chunk
+// has been observed to not reach the client on Vercel before the
+// stream ends, which would otherwise leave the trailing row shimmering
+// forever.
 export function narrationsForFinalize(
   toolName: string,
   input: unknown,

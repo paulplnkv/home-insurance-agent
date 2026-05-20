@@ -88,10 +88,23 @@ function deriveEventsAndObject<T>(
         if (input !== undefined) {
           finalizeInput = input as DeepPartial<T>;
         }
+        // Treat the finalize tool as "done" the moment the model has
+        // finished streaming the structured answer (input-available),
+        // not when the server-side identity execute returns
+        // (output-available). The two are equivalent for these tools —
+        // execute is `async (input) => input` — but on Vercel the
+        // output-available chunk doesn't always reach the client before
+        // the stream is considered complete, leaving the trailing
+        // narration shimmering forever. output-error is included so the
+        // row settles into a non-shimmer state on error too.
+        const finalizeSettled =
+          partState === 'input-available' ||
+          partState === 'output-available' ||
+          partState === 'output-error';
         const narrations = narrationsForFinalize(
           toolName,
           input,
-          partState === 'output-available'
+          finalizeSettled
         );
         for (const narration of narrations) {
           events.push(narration);
