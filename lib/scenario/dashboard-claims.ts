@@ -19,6 +19,28 @@ export const STATUS_ORDER: readonly ClaimStatus[] = [
   'Denied',
 ] as const;
 
+export const OPEN_STATUSES: ReadonlySet<ClaimStatus> = new Set([
+  'New',
+  'In Investigation',
+  'Pending Review',
+  'In Adjustment',
+]);
+
+export const REAL_CLAIM_AGENT_KEYS = {
+  coverage: 'home-ins:coverage:v3',
+  damage: 'home-ins:damage:v4',
+  documents: 'home-ins:documents:v3',
+} as const;
+
+export function daysSinceLoss(
+  dateOfLoss: string,
+  asOf: Date = new Date(),
+): number {
+  const loss = new Date(`${dateOfLoss}T00:00:00`);
+  const ms = asOf.getTime() - loss.getTime();
+  return Math.max(0, Math.floor(ms / 86_400_000));
+}
+
 export type ClaimSummary = {
   claim_number: string;
   insured_name: string;
@@ -28,6 +50,8 @@ export type ClaimSummary = {
   date_of_loss: string;
   coverage_a: number;
   adjuster_name: string;
+  reserve_working: number | null;
+  cat_event: string | null;
   is_real: boolean;
 };
 
@@ -40,6 +64,8 @@ const CHEN_ROW: ClaimSummary = {
   date_of_loss: CLAIM.loss.date_of_loss,
   coverage_a: CLAIM.policy.coverage_a_dwelling,
   adjuster_name: CLAIM.adjuster.name,
+  reserve_working: 22_000,
+  cat_event: 'CAT-2026-022 · TX Hail Event Apr 2026',
   is_real: true,
 };
 
@@ -53,6 +79,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-05-11',
     coverage_a: 365_000,
     adjuster_name: 'Maria Wells',
+    reserve_working: null,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-04-04188',
@@ -63,6 +91,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-04-18',
     coverage_a: 295_000,
     adjuster_name: 'James Okafor',
+    reserve_working: 18_500,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-04-04201',
@@ -73,6 +103,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-04-22',
     coverage_a: 612_000,
     adjuster_name: 'Maria Wells',
+    reserve_working: 41_300,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-04-04153',
@@ -83,6 +115,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-04-09',
     coverage_a: 525_000,
     adjuster_name: 'Linda Park',
+    reserve_working: 73_500,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-04-04122',
@@ -93,6 +127,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-04-04',
     coverage_a: 410_000,
     adjuster_name: 'James Okafor',
+    reserve_working: 31_700,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-04-04089',
@@ -103,6 +139,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-04-02',
     coverage_a: 820_000,
     adjuster_name: 'Maria Wells',
+    reserve_working: 184_500,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-03-03987',
@@ -113,6 +151,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-03-27',
     coverage_a: 348_000,
     adjuster_name: 'Linda Park',
+    reserve_working: 28_650,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-03-03842',
@@ -123,6 +163,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-03-14',
     coverage_a: 715_000,
     adjuster_name: 'James Okafor',
+    reserve_working: 41_200,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-03-03801',
@@ -133,6 +175,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-03-08',
     coverage_a: 242_000,
     adjuster_name: 'Linda Park',
+    reserve_working: null,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-05-04458',
@@ -143,6 +187,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-05-14',
     coverage_a: 388_000,
     adjuster_name: 'James Okafor',
+    reserve_working: null,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-05-04471',
@@ -153,6 +199,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-05-15',
     coverage_a: 472_000,
     adjuster_name: 'Maria Wells',
+    reserve_working: null,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-05-04305',
@@ -163,6 +211,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-05-02',
     coverage_a: 535_000,
     adjuster_name: 'Linda Park',
+    reserve_working: 14_200,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-04-04244',
@@ -173,6 +223,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-04-26',
     coverage_a: 458_000,
     adjuster_name: 'James Okafor',
+    reserve_working: 9_800,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-04-04175',
@@ -183,6 +235,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-04-16',
     coverage_a: 322_000,
     adjuster_name: 'Maria Wells',
+    reserve_working: 26_400,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-04-04147',
@@ -193,6 +247,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-04-12',
     coverage_a: 668_000,
     adjuster_name: 'Linda Park',
+    reserve_working: 38_900,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-04-04101',
@@ -203,6 +259,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-04-06',
     coverage_a: 286_000,
     adjuster_name: 'Maria Wells',
+    reserve_working: 12_300,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-03-03952',
@@ -213,6 +271,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-03-22',
     coverage_a: 555_000,
     adjuster_name: 'James Okafor',
+    reserve_working: 96_400,
+    cat_event: null,
   },
   {
     claim_number: 'HO-2026-03-03877',
@@ -223,6 +283,8 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     date_of_loss: '2026-03-17',
     coverage_a: 304_000,
     adjuster_name: 'Maria Wells',
+    reserve_working: 8_900,
+    cat_event: null,
   },
 ];
 
