@@ -13,7 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { CLAIM, formatDateTime } from '@/lib/scenario/claim';
+import { Field } from './field';
+import { CLAIM, formatCurrency, formatDate, formatDateTime } from '@/lib/scenario/claim';
 import { PHOTO_MANIFEST } from '@/lib/scenario/photos';
 
 type Action = {
@@ -48,9 +49,26 @@ export function ClaimSidebar() {
   return (
     <aside className="flex flex-col gap-4">
       <NextActions />
+      <Reserve />
       <Parties />
       <Timeline />
     </aside>
+  );
+}
+
+function Reserve() {
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base">Reserve</CardTitle>
+      </CardHeader>
+      <CardContent className="grid grid-cols-2 gap-x-4 gap-y-3 pb-4">
+        <Field label="Initial reserve" value={formatCurrency(22_000)} />
+        <Field label="Current reserve" value={formatCurrency(22_000)} />
+        <Field label="Last updated" value={formatDate('2026-04-23')} />
+        <Field label="Reserve adequacy" value="Under review" />
+      </CardContent>
+    </Card>
   );
 }
 

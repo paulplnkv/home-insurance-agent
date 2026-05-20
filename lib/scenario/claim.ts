@@ -9,7 +9,7 @@ export const CLAIM = {
     address: '4521 Oak Ridge Dr, Plano TX 75024',
     phone: '+1 (469) 555-0182',
     email: 'maria.chen@gmail.com',
-    preferred_contact: 'SMS' as 'SMS' | 'Email' | 'Phone',
+    preferred_contact: 'Phone' as 'SMS' | 'Email' | 'Phone',
   },
   policy: {
     number: 'PSM-HO-7842113',

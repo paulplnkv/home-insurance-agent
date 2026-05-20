@@ -1,26 +1,26 @@
 import { CLAIM } from './claim';
 
 export type ClaimStatus =
-  | 'New'
+  | 'Open'
   | 'In Investigation'
   | 'Pending Review'
   | 'In Adjustment'
-  | 'Approved'
+  | 'Payment Approved'
   | 'Closed'
   | 'Denied';
 
 export const STATUS_ORDER: readonly ClaimStatus[] = [
-  'New',
+  'Open',
   'In Investigation',
   'Pending Review',
   'In Adjustment',
-  'Approved',
+  'Payment Approved',
   'Closed',
   'Denied',
 ] as const;
 
 export const OPEN_STATUSES: ReadonlySet<ClaimStatus> = new Set([
-  'New',
+  'Open',
   'In Investigation',
   'Pending Review',
   'In Adjustment',
@@ -75,7 +75,7 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     insured_name: 'David Rodriguez',
     loss_address: '218 Pecan Hollow Ln, Frisco TX 75033',
     peril: 'Wind',
-    status: 'New',
+    status: 'Open',
     date_of_loss: '2026-05-11',
     coverage_a: 365_000,
     adjuster_name: 'Maria Wells',
@@ -110,7 +110,7 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     claim_number: 'HO-2026-04-04153',
     insured_name: 'Jennifer Brooks',
     loss_address: '3408 Magnolia Bend Dr, The Woodlands TX 77381',
-    peril: 'Tree fall',
+    peril: 'Falling Objects',
     status: 'Pending Review',
     date_of_loss: '2026-04-09',
     coverage_a: 525_000,
@@ -147,7 +147,7 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     insured_name: 'Carlos Mendoza',
     loss_address: '2245 Oak Park Blvd, San Antonio TX 78248',
     peril: 'Hailstorm',
-    status: 'Approved',
+    status: 'Payment Approved',
     date_of_loss: '2026-03-27',
     coverage_a: 348_000,
     adjuster_name: 'Linda Park',
@@ -183,7 +183,7 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     insured_name: 'Hannah Schultz',
     loss_address: '1812 Trailwood Ave, McKinney TX 75070',
     peril: 'Lightning',
-    status: 'New',
+    status: 'Open',
     date_of_loss: '2026-05-14',
     coverage_a: 388_000,
     adjuster_name: 'James Okafor',
@@ -195,7 +195,7 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     insured_name: 'Trevor Bauer',
     loss_address: '4406 Lakeside Vw, Flower Mound TX 75028',
     peril: 'Hailstorm',
-    status: 'New',
+    status: 'Open',
     date_of_loss: '2026-05-15',
     coverage_a: 472_000,
     adjuster_name: 'Maria Wells',
@@ -230,7 +230,7 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     claim_number: 'HO-2026-04-04175',
     insured_name: 'Rachel Kim',
     loss_address: '511 Briarcliff Way, Richardson TX 75080',
-    peril: 'Tree fall',
+    peril: 'Falling Objects',
     status: 'Pending Review',
     date_of_loss: '2026-04-16',
     coverage_a: 322_000,
@@ -267,7 +267,7 @@ const MOCK_ROWS: Omit<ClaimSummary, 'is_real'>[] = [
     insured_name: 'Andrew Park',
     loss_address: '6122 Dove Meadow Dr, Lewisville TX 75067',
     peril: 'Fire',
-    status: 'Approved',
+    status: 'Payment Approved',
     date_of_loss: '2026-03-22',
     coverage_a: 555_000,
     adjuster_name: 'James Okafor',

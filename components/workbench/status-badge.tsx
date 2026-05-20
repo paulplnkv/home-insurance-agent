@@ -12,7 +12,7 @@ export function StatusBadge({
   const variant: 'secondary' | 'outline' | 'destructive' =
     status === 'Denied'
       ? 'destructive'
-      : status === 'Approved' || status === 'Closed'
+      : status === 'Payment Approved' || status === 'Closed'
         ? 'outline'
         : 'secondary';
 

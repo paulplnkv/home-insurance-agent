@@ -27,10 +27,7 @@ function initials(name: string): string {
 
 export function ClaimHeader() {
   const open = daysSince(CLAIM.loss.fnol_filed_at);
-  const reportedVia =
-    CLAIM.insured.preferred_contact === 'SMS'
-      ? 'SMS · Insured'
-      : `${CLAIM.insured.preferred_contact} · Insured`;
+  const reportedVia = 'Phone · Inbound 1-800';
 
   return (
     <header className="overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm">
