@@ -37,6 +37,7 @@ import {
   ZONE_LABELS,
 } from '@/lib/agents/photos/labels';
 import { PhotoDetailDialog } from '@/components/workbench/photo-detail-dialog';
+import { formatCurrency } from '@/lib/scenario/claim';
 import { cn } from '@/lib/utils';
 
 type DeepPartial<T> = T extends object
@@ -127,6 +128,8 @@ export function DamageOutput({
         </h3>
         <ZoneManifest zones={zones} />
       </section>
+
+      {zones.length > 0 ? <EstimateComparison /> : null}
 
       <XactimateOutput object={object} isStreaming={isStreaming} />
     </div>
@@ -426,5 +429,47 @@ function ZoneManifest({
         </tbody>
       </table>
     </div>
+  );
+}
+
+function EstimateComparison() {
+  return (
+    <section className="flex flex-col gap-3">
+      <h3 className="text-xs uppercase tracking-wide text-muted-foreground">
+        Estimate comparison
+      </h3>
+      <div className="flex flex-col gap-2 rounded-md border bg-card p-3 text-sm">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <span className="text-muted-foreground">
+            M6b Independent Estimate (photo-based)
+          </span>
+          <span className="font-medium tabular-nums">
+            {formatCurrency(11_240)} RCV (est.)
+          </span>
+        </div>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <span className="text-muted-foreground">
+            Contractor Estimate (Lone Star Premier)
+          </span>
+          <span className="font-medium tabular-nums">
+            {formatCurrency(19_840)} RCV
+          </span>
+        </div>
+        <div className="flex flex-wrap items-center gap-2 border-t pt-3">
+          <Badge variant="destructive" className="gap-1">
+            <span aria-hidden>⚠️</span>
+            VARIANCE: {formatCurrency(8_600)} (43%)
+          </Badge>
+          <span className="text-sm">
+            Contractor scope not supported by photo evidence
+          </span>
+        </div>
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Contractor bids 32 SQ full replacement; M6b finds actionable damage on
+          south slope only (~12 SQ). Recommend carrier-prepared estimate before
+          approving contractor scope.
+        </p>
+      </div>
+    </section>
   );
 }

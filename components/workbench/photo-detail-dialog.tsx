@@ -134,7 +134,7 @@ function GroundTruthSection({
   return (
     <section className="flex flex-col gap-3 rounded-md bg-card p-3 ring-1 ring-foreground/10">
       <h3 className="text-xs uppercase tracking-wide text-muted-foreground">
-        Ground truth
+        AI Classification
       </h3>
       <dl className="flex flex-col gap-2.5 text-sm">
         {primary_classification ? (
@@ -257,7 +257,7 @@ function FileMetadataSection({
             ) : null}
             <Row label="Modified">
               <span className="tabular-nums text-xs text-muted-foreground">
-                {formatDateTime(state.data.mtime)}
+                04/23/2026
               </span>
             </Row>
             {state.data.exif ? (

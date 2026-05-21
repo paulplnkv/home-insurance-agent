@@ -1,12 +1,14 @@
 'use client';
 
 import { AppBar } from '@/components/workbench/app-bar';
+import { Badge } from '@/components/ui/badge';
 import { Breadcrumb } from '@/components/workbench/breadcrumb';
 import { ClaimSubTabs } from '@/components/workbench/claim-sub-tabs';
 import { ActivityFeed } from '@/components/workbench/activity-feed';
 import { AgentPageBody } from '@/components/workbench/agent-page';
 import { damageAgentConfig } from '@/components/workbench/damage-agent-panel';
 import { DamageOutput } from '@/components/workbench/damage-output';
+import { DamageScaffold } from '@/components/workbench/damage-scaffold';
 import { useAgentChat } from '@/hooks/use-agent-chat';
 
 export default function DamageAgentPage() {
@@ -25,7 +27,12 @@ export default function DamageAgentPage() {
         <AgentPageBody
           title={damageAgentConfig.title}
           description={damageAgentConfig.description}
-          idlePlaceholder={damageAgentConfig.idlePlaceholder}
+          identityBadge={
+            <Badge variant="secondary" className="font-normal">
+              M6b · Photo Intel Agent · Tier 2 — Draft output, adjuster review required
+            </Badge>
+          }
+          idlePlaceholder={<DamageScaffold />}
           state={agent.state}
           startedAt={agent.startedAt}
           endedAt={agent.endedAt}
