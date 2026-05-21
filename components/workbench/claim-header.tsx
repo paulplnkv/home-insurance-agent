@@ -9,12 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { ConsistencyCheckBadge } from './consistency-check-badge';
 import { Field } from './field';
 import { StatusBadge } from './status-badge';
-import {
-  CLAIM,
-  daysSince,
-  formatDate,
-  formatDateTime,
-} from '@/lib/scenario/claim';
+import { CLAIM, formatDate, formatDateTime } from '@/lib/scenario/claim';
 
 function initials(name: string): string {
   return name
@@ -27,7 +22,7 @@ function initials(name: string): string {
 }
 
 export function ClaimHeader() {
-  const open = daysSince(CLAIM.loss.fnol_filed_at);
+  const open = 1;
   const reportedVia = 'Phone · Inbound 1-800';
 
   return (
