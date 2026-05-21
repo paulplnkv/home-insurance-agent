@@ -1,16 +1,17 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import { ExternalLinkIcon, FileTextIcon } from 'lucide-react';
+import { CameraIcon, ExternalLinkIcon, FileTextIcon } from 'lucide-react';
 import {
   Card,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { buttonVariants } from '@/components/ui/button';
 import {
   DOCUMENT_KIND_LABELS,
   SCENARIO_DOCUMENTS,
 } from '@/lib/scenario/documents';
 import { PHOTO_MANIFEST } from '@/lib/scenario/photos';
+import { cn } from '@/lib/utils';
 
 const POLICY_PDF_URL = '/documents/policy-ho3.pdf';
 
@@ -48,32 +49,24 @@ export function ClaimFile() {
           <CardTitle className="text-base">
             Field photos ({PHOTO_MANIFEST.length})
           </CardTitle>
-          <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6">
-            {PHOTO_MANIFEST.map((p) => (
-              <li key={p.id}>
-                <Link
-                  href={p.publicUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={p.description}
-                  className="group block overflow-hidden rounded-md border bg-card transition-colors hover:border-foreground/30"
-                >
-                  <div className="relative aspect-[4/3]">
-                    <Image
-                      src={p.publicUrl}
-                      alt={p.id}
-                      fill
-                      sizes="(max-width: 1024px) 25vw, 12vw"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="px-1.5 py-1 text-[10px] font-mono text-muted-foreground transition-colors group-hover:text-foreground">
-                    {p.id}
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border bg-muted/30 p-3">
+            <div className="flex items-center gap-2 text-sm">
+              <CameraIcon className="size-4 text-muted-foreground" />
+              <span className="font-medium">
+                {PHOTO_MANIFEST.length} photos staged
+              </span>
+              <span className="text-muted-foreground">·</span>
+              <span className="text-xs text-muted-foreground">
+                Pending classification
+              </span>
+            </div>
+            <Link
+              href="/agents/damage"
+              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+            >
+              View photos
+            </Link>
+          </div>
         </CardHeader>
       </Card>
     </section>

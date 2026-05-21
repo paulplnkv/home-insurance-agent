@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { ConsistencyCheckBadge } from './consistency-check-badge';
 import { Field } from './field';
 import { StatusBadge } from './status-badge';
 import {
@@ -59,7 +60,10 @@ export function ClaimHeader() {
         </div>
 
         <div className="flex flex-col items-end gap-3">
-          <StatusBadge status={CLAIM.status} className="text-xs" />
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <StatusBadge status={CLAIM.status} className="text-xs" />
+            <ConsistencyCheckBadge className="text-xs" />
+          </div>
           <AdjusterCard />
         </div>
       </div>

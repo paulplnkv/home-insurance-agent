@@ -26,7 +26,9 @@ const STATE_VARIANT: Record<
 interface AgentPageBodyProps {
   title: string;
   description: string;
-  idlePlaceholder: string;
+  // Accepts a plain string (rendered as italic muted copy) or a React
+  // node when a page needs richer pre-run content like a scaffold table.
+  idlePlaceholder: React.ReactNode;
   state: AgentState;
   startedAt: number | null;
   endedAt: number | null;
@@ -36,6 +38,9 @@ interface AgentPageBodyProps {
   onReset?: () => void;
   // Live-activity slot rendered as a sticky sidebar on the left at lg+.
   activity?: React.ReactNode;
+  // Optional badge rendered beside the title so the audience can map
+  // the page to its agent identity (e.g. "M2 · Coverage Agent · Tier 3").
+  identityBadge?: React.ReactNode;
   children?: React.ReactNode;
 }
 
@@ -55,6 +60,7 @@ export function AgentPageBody({
   onStop,
   onReset,
   activity,
+  identityBadge,
   children,
 }: AgentPageBodyProps) {
   const [now, setNow] = useState(() => Date.now());
@@ -78,7 +84,10 @@ export function AgentPageBody({
       <Card>
         <div className="flex flex-wrap items-start justify-between gap-3 px-6 py-4">
           <div className="flex flex-col gap-1">
-            <h1 className="text-base font-semibold leading-tight">{title}</h1>
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-base font-semibold leading-tight">{title}</h1>
+              {identityBadge}
+            </div>
             <p className="text-xs text-muted-foreground">{description}</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -142,9 +151,13 @@ export function AgentPageBody({
                 {title} failed: {error.message}
               </p>
             ) : state === 'idle' ? (
-              <p className="text-sm italic text-muted-foreground">
-                {idlePlaceholder}
-              </p>
+              typeof idlePlaceholder === 'string' ? (
+                <p className="text-sm italic text-muted-foreground">
+                  {idlePlaceholder}
+                </p>
+              ) : (
+                idlePlaceholder
+              )
             ) : (
               children
             )}

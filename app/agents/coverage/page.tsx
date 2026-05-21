@@ -1,12 +1,14 @@
 'use client';
 
 import { AppBar } from '@/components/workbench/app-bar';
+import { Badge } from '@/components/ui/badge';
 import { Breadcrumb } from '@/components/workbench/breadcrumb';
 import { ClaimSubTabs } from '@/components/workbench/claim-sub-tabs';
 import { ActivityFeed } from '@/components/workbench/activity-feed';
 import { AgentPageBody } from '@/components/workbench/agent-page';
 import { coverageAgentConfig } from '@/components/workbench/coverage-agent-panel';
 import { CoverageOutput } from '@/components/workbench/coverage-output';
+import { CoverageScaffold } from '@/components/workbench/coverage-scaffold';
 import { useAgentChat } from '@/hooks/use-agent-chat';
 
 export default function CoverageAgentPage() {
@@ -25,7 +27,12 @@ export default function CoverageAgentPage() {
         <AgentPageBody
           title={coverageAgentConfig.title}
           description={coverageAgentConfig.description}
-          idlePlaceholder={coverageAgentConfig.idlePlaceholder}
+          identityBadge={
+            <Badge variant="secondary" className="font-normal">
+              M2 · Coverage Agent · Tier 3 — Adjuster confirmation required
+            </Badge>
+          }
+          idlePlaceholder={<CoverageScaffold />}
           state={agent.state}
           startedAt={agent.startedAt}
           endedAt={agent.endedAt}

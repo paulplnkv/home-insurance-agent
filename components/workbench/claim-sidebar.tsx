@@ -1,10 +1,7 @@
-import Link from 'next/link';
 import {
-  ArrowRightIcon,
   CameraIcon,
   ClipboardCheckIcon,
   ClockIcon,
-  FileSearchIcon,
   HammerIcon,
   MailIcon,
   MicIcon,
@@ -17,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { AiAgentsPanel } from './ai-agents-panel';
 import { Field } from './field';
 import { ClaimRegulatoryDeadlines } from './claim-regulatory-deadlines';
 import { ClaimFraudRisk } from './claim-fraud-risk';
@@ -24,38 +22,10 @@ import { ClaimPendingApprovals } from './claim-pending-approvals';
 import { CLAIM, formatCurrency, formatDate, formatDateTime } from '@/lib/scenario/claim';
 import { PHOTO_MANIFEST } from '@/lib/scenario/photos';
 
-type Action = {
-  href: string;
-  title: string;
-  description: string;
-  icon: typeof ShieldCheckIcon;
-};
-
-const ACTIONS: ReadonlyArray<Action> = [
-  {
-    href: '/agents/coverage',
-    title: 'Run coverage check',
-    description: 'Verify the HO-3 covers hail to roof, gutters, and skylight.',
-    icon: ShieldCheckIcon,
-  },
-  {
-    href: '/agents/damage',
-    title: 'Assess damages',
-    description: 'Score field photos and call out replacement candidates.',
-    icon: HammerIcon,
-  },
-  {
-    href: '/agents/documents',
-    title: 'Review documents',
-    description: 'Cross-check the file for inconsistencies and missing paperwork.',
-    icon: FileSearchIcon,
-  },
-];
-
 export function ClaimSidebar() {
   return (
     <aside className="flex flex-col gap-4">
-      <NextActions />
+      <AiAgentsPanel />
       <Reserve />
       <ClaimRegulatoryDeadlines />
       <ClaimFraudRisk />
@@ -77,34 +47,6 @@ function Reserve() {
         <Field label="Current reserve" value={formatCurrency(22_000)} />
         <Field label="Last updated" value={formatDate('2026-04-23')} />
         <Field label="Reserve adequacy" value="Under review" />
-      </CardContent>
-    </Card>
-  );
-}
-
-function NextActions() {
-  return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base">AI agents</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-2 pb-4">
-        {ACTIONS.map((action) => (
-          <Link
-            key={action.href}
-            href={action.href}
-            className="group flex items-start gap-3 rounded-md border bg-card p-3 transition-colors hover:border-foreground/30 hover:bg-accent/40"
-          >
-            <action.icon className="mt-0.5 size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
-            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span className="text-sm font-medium">{action.title}</span>
-              <span className="text-xs text-muted-foreground">
-                {action.description}
-              </span>
-            </div>
-            <ArrowRightIcon className="mt-0.5 size-3.5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground" />
-          </Link>
-        ))}
       </CardContent>
     </Card>
   );
