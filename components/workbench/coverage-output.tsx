@@ -1,6 +1,12 @@
 'use client';
 
-import { ExternalLinkIcon } from 'lucide-react';
+import {
+  AlertTriangleIcon,
+  CheckCircle2Icon,
+  ExternalLinkIcon,
+  FileTextIcon,
+} from 'lucide-react';
+import { useSyncExternalStore } from 'react';
 import { Streamdown } from 'streamdown';
 import {
   Accordion,
@@ -8,8 +14,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { CoverageScaffold } from '@/components/workbench/coverage-scaffold';
 import type { CoveragePosition } from '@/lib/agents/coverage/schema';
+import { CLAIM } from '@/lib/scenario/claim';
+import { TIER3_CONFIRMED_KEY } from '@/lib/scenario/tier3';
 import POLICY_PAGE_MAP from '@/lib/policy/page-map.json';
 
 // PDF facsimile of the HO-3 policy text — the same source the retriever
@@ -50,6 +61,10 @@ export function CoverageOutput({
 
   return (
     <div className="flex flex-col gap-4 text-sm">
+      <Tier3Banner />
+
+      <CoverageScaffold lines={object?.coverage_lines} />
+
       <HeadlineSummary memo={object?.memo_markdown} />
 
       <PositionRow
@@ -134,8 +149,128 @@ export function CoverageOutput({
           ) : null}
         </Accordion>
       ) : null}
+
+      {hasMemo ? <QueuedDocuments /> : null}
     </div>
   );
+}
+
+function Tier3Banner() {
+  const confirmedAt = useSyncExternalStore(
+    subscribeTier3,
+    readTier3Confirmation,
+    getServerTier3Snapshot,
+  );
+
+  if (confirmedAt) {
+    return (
+      <Alert>
+        <CheckCircle2Icon className="text-emerald-600" />
+        <AlertTitle>
+          Coverage position confirmed by {CLAIM.adjuster.name} ·{' '}
+          {formatConfirmTimestamp(confirmedAt)} · Written to claim file.
+        </AlertTitle>
+      </Alert>
+    );
+  }
+
+  return (
+    <Alert variant="destructive">
+      <AlertTriangleIcon />
+      <AlertTitle>Tier 3 — Adjuster confirmation required</AlertTitle>
+      <AlertDescription>
+        This coverage position has not been written to the claim file. Review
+        the analysis below and confirm to save.
+      </AlertDescription>
+      <div className="mt-3 flex gap-2 group-has-[>svg]/alert:col-start-2">
+        <Button size="sm" onClick={confirmTier3}>
+          Confirm and save to claim file
+        </Button>
+        <Button size="sm" variant="outline">
+          Request changes
+        </Button>
+      </div>
+    </Alert>
+  );
+}
+
+function QueuedDocuments() {
+  return (
+    <section className="flex flex-col gap-3 rounded-md border bg-card p-4">
+      <h3 className="text-xs uppercase tracking-wide text-muted-foreground">
+        Queued documents (1)
+      </h3>
+      <div className="flex items-start gap-2">
+        <FileTextIcon className="mt-0.5 size-4 text-muted-foreground" />
+        <div className="flex min-w-0 flex-col gap-1">
+          <span className="text-sm font-medium leading-tight">
+            Reservation of Rights Letter — Draft
+          </span>
+          <span className="text-xs text-muted-foreground">
+            Wind/Hail Percentage Deductible Disclosure (HE-7 §6)
+          </span>
+        </div>
+      </div>
+      <p className="text-xs text-muted-foreground">
+        Required: Written disclosure to insured of percentage deductible before
+        any settlement payment is issued.
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <Button size="sm" variant="outline">
+          Review Draft
+        </Button>
+        <Button size="sm" variant="outline">
+          Edit
+        </Button>
+        <Button size="sm">Send</Button>
+      </div>
+    </section>
+  );
+}
+
+// Tier 3 confirmation state — mirrors the pattern used in
+// claim-pending-approvals.tsx so the banner and the sidebar stay in sync via
+// the same localStorage key + manual StorageEvent dispatch.
+function readTier3Confirmation(): string | null {
+  if (typeof window === 'undefined') return null;
+  return window.localStorage.getItem(TIER3_CONFIRMED_KEY);
+}
+
+function subscribeTier3(notify: () => void): () => void {
+  const handler = (event: StorageEvent) => {
+    if (event.key === null || event.key === TIER3_CONFIRMED_KEY) notify();
+  };
+  window.addEventListener('storage', handler);
+  return () => window.removeEventListener('storage', handler);
+}
+
+function getServerTier3Snapshot(): string | null {
+  return null;
+}
+
+function confirmTier3() {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(TIER3_CONFIRMED_KEY, new Date().toISOString());
+  // `storage` only fires across tabs — dispatch manually so same-tab
+  // subscribers (this banner, the sidebar, and the dashboard AI-status cell)
+  // re-render.
+  window.dispatchEvent(
+    new StorageEvent('storage', { key: TIER3_CONFIRMED_KEY }),
+  );
+}
+
+const CONFIRM_TIMESTAMP_FORMATTER = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+  hour: 'numeric',
+  minute: '2-digit',
+});
+
+function formatConfirmTimestamp(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
+  return CONFIRM_TIMESTAMP_FORMATTER.format(date);
 }
 
 // Pulls the bolded one-sentence headline the agent is required to write

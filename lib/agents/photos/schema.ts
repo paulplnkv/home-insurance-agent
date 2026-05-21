@@ -108,7 +108,7 @@ export const DAMAGE_ZONES = [
   'property_overview',
 ] as const;
 
-export const DAMAGE_SEVERITIES = ['minor', 'moderate', 'major'] as const;
+export const DAMAGE_SEVERITIES = ['minor', 'moderate', 'major', 'severe'] as const;
 
 export const PERIL_CONSISTENCY = [
   'consistent',
@@ -191,6 +191,23 @@ export const damageAgentOutputSchema = z.object({
       z.object({
         zone: z.enum(DAMAGE_ZONES),
         severity: z.enum(DAMAGE_SEVERITIES),
+        photo_count: z
+          .number()
+          .int()
+          .nonnegative()
+          .describe(
+            'Number of photos in the set that evidence this zone. Powers the manifest "Photos" column.'
+          ),
+        findings_summary: z
+          .string()
+          .describe(
+            'Comma-separated human-readable findings summary, e.g. "Bruise/spatter, Granule loss, Fractured tab". Drives the manifest "Findings" column.'
+          ),
+        recommendation: z
+          .string()
+          .describe(
+            'Short repair recommendation with quantity, e.g. "Replace — 12 SQ", "No repair", "R&R drywall ~96 SF". Drives the manifest "Recommendation" column.'
+          ),
         evidence: z
           .string()
           .describe(

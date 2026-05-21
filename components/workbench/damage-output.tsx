@@ -67,12 +67,17 @@ const NOTABLE_SHOT_TYPES = new Set<ShotTypeTag>([
 ]);
 
 const SEVERITY_BADGE: Record<
-  'minor' | 'moderate' | 'major',
-  { variant: 'default' | 'secondary' | 'destructive'; label: string }
+  'minor' | 'moderate' | 'major' | 'severe',
+  {
+    variant: 'default' | 'secondary' | 'destructive';
+    label: string;
+    className?: string;
+  }
 > = {
   minor: { variant: 'secondary', label: 'Minor' },
   moderate: { variant: 'default', label: 'Moderate' },
   major: { variant: 'destructive', label: 'Major' },
+  severe: { variant: 'destructive', label: 'Severe', className: 'uppercase' },
 };
 
 const PERIL_CONSISTENCY_BADGE: Record<
@@ -372,7 +377,9 @@ function ZoneManifest({
           <tr>
             <th className="px-3 py-2 text-left font-medium">Zone</th>
             <th className="px-3 py-2 text-left font-medium">Severity</th>
-            <th className="px-3 py-2 text-left font-medium">Evidence</th>
+            <th className="px-3 py-2 text-left font-medium">Photos</th>
+            <th className="px-3 py-2 text-left font-medium">Findings</th>
+            <th className="px-3 py-2 text-left font-medium">Recommendation</th>
           </tr>
         </thead>
         <tbody>
@@ -390,17 +397,28 @@ function ZoneManifest({
                 ? (rawZone as DamageZone)
                 : null;
             return zone ? (
-              <tr key={`${zone}-${i}`} className="border-t">
+              <tr key={`${zone}-${i}`} className="border-t align-top">
                 <td className="px-3 py-2 font-medium">{ZONE_LABELS[zone]}</td>
                 <td className="px-3 py-2">
                   {sev ? (
-                    <Badge variant={SEVERITY_BADGE[sev].variant}>
+                    <Badge
+                      variant={SEVERITY_BADGE[sev].variant}
+                      className={SEVERITY_BADGE[sev].className}
+                    >
                       {SEVERITY_BADGE[sev].label}
                     </Badge>
                   ) : null}
                 </td>
+                <td className="px-3 py-2 tabular-nums text-muted-foreground">
+                  {typeof z?.photo_count === 'number'
+                    ? `${z.photo_count} photos`
+                    : ''}
+                </td>
                 <td className="px-3 py-2 text-muted-foreground">
-                  {z?.evidence ?? ''}
+                  {z?.findings_summary ?? ''}
+                </td>
+                <td className="px-3 py-2 text-muted-foreground">
+                  {z?.recommendation ?? ''}
                 </td>
               </tr>
             ) : null;

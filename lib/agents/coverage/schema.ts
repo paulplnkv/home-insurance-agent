@@ -46,6 +46,21 @@ export const coveragePositionSchema = z.object({
     .describe(
       'Plain-language coverage memo for the file, in markdown. Reference cited clauses inline by section name. Two to four short paragraphs.'
     ),
+  coverage_lines: z
+    .array(
+      z.object({
+        code: z.enum(['A', 'B', 'C', 'D', 'HE7', 'HO0490', 'HO0441']),
+        status: z.enum([
+          'COVERED',
+          'PARTIALLY_COVERED',
+          'EXCLUDED',
+          'NEEDS_REVIEW',
+        ]),
+      })
+    )
+    .describe(
+      'Per-coverage-line evaluation, one entry per scaffold row. The UI mirrors the pre-run scaffold post-run with these statuses replacing the Pending badges.'
+    ),
   flags: z
     .array(
       z.object({

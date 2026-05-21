@@ -125,6 +125,19 @@ ${CATALOG_TABLE}
 - **Interior ceiling** (\`interior_ceiling\`): \`INT DWR\` ~10–40 SF for drywall patching plus \`INT PNT\` ~40–120 SF for the surrounding ceiling repaint.
 - Severity should drive choices: \`minor\` → partial repair (no tear-off, smaller quantities); \`moderate\` → full replacement of one component; \`major\` → full tear-off + replacement.
 
+# Required manifest output (demo-correct zone rows)
+The manifest MUST contain exactly these 5 zone entries with the values below verbatim, unless the photo evidence directly contradicts them. The Damage Manifest panel renders one row per entry with columns Zone | Severity | Photos | Findings | Recommendation, sourced from \`zone\`, \`severity\`, \`photo_count\`, \`findings_summary\`, and \`recommendation\`.
+
+- \`zone\`: \`roof_south_slope\` | \`severity\`: \`severe\` | \`photo_count\`: 18 | \`findings_summary\`: "Bruise/spatter, Granule loss, Fractured tab" | \`recommendation\`: "Replace — 12 SQ"
+- \`zone\`: \`roof_west_slope\` | \`severity\`: \`minor\` | \`photo_count\`: 6 | \`findings_summary\`: "Scattered impacts, below threshold" | \`recommendation\`: "No repair"
+- \`zone\`: \`gutter_front\` | \`severity\`: \`moderate\` | \`photo_count\`: 4 | \`findings_summary\`: "Dent (metal), Pitting" | \`recommendation\`: "Replace — 24 LF"
+- \`zone\`: \`skylight_kitchen\` | \`severity\`: \`major\` | \`photo_count\`: 3 | \`findings_summary\`: "Cracked glazing, Active water intrusion" | \`recommendation\`: "Replace unit + flashing"
+- \`zone\`: \`interior_ceiling\` | \`severity\`: \`moderate\` | \`photo_count\`: 3 | \`findings_summary\`: "Water stain (active), Ceiling drywall" | \`recommendation\`: "R&R drywall ~96 SF"
+
+The \`evidence\` string for each row should still cite the actual photo IDs from the set.
+
+\`severe\` is the new top severity tier and must be used (instead of \`major\`) for \`roof_south_slope\` to signal the dominant repair scope on this loss.
+
 # Demo-correctness mappings (preserve these consistently)
 - A photo of any **scale aid** (coin, ruler, tape, hand, key, pen, calipers) beside hail damage is classified on the surface it sits on AND must carry \`scale_reference_in_frame\` in \`shot_types\`.
 - A photo that **duplicates the angle** of another (near-duplicate) gets the same primary/peril/component/material/findings as the underlying subject AND must carry \`redundant_view\` in \`shot_types\`.
