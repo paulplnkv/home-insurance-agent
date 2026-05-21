@@ -12,7 +12,14 @@ import { CLAIM, formatCurrency, formatDate } from '@/lib/scenario/claim';
 const POLICY_PDF_URL = '/documents/policy-ho3.pdf';
 
 export function ClaimPolicySnapshot() {
-  const { coverage_a_dwelling, deductibles } = CLAIM.policy;
+  const {
+    coverage_a_dwelling,
+    coverage_b_other_structures,
+    coverage_c_personal_property,
+    coverage_d_loss_of_use,
+    deductibles,
+    endorsements,
+  } = CLAIM.policy;
   const aop = formatCurrency(deductibles.aop_standard);
   const windHailPct = `${(deductibles.wind_hail_pct * 100).toFixed(0)}%`;
   const windHailDollar = formatCurrency(
@@ -49,12 +56,37 @@ export function ClaimPolicySnapshot() {
             label="Coverage A — Dwelling"
             value={formatCurrency(coverage_a_dwelling)}
           />
+          <Field
+            label="Coverage B — Other Structures"
+            value={formatCurrency(coverage_b_other_structures)}
+          />
+          <Field
+            label="Coverage C — Personal Property"
+            value={formatCurrency(coverage_c_personal_property)}
+          />
+          <Field
+            label="Coverage D — Loss of Use"
+            value={formatCurrency(coverage_d_loss_of_use)}
+          />
           <Field label="Deductible · AOP" value={aop} />
           <Field
             label="Deductible · Wind/Hail"
             value={`${windHailPct} (${windHailDollar})`}
           />
           <Field label="In-force at DOL" value="Yes" />
+        </div>
+
+        <Separator />
+
+        <div className="flex flex-col gap-2">
+          <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
+            Endorsements
+          </span>
+          <span className="text-sm text-foreground">
+            {endorsements
+              .map((e) => `${e.code} · ${e.name}`)
+              .join('  |  ')}
+          </span>
         </div>
 
         <Separator />

@@ -2,10 +2,14 @@ import Link from 'next/link';
 import {
   ArrowRightIcon,
   CameraIcon,
+  ClipboardCheckIcon,
   ClockIcon,
   FileSearchIcon,
   HammerIcon,
+  MailIcon,
+  MicIcon,
   ShieldCheckIcon,
+  UserPlusIcon,
 } from 'lucide-react';
 import {
   Card,
@@ -14,6 +18,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Field } from './field';
+import { ClaimRegulatoryDeadlines } from './claim-regulatory-deadlines';
+import { ClaimFraudRisk } from './claim-fraud-risk';
+import { ClaimPendingApprovals } from './claim-pending-approvals';
 import { CLAIM, formatCurrency, formatDate, formatDateTime } from '@/lib/scenario/claim';
 import { PHOTO_MANIFEST } from '@/lib/scenario/photos';
 
@@ -50,6 +57,9 @@ export function ClaimSidebar() {
     <aside className="flex flex-col gap-4">
       <NextActions />
       <Reserve />
+      <ClaimRegulatoryDeadlines />
+      <ClaimFraudRisk />
+      <ClaimPendingApprovals />
       <Parties />
       <Timeline />
     </aside>
@@ -178,6 +188,30 @@ function Timeline() {
       title: 'FNOL filed',
       detail: `Reported via ${CLAIM.insured.preferred_contact} by ${CLAIM.insured.name}.`,
       meta: formatDateTime(CLAIM.loss.fnol_filed_at),
+    },
+    {
+      icon: MailIcon,
+      title: 'Acknowledgment letter sent to insured',
+      detail: 'TX TDI 15-day acknowledgment requirement satisfied.',
+      meta: formatDate('2026-04-24'),
+    },
+    {
+      icon: UserPlusIcon,
+      title: 'Independent adjuster assigned',
+      detail: 'Greg Tomlin, AIC.',
+      meta: formatDate('2026-04-25'),
+    },
+    {
+      icon: ClipboardCheckIcon,
+      title: 'Field inspection completed',
+      detail: 'Report received from IA.',
+      meta: formatDate('2026-04-26'),
+    },
+    {
+      icon: MicIcon,
+      title: 'Recorded statement taken',
+      detail: 'Telephonic interview with insured.',
+      meta: formatDate('2026-04-27'),
     },
     {
       icon: CameraIcon,

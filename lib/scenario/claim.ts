@@ -17,10 +17,18 @@ export const CLAIM = {
     effective_date: '2025-08-01',
     expiration_date: '2026-08-01',
     coverage_a_dwelling: 480_000,
+    coverage_b_other_structures: 48_000,
+    coverage_c_personal_property: 240_000,
+    coverage_d_loss_of_use: 96_000,
     deductibles: {
       aop_standard: 1_000,
       wind_hail_pct: 0.02,
     },
+    endorsements: [
+      { code: 'HE-7', name: 'Wind/Hail % Deductible' },
+      { code: 'HO 04 90', name: 'Ordinance or Law' },
+      { code: 'HO 04 41', name: 'Limited Mold' },
+    ],
     mortgagee: {
       lender: 'Frost Bank, NA',
       loan_number: '0042-118937',

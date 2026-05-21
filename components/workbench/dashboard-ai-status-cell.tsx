@@ -7,15 +7,11 @@ import {
   ClockIcon,
   Loader2Icon,
 } from 'lucide-react';
-import { CLAIM } from '@/lib/scenario/claim';
 import { REAL_CLAIM_AGENT_KEYS } from '@/lib/scenario/dashboard-claims';
+import { TIER3_CONFIRMED_KEY } from '@/lib/scenario/tier3';
 import { cn } from '@/lib/utils';
 
 type AiStatus = 'pending' | 'running' | 'complete' | 'action_needed';
-
-// Same key the Coverage Agent's Tier 3 banner will write to (Task 24). Read
-// here so the AI-status icon flips to "Complete" the moment confirmation lands.
-const TIER3_CONFIRMED_KEY = `coverage:tier3-confirmed:${CLAIM.claim_number}`;
 
 // Keys observed by `useSyncExternalStore` snapshot. Subscribed via the
 // `storage` event so updates from other tabs/pages re-render this cell.
