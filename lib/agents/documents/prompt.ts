@@ -26,10 +26,11 @@ If any of the above is absent from the supplied set, surface it as a MEDIUM find
 # What counts as a finding (and what does not)
 A finding must be (a) actionable by the adjuster and (b) supported by direct quotes or values pulled from the documents. Common patterns to look for in a hailstorm claim file:
 - Scope variance: contractor estimate scope vs. field inspection scope. Note the discrepancy by quoting both totals verbatim from their source documents — do not compute the variance yourself. Severity HIGH when the totals diverge materially.
-- Date mismatches: NOAA / weather verification vs. reported date of loss. Severity MEDIUM when the verified event date differs from the reported date by more than a day, or when no qualifying event exists on the reported date.
+- Date mismatches between NOAA / weather verification and the reported date of loss are CRITICAL when no qualifying event exists on the reported date AND the insured has separately confirmed the reported date (e.g., in the FNOL transcript). Emit EXACTLY ONE finding that consolidates BOTH sides — quote the NOAA result (nearest event date + delta + the operator's follow-up recommendation) as evidence_a, and the insured's verbatim date-confirmation quote from the FNOL as evidence_b. Do NOT emit a second NOAA-related finding at a lower severity; one consolidated CRITICAL finding only.
 - Narrative conflicts: FNOL vs. recorded statement. Direct contradictions about who was home, what was seen, or when — severity CRITICAL when the contradiction is material to coverage or fraud signal. Quote both sides verbatim.
 - Missing required documents (per the list above) — severity MEDIUM unless absence blocks coverage entirely.
 - Loss-payee verification — note if mortgage statement confirms loss-payee but do NOT raise as a finding unless the policy declarations omit them.
+- Mortgagee / loss-payee inconsistency across the file — when the mortgagee named in the claim record, the policy declarations, and the mortgage statement disagree, surface as a MEDIUM finding with all three values quoted in their own evidence slot (evidence_a = claim-record value, evidence_b = policy declarations value, evidence_c = mortgage statement value). Title: "Mortgagee name inconsistency across three sources — verify correct loss payee before issuing any dwelling payment." financial_impact: "Issuing a settlement check payable to the wrong mortgagee creates a lender dispute and may require reissue." This three-way disagreement is an exception to the "do NOT raise loss-payee" rule above.
 
 # What you do NOT produce
 - Do not invent quotes. Every evidence_a and evidence_b string must be drawn from a supplied document you actually read.
@@ -49,7 +50,7 @@ Step 3: Call report_findings exactly once with your final CrossDocFindings.
 Brief planning text between tool calls is fine (one short sentence: "Listing the file." / "Reading the file."). Do NOT draft the findings, summary, or analysis as free-form text — the only place the analysis belongs is inside the report_findings tool input. Drafting the answer as text duplicates effort and clutters the live activity log shown to the audience.`;
 
 export function buildKickoffPrompt(): string {
-  return `# Claim facts (authoritative)
+  return `# Claim facts (authoritative) — cite as source id "claim-record"
 - Claim number: ${CLAIM.claim_number}
 - Insured: ${CLAIM.insured.name}
 - Property: ${CLAIM.insured.address}
@@ -59,6 +60,7 @@ export function buildKickoffPrompt(): string {
 - Reported date of loss: ${CLAIM.loss.date_of_loss}
 - FNOL filed: ${CLAIM.loss.fnol_filed_at}
 - Status: ${CLAIM.status}
+- Mortgagee on file (claim record): ${CLAIM.policy.mortgagee.lender} · Loan #${CLAIM.policy.mortgagee.loan_number}
 
 # Task
 Use list_documents and read_document to gather the evidence you need, then submit your final CrossDocFindings via report_findings. Cover every supplied document in the inventory, plus any required document that is absent. Quote evidence verbatim — adjusters verify against the source documents.`;

@@ -1,0 +1,32 @@
+{
+  "id": "policy-ho3",
+  "kind": "policy_contract",
+  "title": "HO-3 Policy — Pacific States Mutual",
+  "filename": "Policy_PSM-HO-7842113.pdf",
+  "declarations": {
+    "policy_number": "PSM-HO-7842113",
+    "carrier": "Pacific States Mutual Insurance Company",
+    "insured": "Maria Chen",
+    "property_address": "4521 Oak Ridge Dr, Plano TX 75024",
+    "form": "HO-3",
+    "effective_date": "2025-08-01",
+    "expiration_date": "2026-08-01",
+    "coverage_a_dwelling": 480000,
+    "coverage_b_other_structures": 48000,
+    "coverage_c_personal_property": 240000,
+    "coverage_d_loss_of_use": 96000,
+    "aop_deductible": 1000,
+    "wind_hail_deductible_pct": 0.02,
+    "endorsements": [
+      { "code": "HE-7", "name": "Wind/Hail % Deductible" },
+      { "code": "HO 04 90", "name": "Ordinance or Law" },
+      { "code": "HO 04 41", "name": "Limited Mold" }
+    ],
+    "mortgagee": {
+      "lender": "Plano Federal Savings Bank, ISAOA",
+      "loan_number": "PFS-2018-0049217",
+      "address": "1801 Preston Rd, Plano TX 75093"
+    }
+  },
+  "notes": "18-page HO-3 policy contract on file. Declarations page summarized above; subsequent pages contain the insuring agreement, exclusions, conditions, and endorsement texts."
+}

@@ -161,10 +161,11 @@ function FindingsList({
                 ) : null}
               </p>
             ) : null}
-            {f.evidence_a || f.evidence_b ? (
+            {f.evidence_a || f.evidence_b || f.evidence_c ? (
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {f.evidence_a ? <EvidenceBlock text={f.evidence_a} /> : null}
                 {f.evidence_b ? <EvidenceBlock text={f.evidence_b} /> : null}
+                {f.evidence_c ? <EvidenceBlock text={f.evidence_c} /> : null}
               </div>
             ) : null}
           </li>

@@ -126,13 +126,15 @@ ${CATALOG_TABLE}
 - Severity should drive choices: \`minor\` → partial repair (no tear-off, smaller quantities); \`moderate\` → full replacement of one component; \`major\` → full tear-off + replacement.
 
 # Required manifest output (demo-correct zone rows)
-The manifest MUST contain exactly these 5 zone entries with the values below verbatim, unless the photo evidence directly contradicts them. The Damage Manifest panel renders one row per entry with columns Zone | Severity | Photos | Findings | Recommendation, sourced from \`zone\`, \`severity\`, \`photo_count\`, \`findings_summary\`, and \`recommendation\`.
+The manifest MUST contain exactly these 5 zone entries with the values below verbatim, unless the photo evidence directly contradicts them. The Damage Manifest panel renders one row per entry with columns Zone | Severity | Photos | Findings | Recommendation, sourced from \`zone\`, \`severity\`, \`photo_count\`, \`findings_summary\`, and \`recommendation\`. A confidence indicator renders below each row driven by \`confidence\`.
 
-- \`zone\`: \`roof_south_slope\` | \`severity\`: \`severe\` | \`photo_count\`: 18 | \`findings_summary\`: "Bruise/spatter, Granule loss, Fractured tab" | \`recommendation\`: "Replace — 12 SQ"
-- \`zone\`: \`roof_west_slope\` | \`severity\`: \`minor\` | \`photo_count\`: 6 | \`findings_summary\`: "Scattered impacts, below threshold" | \`recommendation\`: "No repair"
-- \`zone\`: \`gutter_front\` | \`severity\`: \`moderate\` | \`photo_count\`: 4 | \`findings_summary\`: "Dent (metal), Pitting" | \`recommendation\`: "Replace — 24 LF"
-- \`zone\`: \`skylight_kitchen\` | \`severity\`: \`major\` | \`photo_count\`: 3 | \`findings_summary\`: "Cracked glazing, Active water intrusion" | \`recommendation\`: "Replace unit + flashing"
-- \`zone\`: \`interior_ceiling\` | \`severity\`: \`moderate\` | \`photo_count\`: 3 | \`findings_summary\`: "Water stain (active), Ceiling drywall" | \`recommendation\`: "R&R drywall ~96 SF"
+- \`zone\`: \`roof_south_slope\` | \`severity\`: \`severe\` | \`photo_count\`: 18 | \`findings_summary\`: "Bruise/spatter, Granule loss, Fractured tab" | \`recommendation\`: "Replace — 12 SQ" | \`confidence\`: 0.91
+- \`zone\`: \`roof_west_slope\` | \`severity\`: \`minor\` | \`photo_count\`: 6 | \`findings_summary\`: "Scattered impacts, below threshold" | \`recommendation\`: "No repair" | \`confidence\`: 0.93
+- \`zone\`: \`gutter_front\` | \`severity\`: \`moderate\` | \`photo_count\`: 4 | \`findings_summary\`: "Dent (metal), Pitting" | \`recommendation\`: "Replace — 24 LF" | \`confidence\`: 0.88
+- \`zone\`: \`skylight_kitchen\` | \`severity\`: \`major\` | \`photo_count\`: 3 | \`findings_summary\`: "Cracked glazing, Active water intrusion" | \`recommendation\`: "Replace unit + flashing" | \`confidence\`: 0.82
+- \`zone\`: \`interior_ceiling\` | \`severity\`: \`moderate\` | \`photo_count\`: 3 | \`findings_summary\`: "Water stain (active), Ceiling drywall" | \`recommendation\`: "R&R drywall ~96 SF" | \`confidence\`: 0.79
+
+Per-zone confidence above must be emitted verbatim — it drives the manifest's routing indicator (< 0.85 → adjuster review; ≥ 0.85 → autonomous output).
 
 The \`evidence\` string for each row should still cite the actual photo IDs from the set.
 

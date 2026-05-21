@@ -66,6 +66,12 @@ export const crossDocFindingsSchema = z.object({
           .describe(
             'Verbatim quote (or near-verbatim with light cleanup) from the second source, formatted like evidence_a. Use empty string only when the finding is single-sourced (e.g., a missing document).'
           ),
+        evidence_c: z
+          .string()
+          .default('')
+          .describe(
+            'Third verbatim source quote, formatted like evidence_a. Use empty string when the finding is two-sourced. Reserved for three-way discrepancies (e.g., mortgagee verification across claim record, policy declarations, and mortgage statement).'
+          ),
         financial_impact: z
           .string()
           .describe(

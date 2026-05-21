@@ -116,6 +116,11 @@ export const PERIL_CONSISTENCY = [
   'inconclusive',
 ] as const;
 
+// M6b autonomous-output cutoff. Per-zone confidence at or above this
+// threshold renders as an autonomous-output indicator; below it routes
+// the zone to adjuster review.
+export const CONFIDENCE_ROUTING_THRESHOLD = 0.85;
+
 export const damageAgentOutputSchema = z.object({
   classifications: z
     .array(
@@ -212,6 +217,13 @@ export const damageAgentOutputSchema = z.object({
           .string()
           .describe(
             'Photo IDs and short observations supporting this zone, e.g. "roof-south-1, roof-south-2: granule loss across mid-field; impact craters consistent with hail."'
+          ),
+        confidence: z
+          .number()
+          .min(0)
+          .max(1)
+          .describe(
+            'Per-zone classification confidence (0–1). Values below CONFIDENCE_ROUTING_THRESHOLD route the zone to adjuster review; at or above the threshold the zone renders as an autonomous output.'
           ),
       })
     )

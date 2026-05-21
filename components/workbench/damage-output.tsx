@@ -1,5 +1,6 @@
 'use client';
 
+import { Fragment } from 'react';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Shimmer } from '@/components/ai-elements/shimmer';
@@ -7,6 +8,7 @@ import { XactimateOutput } from '@/components/workbench/xactimate-output';
 import { PHOTO_MANIFEST } from '@/lib/scenario/photos';
 import {
   COMPONENT_TAGS,
+  CONFIDENCE_ROUTING_THRESHOLD,
   DAMAGE_ZONES,
   FINDING_TAGS,
   MATERIAL_TAGS,
@@ -399,31 +401,51 @@ function ZoneManifest({
               rawZone && ZONE_SET.has(rawZone as DamageZone)
                 ? (rawZone as DamageZone)
                 : null;
+            const confidence =
+              typeof z?.confidence === 'number' ? z.confidence : null;
             return zone ? (
-              <tr key={`${zone}-${i}`} className="border-t align-top">
-                <td className="px-3 py-2 font-medium">{ZONE_LABELS[zone]}</td>
-                <td className="px-3 py-2">
-                  {sev ? (
-                    <Badge
-                      variant={SEVERITY_BADGE[sev].variant}
-                      className={SEVERITY_BADGE[sev].className}
-                    >
-                      {SEVERITY_BADGE[sev].label}
-                    </Badge>
-                  ) : null}
-                </td>
-                <td className="px-3 py-2 tabular-nums text-muted-foreground">
-                  {typeof z?.photo_count === 'number'
-                    ? `${z.photo_count} photos`
-                    : ''}
-                </td>
-                <td className="px-3 py-2 text-muted-foreground">
-                  {z?.findings_summary ?? ''}
-                </td>
-                <td className="px-3 py-2 text-muted-foreground">
-                  {z?.recommendation ?? ''}
-                </td>
-              </tr>
+              <Fragment key={`${zone}-${i}`}>
+                <tr className="border-t align-top">
+                  <td className="px-3 py-2 font-medium">{ZONE_LABELS[zone]}</td>
+                  <td className="px-3 py-2">
+                    {sev ? (
+                      <Badge
+                        variant={SEVERITY_BADGE[sev].variant}
+                        className={SEVERITY_BADGE[sev].className}
+                      >
+                        {SEVERITY_BADGE[sev].label}
+                      </Badge>
+                    ) : null}
+                  </td>
+                  <td className="px-3 py-2 tabular-nums text-muted-foreground">
+                    {typeof z?.photo_count === 'number'
+                      ? `${z.photo_count} photos`
+                      : ''}
+                  </td>
+                  <td className="px-3 py-2 text-muted-foreground">
+                    {z?.findings_summary ?? ''}
+                  </td>
+                  <td className="px-3 py-2 text-muted-foreground">
+                    {z?.recommendation ?? ''}
+                  </td>
+                </tr>
+                {confidence !== null ? (
+                  <tr>
+                    <td colSpan={5} className="px-3 pb-2 pt-0">
+                      {confidence >= CONFIDENCE_ROUTING_THRESHOLD ? (
+                        <span className="text-xs text-muted-foreground">
+                          Confidence {confidence.toFixed(2)} — autonomous output
+                        </span>
+                      ) : (
+                        <span className="text-xs text-amber-900 dark:text-amber-300">
+                          <span aria-hidden>⚠️</span> Confidence{' '}
+                          {confidence.toFixed(2)} — routed to adjuster review
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ) : null}
+              </Fragment>
             ) : null;
           })}
         </tbody>

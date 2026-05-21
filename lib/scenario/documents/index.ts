@@ -12,6 +12,7 @@ import fieldInspection from './field-inspection.json';
 import noaaWeather from './noaa-weather.json';
 import recordedStatement from './recorded-statement.json';
 import mortgageStatement from './mortgage-statement.json';
+import policyHo3 from './policy-ho3.json';
 
 export const DOCUMENT_KINDS = [
   'fnol_transcript',
@@ -21,6 +22,7 @@ export const DOCUMENT_KINDS = [
   'recorded_statement',
   'mortgage_statement',
   'emergency_mitigation_receipt',
+  'policy_contract',
 ] as const;
 
 export type DocumentKind = (typeof DOCUMENT_KINDS)[number];
@@ -33,6 +35,7 @@ export const DOCUMENT_KIND_LABELS: Record<DocumentKind, string> = {
   recorded_statement: 'Recorded statement',
   mortgage_statement: 'Mortgage statement',
   emergency_mitigation_receipt: 'Emergency mitigation receipt',
+  policy_contract: 'Policy contract · 18 pages',
 };
 
 export interface ScenarioDocument {
@@ -103,6 +106,14 @@ export const SCENARIO_DOCUMENTS: ScenarioDocument[] = [
     pdfUrl: pdfUrlFor(mortgageStatement.id),
     payload: mortgageStatement,
   },
+  {
+    id: policyHo3.id,
+    kind: policyHo3.kind as DocumentKind,
+    title: policyHo3.title,
+    filename: policyHo3.filename,
+    pdfUrl: pdfUrlFor(policyHo3.id),
+    payload: policyHo3,
+  },
 ];
 
 export function getDocumentById(id: string): ScenarioDocument | undefined {
@@ -121,6 +132,7 @@ export const REQUIRED_DOCUMENT_KINDS: readonly DocumentKind[] = [
   'recorded_statement',
   'mortgage_statement',
   'emergency_mitigation_receipt',
+  'policy_contract',
 ];
 
 export function getMissingRequiredKinds(): DocumentKind[] {

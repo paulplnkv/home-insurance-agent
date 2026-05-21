@@ -1,6 +1,7 @@
 'use client';
 
 import { AppBar } from '@/components/workbench/app-bar';
+import { Badge } from '@/components/ui/badge';
 import { Breadcrumb } from '@/components/workbench/breadcrumb';
 import { ClaimSubTabs } from '@/components/workbench/claim-sub-tabs';
 import { ActivityFeed } from '@/components/workbench/activity-feed';
@@ -25,6 +26,11 @@ export default function DocumentsAgentPage() {
         <AgentPageBody
           title={documentsAgentConfig.title}
           description={documentsAgentConfig.description}
+          identityBadge={
+            <Badge variant="secondary" className="font-normal">
+              M6e · Cross-Document Consistency Engine · Tier 2 — Findings require adjuster review
+            </Badge>
+          }
           idlePlaceholder={documentsAgentConfig.idlePlaceholder}
           state={agent.state}
           startedAt={agent.startedAt}
