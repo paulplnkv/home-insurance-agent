@@ -45,7 +45,11 @@ export function CoverageAgentPanel() {
         />
       }
     >
-      <CoverageOutput key={agent.resetKey} object={agent.object} />
+      <CoverageOutput
+        key={agent.resetKey}
+        object={agent.object}
+        endedAt={agent.endedAt}
+      />
     </AgentPanel>
   );
 }

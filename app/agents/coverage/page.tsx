@@ -6,10 +6,18 @@ import { Breadcrumb } from '@/components/workbench/breadcrumb';
 import { ClaimSubTabs } from '@/components/workbench/claim-sub-tabs';
 import { ActivityFeed } from '@/components/workbench/activity-feed';
 import { AgentPageBody } from '@/components/workbench/agent-page';
+import { AgentPreRunContext } from '@/components/workbench/agent-pre-run-context';
 import { coverageAgentConfig } from '@/components/workbench/coverage-agent-panel';
 import { CoverageOutput } from '@/components/workbench/coverage-output';
 import { CoverageScaffold } from '@/components/workbench/coverage-scaffold';
 import { useAgentChat } from '@/hooks/use-agent-chat';
+
+const COVERAGE_PRE_RUN_CONTEXT = [
+  'Policy in scope: PSM-HO-7842113 · HO-3 · $480,000 Coverage A',
+  'Peril: Hailstorm · Date of Loss: Apr 22, 2026',
+  'M2 will evaluate: Coverage A, B, C, D + 3 endorsements',
+  'RAG source: HO-3 Policy PDF (18 pages) loaded',
+] as const;
 
 export default function CoverageAgentPage() {
   const agent = useAgentChat({
@@ -33,6 +41,7 @@ export default function CoverageAgentPage() {
             </Badge>
           }
           idlePlaceholder={<CoverageScaffold />}
+          preRunContext={<AgentPreRunContext rows={COVERAGE_PRE_RUN_CONTEXT} />}
           state={agent.state}
           startedAt={agent.startedAt}
           endedAt={agent.endedAt}
@@ -48,7 +57,11 @@ export default function CoverageAgentPage() {
             />
           }
         >
-          <CoverageOutput key={agent.resetKey} object={agent.object} />
+          <CoverageOutput
+            key={agent.resetKey}
+            object={agent.object}
+            endedAt={agent.endedAt}
+          />
         </AgentPageBody>
       </main>
     </div>

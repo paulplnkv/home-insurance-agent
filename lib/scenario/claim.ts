@@ -37,7 +37,7 @@ export const CLAIM = {
   loss: {
     peril: 'Hailstorm',
     date_of_loss: '2026-04-22',
-    fnol_filed_at: '2026-04-23T09:14:00-05:00',
+    fnol_filed_at: '2026-04-23T14:14:00-05:00',
     location_state: 'TX',
     description:
       'Severe hailstorm with reported 1.75" stones swept across Collin County the afternoon of April 22. Insured reports impact dents across roof shingles, bent gutters on the north elevation, and cracked skylight glass.',

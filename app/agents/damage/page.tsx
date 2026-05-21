@@ -6,10 +6,17 @@ import { Breadcrumb } from '@/components/workbench/breadcrumb';
 import { ClaimSubTabs } from '@/components/workbench/claim-sub-tabs';
 import { ActivityFeed } from '@/components/workbench/activity-feed';
 import { AgentPageBody } from '@/components/workbench/agent-page';
+import { AgentPreRunContext } from '@/components/workbench/agent-pre-run-context';
 import { damageAgentConfig } from '@/components/workbench/damage-agent-panel';
 import { DamageOutput } from '@/components/workbench/damage-output';
 import { DamageScaffold } from '@/components/workbench/damage-scaffold';
 import { useAgentChat } from '@/hooks/use-agent-chat';
+
+const DAMAGE_PRE_RUN_CONTEXT = [
+  '60 photos staged · 4 classification categories',
+  'M6b will apply: Relevant / Duplicate / Out of scope / Scale reference',
+  'Output: Zone manifest + Xactimate line items + contractor variance',
+] as const;
 
 export default function DamageAgentPage() {
   const agent = useAgentChat({
@@ -33,6 +40,7 @@ export default function DamageAgentPage() {
             </Badge>
           }
           idlePlaceholder={<DamageScaffold />}
+          preRunContext={<AgentPreRunContext rows={DAMAGE_PRE_RUN_CONTEXT} />}
           state={agent.state}
           startedAt={agent.startedAt}
           endedAt={agent.endedAt}
@@ -52,6 +60,7 @@ export default function DamageAgentPage() {
             key={agent.resetKey}
             object={agent.object}
             isStreaming={agent.state === 'running'}
+            endedAt={agent.endedAt}
           />
         </AgentPageBody>
       </main>

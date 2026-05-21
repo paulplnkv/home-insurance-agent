@@ -39,7 +39,7 @@ import {
   ZONE_LABELS,
 } from '@/lib/agents/photos/labels';
 import { PhotoDetailDialog } from '@/components/workbench/photo-detail-dialog';
-import { formatCurrency } from '@/lib/scenario/claim';
+import { formatCurrency, formatDateTime } from '@/lib/scenario/claim';
 import { cn } from '@/lib/utils';
 
 type DeepPartial<T> = T extends object
@@ -95,9 +95,11 @@ const PERIL_CONSISTENCY_BADGE: Record<
 export function DamageOutput({
   object,
   isStreaming,
+  endedAt,
 }: {
   object: StreamingDamage | undefined;
   isStreaming: boolean;
+  endedAt: number | null;
 }) {
   const classifications = object?.classifications ?? [];
   const zones = object?.zones ?? [];
@@ -105,6 +107,8 @@ export function DamageOutput({
 
   return (
     <div className="flex flex-col gap-6 text-sm">
+      <WriteBackStatusLine endedAt={endedAt} />
+
       <PerilRow consistency={object?.peril_consistency} streaming={isStreaming} />
 
       <section className="flex flex-col gap-3">
@@ -135,6 +139,17 @@ export function DamageOutput({
 
       <XactimateOutput object={object} isStreaming={isStreaming} />
     </div>
+  );
+}
+
+function WriteBackStatusLine({ endedAt }: { endedAt: number | null }) {
+  if (endedAt == null) return null;
+  return (
+    <p className="text-xs text-muted-foreground">
+      <span aria-hidden>✅ </span>
+      Damage manifest written to claim file by M6b ·{' '}
+      {formatDateTime(new Date(endedAt).toISOString())}
+    </p>
   );
 }
 

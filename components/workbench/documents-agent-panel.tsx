@@ -47,6 +47,7 @@ export function DocumentsAgentPanel() {
         key={agent.resetKey}
         object={agent.object}
         isStreaming={agent.state === 'running'}
+        endedAt={agent.endedAt}
       />
     </AgentPanel>
   );

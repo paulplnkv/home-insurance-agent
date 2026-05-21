@@ -48,6 +48,7 @@ export function DamageAgentPanel() {
         key={agent.resetKey}
         object={agent.object}
         isStreaming={agent.state === 'running'}
+        endedAt={agent.endedAt}
       />
     </AgentPanel>
   );

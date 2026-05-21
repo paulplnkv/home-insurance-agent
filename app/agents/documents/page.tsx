@@ -6,9 +6,15 @@ import { Breadcrumb } from '@/components/workbench/breadcrumb';
 import { ClaimSubTabs } from '@/components/workbench/claim-sub-tabs';
 import { ActivityFeed } from '@/components/workbench/activity-feed';
 import { AgentPageBody } from '@/components/workbench/agent-page';
+import { AgentPreRunContext } from '@/components/workbench/agent-pre-run-context';
 import { documentsAgentConfig } from '@/components/workbench/documents-agent-panel';
 import { DocumentsOutput } from '@/components/workbench/documents-output';
 import { useAgentChat } from '@/hooks/use-agent-chat';
+
+const DOCUMENTS_PRE_RUN_CONTEXT = [
+  '6 documents in scope · 1 cross-reference matrix pending',
+  'M6e will check: Consistency · Missing docs · Routing',
+] as const;
 
 export default function DocumentsAgentPage() {
   const agent = useAgentChat({
@@ -32,6 +38,7 @@ export default function DocumentsAgentPage() {
             </Badge>
           }
           idlePlaceholder={documentsAgentConfig.idlePlaceholder}
+          preRunContext={<AgentPreRunContext rows={DOCUMENTS_PRE_RUN_CONTEXT} />}
           state={agent.state}
           startedAt={agent.startedAt}
           endedAt={agent.endedAt}
@@ -51,6 +58,7 @@ export default function DocumentsAgentPage() {
             key={agent.resetKey}
             object={agent.object}
             isStreaming={agent.state === 'running'}
+            endedAt={agent.endedAt}
           />
         </AgentPageBody>
       </main>

@@ -41,6 +41,10 @@ interface AgentPageBodyProps {
   // Optional badge rendered beside the title so the audience can map
   // the page to its agent identity (e.g. "M2 · Coverage Agent · Tier 3").
   identityBadge?: React.ReactNode;
+  // Optional pre-run context card rendered between the header and the
+  // output panel. Visible only while state === 'idle' — hides as soon
+  // as output begins to render.
+  preRunContext?: React.ReactNode;
   children?: React.ReactNode;
 }
 
@@ -61,6 +65,7 @@ export function AgentPageBody({
   onReset,
   activity,
   identityBadge,
+  preRunContext,
   children,
 }: AgentPageBodyProps) {
   const [now, setNow] = useState(() => Date.now());
@@ -131,6 +136,8 @@ export function AgentPageBody({
           </div>
         </div>
       </Card>
+
+      {state === 'idle' && preRunContext ? preRunContext : null}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(300px,360px)_1fr] lg:items-start">
         {activity ? (

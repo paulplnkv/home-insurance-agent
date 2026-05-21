@@ -15,6 +15,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Shimmer } from '@/components/ai-elements/shimmer';
 import type { CrossDocFindings } from '@/lib/agents/documents/schema';
+import { formatDateTime } from '@/lib/scenario/claim';
 import {
   DOCUMENT_KIND_LABELS,
   getDocumentById,
@@ -48,16 +49,21 @@ const KIND_LABELS = DOCUMENT_KIND_LABELS as Record<string, string>;
 export function DocumentsOutput({
   object,
   isStreaming,
+  endedAt,
 }: {
   object: StreamingFindings | undefined;
   isStreaming: boolean;
+  endedAt: number | null;
 }) {
   const inventory = object?.document_inventory ?? [];
   const findings = object?.findings ?? [];
   const memo = object?.summary_markdown;
+  const criticalCount = findings.filter((f) => f?.severity === 'CRITICAL').length;
 
   return (
     <div className="flex flex-col gap-4 text-sm">
+      <WriteBackStatusLine endedAt={endedAt} />
+
       <HeadlineSummary memo={memo} />
 
       <RoutingRow routing={object?.routing} streaming={isStreaming} />
@@ -66,8 +72,24 @@ export function DocumentsOutput({
 
       <DocumentInventory items={inventory} streaming={isStreaming} />
 
-      <FileSummary markdown={memo} streaming={isStreaming} />
+      <FileSummary
+        markdown={memo}
+        routing={object?.routing}
+        criticalCount={criticalCount}
+        streaming={isStreaming}
+      />
     </div>
+  );
+}
+
+function WriteBackStatusLine({ endedAt }: { endedAt: number | null }) {
+  if (endedAt == null) return null;
+  return (
+    <p className="text-xs text-muted-foreground">
+      <span aria-hidden>✅ </span>
+      Findings written to claim file by M6e ·{' '}
+      {formatDateTime(new Date(endedAt).toISOString())}
+    </p>
   );
 }
 
@@ -276,9 +298,13 @@ function DocumentInventory({
 
 function FileSummary({
   markdown,
+  routing,
+  criticalCount,
   streaming,
 }: {
   markdown: string | undefined;
+  routing: string | undefined;
+  criticalCount: number;
   streaming: boolean;
 }) {
   if (!markdown) {
@@ -286,11 +312,12 @@ function FileSummary({
       <Shimmer className="text-xs">Drafting file summary…</Shimmer>
     ) : null;
   }
+  const headline = buildRoutingHeadline(routing, criticalCount);
   return (
-    <Accordion defaultValue={['summary']}>
+    <Accordion defaultValue={[]}>
       <AccordionItem value="summary" className="border-b-0">
-        <AccordionTrigger className="text-xs uppercase tracking-wide text-muted-foreground">
-          File summary
+        <AccordionTrigger className="text-sm font-medium">
+          {headline}
         </AccordionTrigger>
         <AccordionContent>
           <div className="rounded-md border bg-card p-3">
@@ -302,4 +329,24 @@ function FileSummary({
       </AccordionItem>
     </Accordion>
   );
+}
+
+function buildRoutingHeadline(
+  routing: string | undefined,
+  criticalCount: number,
+): string {
+  const findingsClause =
+    criticalCount === 0
+      ? 'no Critical findings'
+      : `${criticalCount} Critical finding${criticalCount === 1 ? '' : 's'}`;
+  if (routing === 'siu_referral') {
+    return `Routing: SIU Referral — ${findingsClause}. This claim must not be settled until SIU review is complete.`;
+  }
+  if (routing === 'adjuster_review') {
+    return `Routing: Adjuster review required — ${findingsClause}.`;
+  }
+  if (routing === 'auto_settle') {
+    return `Routing: Auto-settle — ${findingsClause}.`;
+  }
+  return `Routing pending — ${findingsClause}.`;
 }

@@ -19,7 +19,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { CoverageScaffold } from '@/components/workbench/coverage-scaffold';
 import type { CoveragePosition } from '@/lib/agents/coverage/schema';
-import { CLAIM } from '@/lib/scenario/claim';
+import { CLAIM, formatDateTime } from '@/lib/scenario/claim';
 import { TIER3_CONFIRMED_KEY } from '@/lib/scenario/tier3';
 import POLICY_PAGE_MAP from '@/lib/policy/page-map.json';
 
@@ -52,8 +52,10 @@ const FLAG_BADGE: Record<
 
 export function CoverageOutput({
   object,
+  endedAt,
 }: {
   object: StreamingCoverage | undefined;
+  endedAt: number | null;
 }) {
   const hasClauses = !!object?.cited_clauses?.length;
   const hasMemo = !!object?.memo_markdown;
@@ -61,6 +63,8 @@ export function CoverageOutput({
 
   return (
     <div className="flex flex-col gap-4 text-sm">
+      <WriteBackStatusLine endedAt={endedAt} />
+
       <Tier3Banner />
 
       <CoverageScaffold lines={object?.coverage_lines} />
@@ -152,6 +156,30 @@ export function CoverageOutput({
 
       {hasMemo ? <QueuedDocuments /> : null}
     </div>
+  );
+}
+
+function WriteBackStatusLine({ endedAt }: { endedAt: number | null }) {
+  const confirmedAt = useSyncExternalStore(
+    subscribeTier3,
+    readTier3Confirmation,
+    getServerTier3Snapshot,
+  );
+  if (endedAt == null) return null;
+  if (!confirmedAt) {
+    return (
+      <p className="text-xs text-amber-700 dark:text-amber-400">
+        <span aria-hidden>⏳ </span>
+        Awaiting adjuster confirmation before writing to claim file.
+      </p>
+    );
+  }
+  return (
+    <p className="text-xs text-muted-foreground">
+      <span aria-hidden>✅ </span>
+      Coverage position written to claim file by M2 ·{' '}
+      {formatDateTime(new Date(endedAt).toISOString())}
+    </p>
   );
 }
 
