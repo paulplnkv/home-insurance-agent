@@ -399,10 +399,10 @@ function ClauseChip({ section }: { section: string }) {
       href={citationPdfUrl(section)}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1.5 rounded-md border border-[var(--line-soft)] bg-muted px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+      className="inline-flex items-center gap-1.5 rounded-md bg-[#edf3ff] px-3 py-1 text-xs font-medium uppercase tracking-wide text-[var(--ink)] transition-colors hover:bg-[#dde6fb]"
     >
       {shortenSection(section)}
-      <ExternalLinkIcon className="size-3.5 text-muted-foreground" />
+      <ExternalLinkIcon className="size-3.5" />
     </a>
   );
 }

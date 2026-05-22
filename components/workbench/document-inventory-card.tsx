@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  ExternalLinkIcon,
-  FileQuestionIcon,
-  FileTextIcon,
-} from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { FileTextIcon } from 'lucide-react';
 import { Shimmer } from '@/components/ai-elements/shimmer';
 import { PageCard } from '@/components/workbench/agent-page';
 import type { CrossDocFindings } from '@/lib/agents/documents/schema';
@@ -41,7 +36,7 @@ export function DocumentInventoryCard({
         {items.length === 0 ? (
           <Shimmer className="text-xs">Classifying documents…</Shimmer>
         ) : (
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-3">
             {items.map((row, i) => {
               if (!row?.id) return null;
               return <InventoryRowItem key={`${row.id}-${i}`} row={row} />;
@@ -65,25 +60,28 @@ function InventoryRowItem({ row }: { row: InventoryRow }) {
   return (
     <li
       className={cn(
-        'flex items-start gap-3 rounded-md border p-3',
-        present ? 'bg-card' : 'border-dashed bg-muted/30',
+        'flex items-start gap-3 rounded-xl border bg-white p-4',
+        present
+          ? 'border-[var(--status-open-fg)]'
+          : 'border-[var(--status-danger-fg)]',
       )}
     >
-      <div className="mt-0.5 text-muted-foreground">
-        {present ? (
-          <FileTextIcon className="size-6" />
-        ) : (
-          <FileQuestionIcon className="size-6" />
-        )}
-      </div>
-      <div className="flex flex-1 flex-col gap-1.5 min-w-0">
-        <span className="text-sm font-medium leading-snug">
+      <FileTextIcon className="mt-0.5 size-6 shrink-0 text-[var(--brand-blue)]" />
+      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+        <span className="text-sm font-medium leading-snug text-[var(--ink)]">
           {row?.title ?? kindLabel}
         </span>
         <div className="flex flex-wrap items-center gap-2">
-          <Badge variant={present ? 'secondary' : 'destructive'}>
+          <span
+            className={cn(
+              'inline-flex items-center justify-center rounded-full border bg-white px-2 py-0.5 text-[11px] font-medium',
+              present
+                ? 'border-[var(--status-open-fg)] text-[var(--status-open-fg)]'
+                : 'border-[var(--status-danger-fg)] text-[var(--status-danger-fg)]',
+            )}
+          >
             {present ? 'Present' : 'Missing'}
-          </Badge>
+          </span>
           <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
             {kindLabel}
             {pageCount ? (
@@ -99,9 +97,9 @@ function InventoryRowItem({ row }: { row: InventoryRow }) {
             href={scenarioDoc.pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex w-fit items-center gap-1 text-xs font-medium text-foreground underline-offset-2 hover:underline"
+            className="inline-flex w-fit items-center gap-1 text-xs font-medium text-[var(--brand-blue)] underline-offset-2 hover:underline"
           >
-            <ExternalLinkIcon className="size-3.5" />
+            <FileTextIcon className="size-3.5" />
             Open PDF
           </a>
         ) : null}
