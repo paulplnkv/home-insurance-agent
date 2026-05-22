@@ -8,15 +8,10 @@ import {
   HammerIcon,
   ShieldCheckIcon,
 } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { REAL_CLAIM_AGENT_KEYS } from '@/lib/scenario/dashboard-claims';
 import { TIER3_CONFIRMED_KEY } from '@/lib/scenario/tier3';
-import { formatDateTime } from '@/lib/scenario/claim';
+import { CLAIM, formatDateTime } from '@/lib/scenario/claim';
+import { SectionCard, SectionTitle } from './section-card';
 
 type Action = {
   href: string;
@@ -27,19 +22,19 @@ type Action = {
 
 const ACTIONS: ReadonlyArray<Action> = [
   {
-    href: '/agents/coverage',
+    href: `/claims/${CLAIM.claim_number}/coverages`,
     title: 'Run coverage check',
     description: 'Verify the HO-3 covers hail to roof, gutters, and skylight.',
     icon: ShieldCheckIcon,
   },
   {
-    href: '/agents/damage',
+    href: `/claims/${CLAIM.claim_number}/damages`,
     title: 'Assess damages',
     description: 'Score field photos and call out replacement candidates.',
     icon: HammerIcon,
   },
   {
-    href: '/agents/documents',
+    href: `/claims/${CLAIM.claim_number}/documents`,
     title: 'Review documents',
     description: 'Cross-check the file for inconsistencies and missing paperwork.',
     icon: FileSearchIcon,
@@ -121,7 +116,7 @@ type StatusLine =
   | { kind: 'written'; label: string };
 
 function statusFor(href: string, snapshot: Snapshot): StatusLine | null {
-  if (href === '/agents/coverage') {
+  if (href.endsWith('/coverages')) {
     const endedAt = snapshot.endedAt[REAL_CLAIM_AGENT_KEYS.coverage];
     if (endedAt == null) return null;
     if (!snapshot.tier3Confirmed) return { kind: 'awaiting' };
@@ -130,7 +125,7 @@ function statusFor(href: string, snapshot: Snapshot): StatusLine | null {
       label: `M2 output written to Coverages tab · ${formatTimestamp(endedAt)}`,
     };
   }
-  if (href === '/agents/damage') {
+  if (href.endsWith('/damages')) {
     const endedAt = snapshot.endedAt[REAL_CLAIM_AGENT_KEYS.damage];
     if (endedAt == null) return null;
     return {
@@ -138,7 +133,7 @@ function statusFor(href: string, snapshot: Snapshot): StatusLine | null {
       label: `M6b manifest written to Damages tab · ${formatTimestamp(endedAt)}`,
     };
   }
-  if (href === '/agents/documents') {
+  if (href.endsWith('/documents')) {
     const endedAt = snapshot.endedAt[REAL_CLAIM_AGENT_KEYS.documents];
     if (endedAt == null) return null;
     return {
@@ -157,31 +152,31 @@ export function AiAgentsPanel() {
   );
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base">AI agents</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-2 pb-4">
+    <SectionCard>
+      <SectionTitle>AI agents</SectionTitle>
+      <div className="flex flex-col gap-4">
         {ACTIONS.map((action) => {
           const status = statusFor(action.href, snapshot);
           return (
             <Link
               key={action.href}
               href={action.href}
-              className="group flex items-start gap-3 rounded-md border bg-card p-3 transition-colors hover:border-foreground/30 hover:bg-accent/40"
+              className="group flex items-start justify-between gap-3 rounded-[8px] bg-white p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] transition-colors hover:bg-[#fafbff]"
             >
-              <action.icon className="mt-0.5 size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
-              <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                <span className="text-sm font-medium">{action.title}</span>
-                <span className="text-xs text-muted-foreground">
+              <action.icon className="mt-0.5 size-6 shrink-0 text-[var(--ink)]" />
+              <div className="flex min-w-0 flex-1 flex-col gap-2">
+                <span className="text-[16px] font-semibold text-[var(--ink)]">
+                  {action.title}
+                </span>
+                <span className="text-[14px] text-[var(--ink)]">
                   {action.description}
                 </span>
                 {status ? (
                   <span
                     className={
                       status.kind === 'awaiting'
-                        ? 'mt-1 text-[11px] text-amber-700 dark:text-amber-400'
-                        : 'mt-1 text-[11px] text-muted-foreground'
+                        ? 'text-[14px] text-[var(--status-review-fg)]'
+                        : 'text-[14px] text-[var(--ink-soft)]'
                     }
                   >
                     {status.kind === 'awaiting' ? (
@@ -198,11 +193,11 @@ export function AiAgentsPanel() {
                   </span>
                 ) : null}
               </div>
-              <ArrowRightIcon className="mt-0.5 size-3.5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground" />
+              <ArrowRightIcon className="mt-1 size-4 shrink-0 text-[var(--ink-soft)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--ink)]" />
             </Link>
           );
         })}
-      </CardContent>
-    </Card>
+      </div>
+    </SectionCard>
   );
 }

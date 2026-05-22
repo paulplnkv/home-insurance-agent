@@ -157,7 +157,7 @@ function EstimateSheet({ priced }: { priced: PricedEstimate }) {
             </span>
           </div>
           <table className="w-full text-sm">
-            <thead className="bg-muted/20 text-xs uppercase tracking-wide text-muted-foreground">
+            <thead className="bg-primary/5 text-xs uppercase tracking-wide text-primary">
               <tr>
                 <th className="px-3 py-1.5 text-left font-medium">Selector</th>
                 <th className="px-3 py-1.5 text-left font-medium">Description</th>

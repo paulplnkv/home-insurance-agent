@@ -1,10 +1,17 @@
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Commissioner, Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
 const inter = Inter({
   variable: '--font-sans',
   subsets: ['latin'],
+  display: 'swap',
+});
+
+const commissioner = Commissioner({
+  variable: '--font-commissioner',
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
   display: 'swap',
 });
 
@@ -27,7 +34,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${commissioner.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-muted/40 font-sans">{children}</body>
     </html>

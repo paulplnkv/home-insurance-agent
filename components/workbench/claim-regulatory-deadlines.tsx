@@ -1,11 +1,6 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { formatDate } from '@/lib/scenario/claim';
 import { cn } from '@/lib/utils';
+import { SectionCard, SectionTitle } from './section-card';
 
 type Status = 'met' | 'pending';
 
@@ -40,24 +35,24 @@ const ROWS: ReadonlyArray<DeadlineRow> = [
 const DAY_MS = 1000 * 60 * 60 * 24;
 
 function dueColorClass(dueIso: string | null, status: Status): string {
-  if (status === 'met') return 'text-emerald-600';
-  if (!dueIso) return 'text-muted-foreground';
+  if (status === 'met') return 'text-[var(--status-open-fg)]';
+  if (!dueIso) return 'text-[var(--ink-soft)]';
   const diffDays = (new Date(dueIso).getTime() - Date.now()) / DAY_MS;
-  if (diffDays < 0) return 'text-red-600';
-  if (diffDays <= 5) return 'text-amber-600';
-  return 'text-foreground';
+  if (diffDays < 0) return 'text-[var(--status-danger-fg)]';
+  if (diffDays <= 5) return 'text-[var(--status-review-fg)]';
+  return 'text-[var(--ink)]';
 }
 
 function StatusPill({ status }: { status: Status }) {
   if (status === 'met') {
     return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+      <span className="inline-flex items-center gap-1 rounded-full border border-[var(--status-open-fg)] bg-[var(--status-open-bg)] px-2 py-1 text-[14px] text-[var(--status-open-fg)]">
         <span aria-hidden>✅</span> Met
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+    <span className="inline-flex items-center gap-1 rounded-full border border-[var(--status-review-fg)] bg-[var(--status-review-bg)] px-2 py-1 text-[14px] text-[var(--status-review-fg)]">
       <span aria-hidden>⏳</span> Pending
     </span>
   );
@@ -65,38 +60,27 @@ function StatusPill({ status }: { status: Status }) {
 
 export function ClaimRegulatoryDeadlines() {
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base">
-          Regulatory Deadlines · TX TDI
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-3 pb-4">
-        {ROWS.map((row) => (
-          <div
-            key={row.requirement}
-            className="flex items-start justify-between gap-3"
-          >
-            <div className="flex min-w-0 flex-col gap-0.5">
-              <span className="text-sm font-medium leading-tight">
-                {row.requirement}
-              </span>
-              <span className="text-xs text-muted-foreground">
-                {row.cadence}
-              </span>
-              <span
-                className={cn(
-                  'text-xs font-medium',
-                  dueColorClass(row.dueIso, row.status),
-                )}
-              >
-                {row.dueIso ? `Due ${formatDate(row.dueIso)}` : 'TBD'}
-              </span>
-            </div>
-            <StatusPill status={row.status} />
+    <SectionCard>
+      <SectionTitle>Regulatory deadlines · TX TDI</SectionTitle>
+      {ROWS.map((row) => (
+        <div
+          key={row.requirement}
+          className="flex items-center justify-between gap-3 rounded-[8px] bg-white p-3 shadow-[0_0_10px_rgba(0,0,0,0.1)]"
+        >
+          <div className="flex min-w-0 flex-col gap-2">
+            <span className="text-[16px] font-semibold leading-tight text-[var(--ink)]">
+              {row.requirement}
+            </span>
+            <span className="text-[14px] text-[var(--ink)]">
+              {row.cadence}
+            </span>
+            <span className={cn('text-[14px]', dueColorClass(row.dueIso, row.status))}>
+              {row.dueIso ? `Due ${formatDate(row.dueIso)}` : 'TBD'}
+            </span>
           </div>
-        ))}
-      </CardContent>
-    </Card>
+          <StatusPill status={row.status} />
+        </div>
+      ))}
+    </SectionCard>
   );
 }

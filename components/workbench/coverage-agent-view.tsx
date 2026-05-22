@@ -7,20 +7,27 @@ import { ClaimSubTabs } from '@/components/workbench/claim-sub-tabs';
 import { ActivityFeed } from '@/components/workbench/activity-feed';
 import { AgentPageBody } from '@/components/workbench/agent-page';
 import { AgentPreRunContext } from '@/components/workbench/agent-pre-run-context';
-import { documentsAgentConfig } from '@/components/workbench/documents-agent-panel';
-import { DocumentsOutput } from '@/components/workbench/documents-output';
+import { coverageAgentConfig } from '@/components/workbench/coverage-agent-panel';
+import {
+  CoverageOutput,
+  QueuedDocuments,
+  shouldShowQueuedDocuments,
+} from '@/components/workbench/coverage-output';
+import { CoverageScaffold } from '@/components/workbench/coverage-scaffold';
 import { useAgentChat } from '@/hooks/use-agent-chat';
 
-const DOCUMENTS_PRE_RUN_CONTEXT = [
-  '6 documents in scope · 1 cross-reference matrix pending',
-  'M6e will check: Consistency · Missing docs · Routing',
+const COVERAGE_PRE_RUN_CONTEXT = [
+  'Policy in scope: PSM-HO-7842113 · HO-3 · $480,000 Coverage A',
+  'Peril: Hailstorm · Date of Loss: Apr 22, 2026',
+  'M2 will evaluate: Coverage A, B, C, D + 3 endorsements',
+  'RAG source: HO-3 Policy PDF (18 pages) loaded',
 ] as const;
 
-export default function DocumentsAgentPage() {
+export function CoverageAgentView() {
   const agent = useAgentChat({
-    api: documentsAgentConfig.api,
-    schema: documentsAgentConfig.schema,
-    storageKey: documentsAgentConfig.storageKey,
+    api: coverageAgentConfig.api,
+    schema: coverageAgentConfig.schema,
+    storageKey: coverageAgentConfig.storageKey,
   });
 
   return (
@@ -30,15 +37,15 @@ export default function DocumentsAgentPage() {
       <Breadcrumb />
       <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 px-6 py-4">
         <AgentPageBody
-          title={documentsAgentConfig.title}
-          description={documentsAgentConfig.description}
+          title={coverageAgentConfig.title}
+          description={coverageAgentConfig.description}
           identityBadge={
             <Badge variant="secondary" className="font-normal">
-              M6e · Cross-Document Consistency Engine · Tier 2 — Findings require adjuster review
+              M2 · Coverage Agent · Tier 3 — Adjuster confirmation required
             </Badge>
           }
-          idlePlaceholder={documentsAgentConfig.idlePlaceholder}
-          preRunContext={<AgentPreRunContext rows={DOCUMENTS_PRE_RUN_CONTEXT} />}
+          idlePlaceholder={<CoverageScaffold />}
+          preRunContext={<AgentPreRunContext rows={COVERAGE_PRE_RUN_CONTEXT} />}
           state={agent.state}
           startedAt={agent.startedAt}
           endedAt={agent.endedAt}
@@ -50,14 +57,16 @@ export default function DocumentsAgentPage() {
             <ActivityFeed
               events={agent.events}
               isStreaming={agent.state === 'running'}
-              pendingCopy="Listing the claim file…"
+              pendingCopy="Reaching for the policy…"
             />
           }
+          leftAside={
+            shouldShowQueuedDocuments(agent.object) ? <QueuedDocuments /> : null
+          }
         >
-          <DocumentsOutput
+          <CoverageOutput
             key={agent.resetKey}
             object={agent.object}
-            isStreaming={agent.state === 'running'}
             endedAt={agent.endedAt}
           />
         </AgentPageBody>

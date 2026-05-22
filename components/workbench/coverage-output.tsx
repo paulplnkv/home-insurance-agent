@@ -78,25 +78,23 @@ export function CoverageOutput({
 
       <DeductibleRow deductible={object?.applicable_deductible} />
 
-      {hasClauses || hasMemo || hasFlags ? (
-        <Accordion multiple defaultValue={['clauses', 'memo', 'flags']}>
-          {hasClauses ? (
-            <AccordionItem value="clauses">
-              <AccordionTrigger className="text-xs uppercase tracking-wide text-muted-foreground">
-                Cited clauses ({object!.cited_clauses!.length})
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="flex flex-wrap gap-1.5">
-                  {object!.cited_clauses!.map((clause, i) =>
-                    clause?.section ? (
-                      <ClauseChip key={`${clause.section}-${i}`} section={clause.section} />
-                    ) : null
-                  )}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          ) : null}
+      {hasClauses ? (
+        <section className="flex flex-col gap-2">
+          <span className="text-xs uppercase tracking-wide text-muted-foreground">
+            Cited clauses ({object!.cited_clauses!.length})
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {object!.cited_clauses!.map((clause, i) =>
+              clause?.section ? (
+                <ClauseChip key={`${clause.section}-${i}`} section={clause.section} />
+              ) : null,
+            )}
+          </div>
+        </section>
+      ) : null}
 
+      {hasMemo || hasFlags ? (
+        <Accordion multiple defaultValue={['memo', 'flags']}>
           {hasMemo ? (
             <AccordionItem value="memo">
               <AccordionTrigger className="text-xs uppercase tracking-wide text-muted-foreground">
@@ -145,7 +143,7 @@ export function CoverageOutput({
                           </p>
                         ) : null}
                       </li>
-                    ) : null
+                    ) : null,
                   )}
                 </ul>
               </AccordionContent>
@@ -153,10 +151,17 @@ export function CoverageOutput({
           ) : null}
         </Accordion>
       ) : null}
-
-      {hasMemo ? <QueuedDocuments /> : null}
     </div>
   );
+}
+
+// Exported so the agent page can render it in the leftAside slot
+// (under the activity feed) once the memo has streamed in.
+export { QueuedDocuments };
+export function shouldShowQueuedDocuments(
+  object: StreamingCoverage | undefined,
+): boolean {
+  return !!object?.memo_markdown;
 }
 
 function WriteBackStatusLine({ endedAt }: { endedAt: number | null }) {
@@ -212,7 +217,7 @@ function Tier3Banner() {
       </AlertDescription>
       <div className="mt-3 flex gap-2 group-has-[>svg]/alert:col-start-2">
         <Button size="sm" onClick={confirmTier3}>
-          Confirm and save to claim file
+          Confirm and write to claim file
         </Button>
         <Button size="sm" variant="outline">
           Request changes

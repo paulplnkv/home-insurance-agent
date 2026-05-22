@@ -1,24 +1,16 @@
 import {
   CameraIcon,
-  ClipboardCheckIcon,
   ClockIcon,
   HammerIcon,
   MailIcon,
-  MicIcon,
+  PhoneIcon,
   ShieldCheckIcon,
-  UserPlusIcon,
 } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { AiAgentsPanel } from './ai-agents-panel';
-import { Field } from './field';
 import { ClaimRegulatoryDeadlines } from './claim-regulatory-deadlines';
 import { ClaimFraudRisk } from './claim-fraud-risk';
 import { ClaimPendingApprovals } from './claim-pending-approvals';
+import { FieldTile, SectionCard, SectionTitle } from './section-card';
 import { CLAIM, formatCurrency, formatDate, formatDateTime } from '@/lib/scenario/claim';
 import { PHOTO_MANIFEST } from '@/lib/scenario/photos';
 
@@ -38,17 +30,15 @@ export function ClaimSidebar() {
 
 function Reserve() {
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base">Reserve</CardTitle>
-      </CardHeader>
-      <CardContent className="grid grid-cols-2 gap-x-4 gap-y-3 pb-4">
-        <Field label="Initial reserve" value={formatCurrency(22_000)} />
-        <Field label="Current reserve" value={formatCurrency(22_000)} />
-        <Field label="Last updated" value={formatDate('2026-04-23')} />
-        <Field label="Reserve adequacy" value="Under review" />
-      </CardContent>
-    </Card>
+    <SectionCard>
+      <SectionTitle>Reserve</SectionTitle>
+      <div className="grid grid-cols-2 gap-4">
+        <FieldTile label="INITIAL RESERVE" value={formatCurrency(22_000)} />
+        <FieldTile label="CURRENT RESERVE" value={formatCurrency(22_000)} />
+        <FieldTile label="LAST UPDATED" value={formatDate('2026-04-23')} />
+        <FieldTile label="RESERVE ADEQUACY" value="Under review" />
+      </div>
+    </SectionCard>
   );
 }
 
@@ -64,54 +54,53 @@ function initials(name: string): string {
 
 function Parties() {
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base">Parties</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-3 pb-4">
-        <div className="flex items-start gap-3">
-          <div
-            aria-hidden
-            className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium"
-          >
-            {initials(CLAIM.adjuster.name)}
-          </div>
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
-              Adjuster
-            </span>
-            <span className="text-sm font-medium leading-tight">
-              {CLAIM.adjuster.name}
-            </span>
-            <span className="truncate text-xs text-muted-foreground">
-              {CLAIM.adjuster.email}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {CLAIM.adjuster.phone}
-            </span>
-          </div>
+    <SectionCard>
+      <SectionTitle>Parties</SectionTitle>
+
+      <div className="flex items-start gap-4">
+        <div
+          aria-hidden
+          className="flex size-[71px] shrink-0 items-center justify-center rounded-full border border-[var(--line-soft)] bg-[#edf3ff] text-[24px] font-semibold text-[var(--brand-blue)]"
+        >
+          {initials(CLAIM.adjuster.name)}
         </div>
-        <div className="flex items-start gap-3 rounded-md border border-dashed bg-muted/30 p-3">
-          <div
-            aria-hidden
-            className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background text-muted-foreground"
+        <div className="flex flex-col gap-2">
+          <span className="text-[14px] text-[var(--ink)]">ADJUSTER</span>
+          <span className="text-[24px] font-semibold leading-tight text-[var(--ink)]">
+            {CLAIM.adjuster.name}
+          </span>
+          <a
+            href={`tel:${CLAIM.adjuster.phone}`}
+            className="inline-flex items-center gap-1 text-[14px] text-[var(--brand-blue)] hover:underline"
           >
-            <HammerIcon className="size-4" />
-          </div>
-          <div className="flex flex-col gap-0.5">
-            <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
-              Field contractor
-            </span>
-            <span className="text-sm font-medium leading-tight text-muted-foreground">
-              Pending assignment
-            </span>
-            <span className="text-xs text-muted-foreground">
-              Auto-dispatch after damage assessment runs.
-            </span>
-          </div>
+            <PhoneIcon className="size-4" />
+            {CLAIM.adjuster.phone}
+          </a>
+          <a
+            href={`mailto:${CLAIM.adjuster.email}`}
+            className="inline-flex items-center gap-1 text-[14px] text-[var(--brand-blue)] hover:underline"
+          >
+            <MailIcon className="size-4" />
+            {CLAIM.adjuster.email}
+          </a>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+
+      <div className="flex items-center gap-4 rounded-[8px] bg-white p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)]">
+        <HammerIcon className="size-6 shrink-0 text-[var(--ink-soft)]" />
+        <div className="flex flex-col gap-1">
+          <span className="text-[14px] text-[var(--ink-soft)]">
+            FIELD CONTRACTOR
+          </span>
+          <span className="text-[16px] font-semibold text-[var(--ink)]">
+            Pending Assignment
+          </span>
+          <span className="text-[14px] text-[var(--ink)]">
+            Auto-dispatch after damage assessment runs.
+          </span>
+        </div>
+      </div>
+    </SectionCard>
   );
 }
 
@@ -120,7 +109,7 @@ type TimelineEvent = {
   title: string;
   detail: string;
   meta: string;
-  muted?: boolean;
+  pending?: boolean;
 };
 
 function Timeline() {
@@ -128,90 +117,70 @@ function Timeline() {
     {
       icon: ClockIcon,
       title: 'FNOL filed',
-      detail: `Reported via ${CLAIM.insured.preferred_contact} by ${CLAIM.insured.name}.`,
-      meta: formatDateTime(CLAIM.loss.fnol_filed_at),
-    },
-    {
-      icon: MailIcon,
-      title: 'Acknowledgment letter sent to insured',
-      detail: 'TX TDI 15-day acknowledgment requirement satisfied.',
-      meta: formatDate('2026-04-24'),
-    },
-    {
-      icon: UserPlusIcon,
-      title: 'Independent adjuster assigned',
-      detail: 'Greg Tomlin, AIC.',
-      meta: formatDate('2026-04-25'),
-    },
-    {
-      icon: ClipboardCheckIcon,
-      title: 'Field inspection completed',
-      detail: 'Report received from IA.',
-      meta: formatDate('2026-04-26'),
-    },
-    {
-      icon: MicIcon,
-      title: 'Recorded statement taken',
-      detail: 'Telephonic interview with insured.',
-      meta: formatDate('2026-04-27'),
+      detail: `Reported via ${CLAIM.insured.preferred_contact} by ${CLAIM.insured.name}`,
+      meta: formatDateTime(CLAIM.loss.fnol_filed_at).toUpperCase(),
     },
     {
       icon: CameraIcon,
       title: 'Field photos uploaded',
-      detail: `${PHOTO_MANIFEST.length} photos staged for damage assessment.`,
-      meta: 'Today',
+      detail: `${PHOTO_MANIFEST.length} photos staged for damage assessment`,
+      meta: 'TODAY',
     },
     {
       icon: ShieldCheckIcon,
       title: 'Awaiting agent runs',
-      detail: 'Coverage, damage, and document agents have not run yet.',
-      meta: 'Pending',
-      muted: true,
+      detail: 'Coverage, damage, and document agents have not run yet',
+      meta: '',
+      pending: true,
     },
   ];
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base">Claim timeline</CardTitle>
-      </CardHeader>
-      <CardContent className="pb-4">
-        <ol className="relative flex flex-col gap-4 border-l border-border pl-5">
-          {events.map((event) => (
-            <li key={event.title} className="relative">
+    <SectionCard>
+      <SectionTitle>Claim timeline</SectionTitle>
+      <ol className="flex flex-col gap-6">
+        {events.map((event, idx) => {
+          const last = idx === events.length - 1;
+          return (
+            <li key={event.title} className="relative flex gap-4">
+              {!last ? (
+                <span
+                  aria-hidden
+                  className="absolute left-[15px] top-8 h-[calc(100%+0.75rem)] w-px bg-[var(--line-soft)]"
+                />
+              ) : null}
               <span
                 aria-hidden
-                className="absolute -left-[1.55rem] top-0.5 flex size-4 items-center justify-center rounded-full border bg-background"
+                className={
+                  event.pending
+                    ? 'relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full border border-[var(--brand-blue)] bg-[#edf3ff] text-[var(--brand-blue)]'
+                    : 'relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full border border-[var(--brand-blue)] bg-[var(--brand-blue)] text-white'
+                }
               >
-                <event.icon
-                  className={
-                    event.muted
-                      ? 'size-2.5 text-muted-foreground'
-                      : 'size-2.5 text-foreground'
-                  }
-                />
+                <event.icon className="size-4" />
               </span>
-              <div className="flex flex-col gap-0.5">
-                <span
-                  className={
-                    event.muted
-                      ? 'text-sm font-medium text-muted-foreground'
-                      : 'text-sm font-medium'
-                  }
-                >
+              <div className="flex flex-col gap-2 pt-1">
+                <span className="text-[16px] font-semibold text-[var(--ink)]">
                   {event.title}
                 </span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-[14px] text-[var(--ink)]">
                   {event.detail}
                 </span>
-                <span className="text-[11px] uppercase tracking-wide text-muted-foreground/80">
-                  {event.meta}
-                </span>
+                {event.meta ? (
+                  <span className="text-[14px] text-[var(--ink-soft)]">
+                    {event.meta}
+                  </span>
+                ) : null}
+                {event.pending ? (
+                  <span className="inline-flex w-fit items-center gap-1 rounded-full border border-[var(--status-review-fg)] bg-[var(--status-review-bg)] px-2 py-1 text-[14px] text-[var(--status-review-fg)]">
+                    <span aria-hidden>⏳</span> Pending
+                  </span>
+                ) : null}
               </div>
             </li>
-          ))}
-        </ol>
-      </CardContent>
-    </Card>
+          );
+        })}
+      </ol>
+    </SectionCard>
   );
 }

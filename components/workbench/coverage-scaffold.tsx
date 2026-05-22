@@ -1,5 +1,5 @@
-import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '@/lib/scenario/claim';
+import { cn } from '@/lib/utils';
 
 type LineCode = 'A' | 'B' | 'C' | 'D' | 'HE7' | 'HO0490' | 'HO0441';
 type LineStatus =
@@ -27,21 +27,38 @@ const ROWS: ReadonlyArray<ScaffoldRow> = [
 
 const STATUS_BADGE: Record<
   LineStatus,
-  {
-    variant: 'secondary' | 'default' | 'destructive' | 'outline';
-    icon: string;
-    label: string;
-  }
+  { className: string; icon: string; label: string }
 > = {
-  PENDING: { variant: 'secondary', icon: '⬜', label: 'Pending' },
-  COVERED: { variant: 'default', icon: '✅', label: 'Covered' },
+  PENDING: {
+    className:
+      'border border-border bg-muted text-muted-foreground',
+    icon: '⬜',
+    label: 'Pending',
+  },
+  COVERED: {
+    className:
+      'border border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-300',
+    icon: '✅',
+    label: 'Covered',
+  },
   PARTIALLY_COVERED: {
-    variant: 'secondary',
+    className:
+      'border border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-300',
     icon: '◐',
     label: 'Partially covered',
   },
-  EXCLUDED: { variant: 'destructive', icon: '❌', label: 'Excluded' },
-  NEEDS_REVIEW: { variant: 'destructive', icon: '⚠️', label: 'Needs review' },
+  EXCLUDED: {
+    className:
+      'border border-red-300 bg-red-50 text-red-700 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-300',
+    icon: '❌',
+    label: 'Excluded',
+  },
+  NEEDS_REVIEW: {
+    className:
+      'border border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-300',
+    icon: '⚠️',
+    label: 'Needs review',
+  },
 };
 
 type CoverageLine = { code?: string; status?: string } | undefined;
@@ -93,10 +110,15 @@ export function CoverageScaffold({
                 </span>
                 <span className="text-xs text-muted-foreground">{row.detail}</span>
               </div>
-              <Badge variant={badge.variant} className="gap-1 font-normal">
+              <span
+                className={cn(
+                  'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium',
+                  badge.className,
+                )}
+              >
                 <span aria-hidden>{badge.icon}</span>
                 {badge.label}
-              </Badge>
+              </span>
             </li>
           );
         })}

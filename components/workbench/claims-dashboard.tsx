@@ -1,7 +1,11 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Card } from '@/components/ui/card';
+import {
+  CircleCheckIcon,
+  FolderIcon,
+  LoaderIcon,
+} from 'lucide-react';
 import { ClaimRow } from '@/components/workbench/claim-row';
 import {
   DASHBOARD_CLAIMS,
@@ -9,25 +13,58 @@ import {
 } from '@/lib/scenario/dashboard-claims';
 import { cn } from '@/lib/utils';
 
+type KpiTone = 'open' | 'investigation' | 'review';
+
+const TONE_STYLES: Record<KpiTone, { bg: string; fg: string }> = {
+  open: {
+    bg: 'bg-[var(--status-open-bg)]',
+    fg: 'text-[var(--status-open-fg)]',
+  },
+  investigation: {
+    bg: 'bg-[var(--status-investigation-bg)]',
+    fg: 'text-[var(--status-investigation-fg)]',
+  },
+  review: {
+    bg: 'bg-[var(--status-review-bg)]',
+    fg: 'text-[var(--status-review-fg)]',
+  },
+};
+
 function KpiTile({
   label,
   value,
   hint,
+  icon: Icon,
+  tone,
 }: {
   label: string;
   value: string;
-  hint?: string;
+  hint: string;
+  icon: typeof FolderIcon;
+  tone: KpiTone;
 }) {
+  const { bg, fg } = TONE_STYLES[tone];
   return (
-    <Card className="gap-2 px-5 py-4">
-      <span className="text-xs uppercase tracking-wide text-muted-foreground">
-        {label}
-      </span>
-      <span className="text-2xl font-semibold leading-none">{value}</span>
-      {hint ? (
-        <span className="text-xs text-muted-foreground">{hint}</span>
-      ) : null}
-    </Card>
+    <div className="flex h-[123px] items-center gap-4 rounded-lg bg-white p-4 shadow-[0_0_20px_0_rgba(0,0,0,0.1)]">
+      <div
+        aria-hidden
+        className={cn(
+          'flex size-[91px] shrink-0 items-center justify-center rounded-full border border-[var(--line-soft)]',
+          bg,
+        )}
+      >
+        <Icon className={cn('size-10', fg)} strokeWidth={1.5} />
+      </div>
+      <div className="flex min-w-0 flex-col gap-2">
+        <span className="text-sm font-normal uppercase text-[var(--ink)]">
+          {label}
+        </span>
+        <span className="text-2xl font-semibold leading-none text-[var(--ink)]">
+          {value}
+        </span>
+        <span className="text-sm font-normal text-[var(--ink)]">{hint}</span>
+      </div>
+    </div>
   );
 }
 
@@ -56,43 +93,49 @@ export function ClaimsDashboard() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-end justify-between gap-2">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-semibold leading-tight">
-            Claims Dashboard
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            {visibleClaims.length}{' '}
-            {mode === 'open' ? 'open' : 'total'} claims · Updated {today}
-          </p>
-        </div>
-        <span className="text-xs text-muted-foreground">
-          Pacific States Mutual · Texas region
-        </span>
+      <div className="flex flex-col gap-3">
+        <h1 className="text-2xl font-semibold leading-tight text-[var(--ink)]">
+          Claims Dashboard
+        </h1>
+        <p className="flex flex-wrap items-center gap-2 text-sm text-[var(--ink)]">
+          <span>{openClaims.length} open claims</span>
+          <span aria-hidden className="block size-1 rounded-full bg-[var(--ink-soft)]" />
+          <span>Updated {today}</span>
+          <span aria-hidden className="block size-1 rounded-full bg-[var(--ink-soft)]" />
+          <span className="text-[var(--ink-soft)]">
+            Pacific States Mutual (Texas region)
+          </span>
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <KpiTile
           label="Open claims"
           value={String(openClaims.length)}
           hint="Active workload"
+          icon={FolderIcon}
+          tone="open"
         />
         <KpiTile
           label="In investigation"
           value={String(investigating)}
           hint="Field review underway"
+          icon={CircleCheckIcon}
+          tone="investigation"
         />
         <KpiTile
           label="Pending review"
           value={String(pendingReview)}
           hint="Awaiting adjuster sign-off"
+          icon={LoaderIcon}
+          tone="review"
         />
       </div>
 
       <div
         role="tablist"
         aria-label="Filter claims"
-        className="inline-flex w-fit items-center gap-1 rounded-md border bg-card p-1 text-xs"
+        className="inline-flex w-fit items-center gap-1 rounded-full border border-[var(--line-table)] bg-[var(--surface-tab-track)] p-0.5 font-[family-name:var(--font-commissioner)]"
       >
         <button
           type="button"
@@ -100,10 +143,10 @@ export function ClaimsDashboard() {
           aria-selected={mode === 'open'}
           onClick={() => setMode('open')}
           className={cn(
-            'rounded px-3 py-1 font-medium transition-colors',
+            'rounded-full border px-4 py-2 text-base font-normal transition-colors',
             mode === 'open'
-              ? 'bg-foreground text-background'
-              : 'text-muted-foreground hover:text-foreground',
+              ? 'border-[var(--brand-blue)] bg-[var(--brand-blue)] text-white'
+              : 'border-transparent bg-white text-[var(--brand-blue)]',
           )}
         >
           Open ({openClaims.length})
@@ -114,41 +157,54 @@ export function ClaimsDashboard() {
           aria-selected={mode === 'all'}
           onClick={() => setMode('all')}
           className={cn(
-            'rounded px-3 py-1 font-medium transition-colors',
+            'rounded-full border px-4 py-2 text-base font-normal transition-colors',
             mode === 'all'
-              ? 'bg-foreground text-background'
-              : 'text-muted-foreground hover:text-foreground',
+              ? 'border-[var(--brand-blue)] bg-[var(--brand-blue)] text-white'
+              : 'border-transparent bg-white text-[var(--brand-blue)]',
           )}
         >
           All ({DASHBOARD_CLAIMS.length})
         </button>
       </div>
 
-      <div className="overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-accent/30 text-xs uppercase tracking-wide text-muted-foreground">
-              <tr className="whitespace-nowrap">
-                <th className="px-6 py-2 text-left font-medium">Claim #</th>
-                <th className="px-4 py-2 text-left font-medium">Insured</th>
-                <th className="px-4 py-2 text-left font-medium">Loss address</th>
-                <th className="px-4 py-2 text-left font-medium">Peril</th>
-                <th className="px-4 py-2 text-left font-medium">Status</th>
-                <th className="px-4 py-2 text-left font-medium">Date of loss</th>
-                <th className="px-4 py-2 text-right font-medium">Days open</th>
-                <th className="px-4 py-2 text-right font-medium">Reserve</th>
-                <th className="px-4 py-2 text-right font-medium">Coverage A</th>
-                <th className="px-4 py-2 text-left font-medium">Adjuster</th>
-                <th className="px-6 py-2 text-center font-medium">AI status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {visibleClaims.map((claim) => (
-                <ClaimRow key={claim.claim_number} claim={claim} />
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="overflow-hidden rounded-[20px] border border-[var(--line-soft)] bg-white font-[family-name:var(--font-commissioner)]">
+        {/* table-fixed + colgroup pins column widths so the layout doesn't
+            shift when the user toggles Open ↔ All. Widths mirror Figma. */}
+        <table className="w-full table-fixed text-base">
+          <colgroup>
+            <col className="w-[170px]" />
+            <col className="w-[140px]" />
+            <col className="w-[200px]" />
+            <col className="w-[110px]" />
+            <col className="w-[150px]" />
+            <col className="w-[140px]" />
+            <col className="w-[110px]" />
+            <col className="w-[130px]" />
+            <col className="w-[140px]" />
+            <col className="w-[140px]" />
+            <col className="w-[90px]" />
+          </colgroup>
+          <thead className="bg-[var(--surface-table-header)] text-[var(--brand-blue)]">
+            <tr className="border-b border-[var(--line-table)]">
+              <th className="px-3 py-4 text-left text-base font-semibold uppercase whitespace-nowrap">Claim #</th>
+              <th className="px-3 py-4 text-left text-base font-semibold uppercase whitespace-nowrap">Insured</th>
+              <th className="px-3 py-4 text-left text-base font-semibold uppercase whitespace-nowrap">Loss address</th>
+              <th className="px-3 py-4 text-left text-base font-semibold uppercase whitespace-nowrap">Peril</th>
+              <th className="px-3 py-4 text-left text-base font-semibold uppercase whitespace-nowrap">Status</th>
+              <th className="px-3 py-4 text-left text-base font-semibold uppercase whitespace-nowrap">Date of loss</th>
+              <th className="px-3 py-4 text-left text-base font-semibold uppercase whitespace-nowrap">Days open</th>
+              <th className="px-3 py-4 text-right text-base font-semibold uppercase whitespace-nowrap">Reserve</th>
+              <th className="px-3 py-4 text-right text-base font-semibold uppercase whitespace-nowrap">Coverage A</th>
+              <th className="px-3 py-4 text-left text-base font-semibold uppercase whitespace-nowrap">Adjuster</th>
+              <th className="px-3 py-4 text-center text-base font-semibold uppercase whitespace-nowrap">AI</th>
+            </tr>
+          </thead>
+          <tbody>
+            {visibleClaims.map((claim) => (
+              <ClaimRow key={claim.claim_number} claim={claim} />
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -1,15 +1,8 @@
-import {
-  AlertTriangleIcon,
-  MailIcon,
-  MapPinIcon,
-  PhoneIcon,
-} from 'lucide-react';
+import { AlertTriangleIcon, MailIcon, PhoneIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { ConsistencyCheckBadge } from './consistency-check-badge';
-import { Field } from './field';
 import { StatusBadge } from './status-badge';
-import { CLAIM, formatDate, formatDateTime } from '@/lib/scenario/claim';
+import { CLAIM, daysSince, formatDate, formatDateTime } from '@/lib/scenario/claim';
 
 function initials(name: string): string {
   return name
@@ -22,103 +15,109 @@ function initials(name: string): string {
 }
 
 export function ClaimHeader() {
-  const open = 1;
-  const reportedVia = 'Phone · Inbound 1-800';
-
   return (
-    <header className="overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm">
-      <div className="flex flex-wrap items-start justify-between gap-6 px-6 py-5">
-        <div className="flex min-w-0 flex-col gap-2">
-          <div className="flex items-center gap-2 text-[11px] uppercase tracking-wide text-muted-foreground">
-            <span>Claim</span>
-            <span aria-hidden>·</span>
-            <span>Policy {CLAIM.policy.number}</span>
-          </div>
-          <h1 className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xl font-semibold leading-tight">
-            <span>{CLAIM.claim_number}</span>
-            <span className="text-muted-foreground">·</span>
-            <span>{CLAIM.insured.name}</span>
-          </h1>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5">
-              <MapPinIcon className="size-3.5" />
-              {CLAIM.insured.address}
-            </span>
-            <Badge
-              variant="outline"
-              className="gap-1 font-normal text-amber-700 dark:text-amber-400"
-            >
-              <AlertTriangleIcon className="size-3" />
-              {CLAIM.loss.cat_event}
-            </Badge>
-          </div>
+    <header className="mt-4 grid gap-6 lg:grid-cols-[1fr_557px] lg:items-start">
+      <div className="flex min-w-0 flex-col gap-4">
+        <h1 className="text-[24px] font-semibold leading-none tracking-tight text-[var(--ink)]">
+          {CLAIM.claim_number} · {CLAIM.insured.name}
+        </h1>
+        <div className="flex flex-wrap items-center gap-2">
+          <StatusBadge status={CLAIM.status} />
+          <ConsistencyCheckBadge />
+          <Badge
+            variant="outline"
+            className="gap-1 rounded-full border-[#9e3838] bg-transparent px-2 py-1 text-[14px] font-normal text-[#9e3838]"
+          >
+            <AlertTriangleIcon className="size-4" />
+            {CLAIM.loss.cat_event}
+          </Badge>
         </div>
-
-        <div className="flex flex-col items-end gap-3">
-          <div className="flex flex-wrap items-center justify-end gap-2">
-            <StatusBadge status={CLAIM.status} className="text-xs" />
-            <ConsistencyCheckBadge className="text-xs" />
-          </div>
-          <AdjusterCard />
+        <div className="flex flex-wrap items-center gap-2 text-[14px] text-[var(--ink)]">
+          <span>CLAIM</span>
+          <span aria-hidden className="size-1 rounded-full bg-[var(--ink)]" />
+          <span>POLICY {CLAIM.policy.number}</span>
+          <span aria-hidden className="size-1 rounded-full bg-[var(--ink)]" />
+          <span className="inline-flex items-center gap-1 text-[var(--ink-soft)]">
+            <span aria-hidden>📍</span>
+            {CLAIM.insured.address}
+          </span>
         </div>
       </div>
 
-      <Separator />
-
-      <dl className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 py-4 sm:grid-cols-3 md:grid-cols-6">
-        <Field label="Peril" value={CLAIM.loss.peril} />
-        <Field
-          label="Date of loss"
-          value={formatDate(CLAIM.loss.date_of_loss)}
-        />
-        <Field
-          label="FNOL filed"
-          value={formatDateTime(CLAIM.loss.fnol_filed_at)}
-        />
-        <Field label="Days open" value={`${open} ${open === 1 ? 'day' : 'days'}`} />
-        <Field label="Reported via" value={reportedVia} />
-        <Field label="Loss state" value={CLAIM.loss.location_state} />
-      </dl>
+      <AdjusterCard />
     </header>
   );
 }
 
 function AdjusterCard() {
   return (
-    <div className="flex items-center gap-3 rounded-md border bg-background/40 px-3 py-2">
+    <div className="relative flex h-[132px] w-full items-start gap-4 overflow-hidden rounded-[8px] bg-white p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)]">
       <div
         aria-hidden
-        className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium text-foreground"
+        className="flex size-[71px] shrink-0 items-center justify-center rounded-full border border-[var(--line-soft)] bg-[#edf3ff] text-[24px] font-semibold text-[var(--brand-blue)]"
       >
         {initials(CLAIM.adjuster.name)}
       </div>
-      <div className="flex flex-col gap-0.5 text-left">
-        <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
-          Assigned adjuster
-        </span>
-        <span className="text-sm font-medium leading-tight">
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <span className="text-[14px] text-[var(--ink)]">ASSIGNED ADJUSTER</span>
+        <span className="text-[24px] font-semibold leading-tight text-[var(--ink)]">
           {CLAIM.adjuster.name}
         </span>
-        <span className="text-[11px] text-muted-foreground">
+        <span className="text-[14px] text-[var(--ink)]">
           {CLAIM.adjuster.team}
         </span>
-        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-muted-foreground">
-          <a
-            href={`tel:${CLAIM.adjuster.phone}`}
-            className="inline-flex items-center gap-1 hover:text-foreground"
-          >
-            <PhoneIcon className="size-3" />
-            {CLAIM.adjuster.phone}
-          </a>
-          <a
-            href={`mailto:${CLAIM.adjuster.email}`}
-            className="inline-flex items-center gap-1 hover:text-foreground"
-          >
-            <MailIcon className="size-3" />
-            {CLAIM.adjuster.email}
-          </a>
-        </div>
       </div>
+      <div className="absolute bottom-3 left-4 flex items-center gap-4 text-[14px] text-[var(--brand-blue)]">
+        <a
+          href={`tel:${CLAIM.adjuster.phone}`}
+          className="inline-flex items-center gap-1 hover:underline"
+        >
+          <PhoneIcon className="size-4" />
+          {CLAIM.adjuster.phone}
+        </a>
+        <a
+          href={`mailto:${CLAIM.adjuster.email}`}
+          className="inline-flex items-center gap-1 hover:underline"
+        >
+          <MailIcon className="size-4" />
+          {CLAIM.adjuster.email}
+        </a>
+      </div>
+    </div>
+  );
+}
+
+export function ClaimStatsBar() {
+  const open = daysSince(CLAIM.loss.fnol_filed_at);
+  const reportedVia = (
+    <>
+      <span>{CLAIM.insured.preferred_contact}</span>
+      <span className="font-normal text-[var(--ink-soft)]"> · </span>
+      <span>Insured</span>
+    </>
+  );
+
+  const stats: ReadonlyArray<{ label: string; value: React.ReactNode }> = [
+    { label: 'PERIL', value: CLAIM.loss.peril },
+    { label: 'DATE OF LOSS', value: formatDate(CLAIM.loss.date_of_loss) },
+    { label: 'FNOL FILED', value: formatDateTime(CLAIM.loss.fnol_filed_at) },
+    { label: 'DAYS OPEN', value: `${open} ${open === 1 ? 'day' : 'days'}` },
+    { label: 'REPORTED VIA', value: reportedVia },
+    { label: 'LOSS STATE', value: CLAIM.loss.location_state },
+  ];
+
+  return (
+    <div className="flex items-center justify-between gap-6 rounded-[16px] border border-[var(--line-soft)] bg-white p-6">
+      {stats.map((stat) => (
+        <div key={stat.label} className="flex flex-col gap-2">
+          <span className="text-[14px] font-normal text-[var(--ink)]">
+            {stat.label}
+          </span>
+          <span className="whitespace-nowrap text-[16px] font-semibold text-[var(--ink)]">
+            {stat.value}
+          </span>
+        </div>
+      ))}
     </div>
   );
 }

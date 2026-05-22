@@ -7,22 +7,20 @@ import { ClaimSubTabs } from '@/components/workbench/claim-sub-tabs';
 import { ActivityFeed } from '@/components/workbench/activity-feed';
 import { AgentPageBody } from '@/components/workbench/agent-page';
 import { AgentPreRunContext } from '@/components/workbench/agent-pre-run-context';
-import { damageAgentConfig } from '@/components/workbench/damage-agent-panel';
-import { DamageOutput } from '@/components/workbench/damage-output';
-import { DamageScaffold } from '@/components/workbench/damage-scaffold';
+import { documentsAgentConfig } from '@/components/workbench/documents-agent-panel';
+import { DocumentsOutput } from '@/components/workbench/documents-output';
 import { useAgentChat } from '@/hooks/use-agent-chat';
 
-const DAMAGE_PRE_RUN_CONTEXT = [
-  '60 photos staged · 4 classification categories',
-  'M6b will apply: Relevant / Duplicate / Out of scope / Scale reference',
-  'Output: Zone manifest + Xactimate line items + contractor variance',
+const DOCUMENTS_PRE_RUN_CONTEXT = [
+  '6 documents in scope · 1 cross-reference matrix pending',
+  'M6e will check: Consistency · Missing docs · Routing',
 ] as const;
 
-export default function DamageAgentPage() {
+export function DocumentsAgentView() {
   const agent = useAgentChat({
-    api: damageAgentConfig.api,
-    schema: damageAgentConfig.schema,
-    storageKey: damageAgentConfig.storageKey,
+    api: documentsAgentConfig.api,
+    schema: documentsAgentConfig.schema,
+    storageKey: documentsAgentConfig.storageKey,
   });
 
   return (
@@ -32,15 +30,15 @@ export default function DamageAgentPage() {
       <Breadcrumb />
       <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 px-6 py-4">
         <AgentPageBody
-          title={damageAgentConfig.title}
-          description={damageAgentConfig.description}
+          title={documentsAgentConfig.title}
+          description={documentsAgentConfig.description}
           identityBadge={
             <Badge variant="secondary" className="font-normal">
-              M6b · Photo Intel Agent · Tier 2 — Draft output, adjuster review required
+              M6e · Cross-Document Consistency Engine · Tier 2 — Findings require adjuster review
             </Badge>
           }
-          idlePlaceholder={<DamageScaffold />}
-          preRunContext={<AgentPreRunContext rows={DAMAGE_PRE_RUN_CONTEXT} />}
+          idlePlaceholder={documentsAgentConfig.idlePlaceholder}
+          preRunContext={<AgentPreRunContext rows={DOCUMENTS_PRE_RUN_CONTEXT} />}
           state={agent.state}
           startedAt={agent.startedAt}
           endedAt={agent.endedAt}
@@ -52,11 +50,11 @@ export default function DamageAgentPage() {
             <ActivityFeed
               events={agent.events}
               isStreaming={agent.state === 'running'}
-              pendingCopy="Pulling the photo manifest…"
+              pendingCopy="Listing the claim file…"
             />
           }
         >
-          <DamageOutput
+          <DocumentsOutput
             key={agent.resetKey}
             object={agent.object}
             isStreaming={agent.state === 'running'}

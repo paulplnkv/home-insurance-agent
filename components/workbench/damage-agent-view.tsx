@@ -7,23 +7,22 @@ import { ClaimSubTabs } from '@/components/workbench/claim-sub-tabs';
 import { ActivityFeed } from '@/components/workbench/activity-feed';
 import { AgentPageBody } from '@/components/workbench/agent-page';
 import { AgentPreRunContext } from '@/components/workbench/agent-pre-run-context';
-import { coverageAgentConfig } from '@/components/workbench/coverage-agent-panel';
-import { CoverageOutput } from '@/components/workbench/coverage-output';
-import { CoverageScaffold } from '@/components/workbench/coverage-scaffold';
+import { damageAgentConfig } from '@/components/workbench/damage-agent-panel';
+import { DamageOutput } from '@/components/workbench/damage-output';
+import { DamageScaffold } from '@/components/workbench/damage-scaffold';
 import { useAgentChat } from '@/hooks/use-agent-chat';
 
-const COVERAGE_PRE_RUN_CONTEXT = [
-  'Policy in scope: PSM-HO-7842113 · HO-3 · $480,000 Coverage A',
-  'Peril: Hailstorm · Date of Loss: Apr 22, 2026',
-  'M2 will evaluate: Coverage A, B, C, D + 3 endorsements',
-  'RAG source: HO-3 Policy PDF (18 pages) loaded',
+const DAMAGE_PRE_RUN_CONTEXT = [
+  '60 photos staged · 4 classification categories',
+  'M6b will apply: Relevant / Duplicate / Out of scope / Scale reference',
+  'Output: Zone manifest + Xactimate line items + contractor variance',
 ] as const;
 
-export default function CoverageAgentPage() {
+export function DamageAgentView() {
   const agent = useAgentChat({
-    api: coverageAgentConfig.api,
-    schema: coverageAgentConfig.schema,
-    storageKey: coverageAgentConfig.storageKey,
+    api: damageAgentConfig.api,
+    schema: damageAgentConfig.schema,
+    storageKey: damageAgentConfig.storageKey,
   });
 
   return (
@@ -33,15 +32,15 @@ export default function CoverageAgentPage() {
       <Breadcrumb />
       <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 px-6 py-4">
         <AgentPageBody
-          title={coverageAgentConfig.title}
-          description={coverageAgentConfig.description}
+          title={damageAgentConfig.title}
+          description={damageAgentConfig.description}
           identityBadge={
             <Badge variant="secondary" className="font-normal">
-              M2 · Coverage Agent · Tier 3 — Adjuster confirmation required
+              M6b · Photo Intel Agent · Tier 2 — Draft output, adjuster review required
             </Badge>
           }
-          idlePlaceholder={<CoverageScaffold />}
-          preRunContext={<AgentPreRunContext rows={COVERAGE_PRE_RUN_CONTEXT} />}
+          idlePlaceholder={<DamageScaffold />}
+          preRunContext={<AgentPreRunContext rows={DAMAGE_PRE_RUN_CONTEXT} />}
           state={agent.state}
           startedAt={agent.startedAt}
           endedAt={agent.endedAt}
@@ -53,13 +52,14 @@ export default function CoverageAgentPage() {
             <ActivityFeed
               events={agent.events}
               isStreaming={agent.state === 'running'}
-              pendingCopy="Reaching for the policy…"
+              pendingCopy="Pulling the photo manifest…"
             />
           }
         >
-          <CoverageOutput
+          <DamageOutput
             key={agent.resetKey}
             object={agent.object}
+            isStreaming={agent.state === 'running'}
             endedAt={agent.endedAt}
           />
         </AgentPageBody>

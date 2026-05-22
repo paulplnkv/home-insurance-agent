@@ -8,16 +8,6 @@ import { formatCurrency, formatDate } from '@/lib/scenario/claim';
 import { type ClaimSummary } from '@/lib/scenario/dashboard-claims';
 import { cn } from '@/lib/utils';
 
-function daysOpenClass(days: number): string {
-  if (days > 30) {
-    return 'bg-red-100 text-red-900 dark:bg-red-500/15 dark:text-red-300';
-  }
-  if (days > 20) {
-    return 'bg-amber-100 text-amber-900 dark:bg-amber-500/15 dark:text-amber-300';
-  }
-  return 'text-foreground';
-}
-
 function pseudoDaysOpen(claimNumber: string): number {
   let h = 0;
   for (let i = 0; i < claimNumber.length; i++) {
@@ -56,54 +46,47 @@ export function ClaimRow({ claim }: { claim: ClaimSummary }) {
         claim.is_real ? `Open claim ${claim.claim_number}` : undefined
       }
       className={cn(
-        'border-t transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:bg-accent/40',
+        'border-b border-[var(--line-table)] transition-colors hover:bg-[var(--surface-table-header)]/50 focus-visible:bg-[var(--surface-table-header)]/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--brand-blue)]',
         claim.is_real ? 'cursor-pointer' : 'cursor-default',
       )}
     >
-      <td className="px-6 py-3 font-mono text-xs font-medium text-foreground">
-        <span className="inline-flex items-center gap-2">
-          {claim.claim_number}
+      <td className="px-3 py-4 text-base text-[var(--ink)]">
+        <div className="flex flex-col items-start gap-1">
+          <span className="whitespace-nowrap">{claim.claim_number}</span>
           {claim.cat_event ? (
             <span
               title={claim.cat_event}
-              className="rounded-md bg-orange-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-orange-800 dark:bg-orange-500/20 dark:text-orange-300"
+              className="inline-flex items-center rounded-full border border-[var(--status-cat-fg)] bg-[var(--status-cat-bg)] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--status-cat-fg)]"
             >
               CAT
             </span>
           ) : null}
-        </span>
+        </div>
       </td>
-      <td className="px-4 py-3 font-medium text-foreground">
+      <td className="px-3 py-4 text-base text-[var(--ink)]">
         {claim.insured_name}
       </td>
-      <td className="px-4 py-3 text-foreground">{claim.loss_address}</td>
-      <td className="px-4 py-3 text-foreground">{claim.peril}</td>
-      <td className="px-4 py-3">
+      <td className="px-3 py-4 text-base text-[var(--ink)]">{claim.loss_address}</td>
+      <td className="px-3 py-4 text-base text-[var(--ink)]">{claim.peril}</td>
+      <td className="px-3 py-4">
         <StatusBadge status={claim.status} />
       </td>
-      <td className="px-4 py-3 text-foreground">
+      <td className="px-3 py-4 text-base text-[var(--ink)]">
         {formatDate(claim.date_of_loss)}
       </td>
-      <td className="px-4 py-3 text-right">
-        <span
-          className={cn(
-            'inline-block min-w-7 rounded px-1.5 font-mono text-xs',
-            daysOpenClass(days),
-          )}
-        >
-          {days}
-        </span>
+      <td className="px-3 py-4 text-base text-[var(--ink)] tabular-nums">
+        {days}
       </td>
-      <td className="px-4 py-3 text-right font-mono text-xs text-foreground">
+      <td className="px-3 py-4 text-right text-base font-semibold text-[var(--ink)] tabular-nums">
         {claim.reserve_working == null
           ? '—'
           : formatCurrency(claim.reserve_working)}
       </td>
-      <td className="px-4 py-3 text-right font-mono text-xs text-foreground">
+      <td className="px-3 py-4 text-right text-base font-semibold text-[var(--ink)] tabular-nums">
         {formatCurrency(claim.coverage_a)}
       </td>
-      <td className="px-4 py-3 text-foreground">{claim.adjuster_name}</td>
-      <td className="px-6 py-3 text-center">
+      <td className="px-3 py-4 text-base text-[var(--ink)]">{claim.adjuster_name}</td>
+      <td className="px-3 py-4 text-center">
         <DashboardAiStatusCell isReal={claim.is_real} />
       </td>
     </tr>

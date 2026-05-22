@@ -4,20 +4,22 @@ const GLOBAL_NAV = ['Dashboard', 'Queue', 'Reports'] as const;
 
 export function AppBar() {
   return (
-    <div className="border-b bg-card">
-      <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between gap-6 px-6 py-2.5 text-xs">
-        <div className="flex items-center gap-5">
-          <span className="font-semibold uppercase tracking-wider text-foreground">
-            Pacific States Mutual
+    <div className="border-b border-[var(--line-soft)] bg-white">
+      <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-6 px-10 py-4 text-xs">
+        <div className="flex items-center">
+          <span className="font-bold tracking-wider text-[var(--brand-blue)]">
+            PACIFIC STATES MUTUAL
           </span>
-          <span className="text-muted-foreground">Claims</span>
-          {GLOBAL_NAV.map((item) => (
-            <span key={item} className="text-muted-foreground/60">
-              {item}
-            </span>
-          ))}
+          <div className="ml-12 flex items-center gap-6">
+            <span className="text-[var(--brand-blue)]">Claims</span>
+            {GLOBAL_NAV.map((item) => (
+              <span key={item} className="text-[var(--ink)]">
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
-        <span className="text-muted-foreground">{CLAIM.adjuster.name}</span>
+        <span className="text-[var(--ink)]">{CLAIM.adjuster.name}</span>
       </div>
     </div>
   );

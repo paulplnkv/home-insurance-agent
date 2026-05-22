@@ -4,7 +4,6 @@ import { useSyncExternalStore } from 'react';
 import {
   AlertCircleIcon,
   CheckCircle2Icon,
-  ClockIcon,
   Loader2Icon,
 } from 'lucide-react';
 import { REAL_CLAIM_AGENT_KEYS } from '@/lib/scenario/dashboard-claims';
@@ -50,17 +49,17 @@ function getServerSnapshot(): AiStatus {
 
 const STATUS_PRESENTATION: Record<
   AiStatus,
-  { icon: typeof ClockIcon; title: string; className: string; spin?: boolean }
+  { icon: typeof Loader2Icon; title: string; className: string; spin?: boolean }
 > = {
   pending: {
-    icon: ClockIcon,
+    icon: Loader2Icon,
     title: 'AI: Pending',
-    className: 'text-muted-foreground',
+    className: 'text-amber-500',
   },
   running: {
     icon: Loader2Icon,
     title: 'AI: Running',
-    className: 'text-blue-600',
+    className: 'text-primary',
     spin: true,
   },
   complete: {

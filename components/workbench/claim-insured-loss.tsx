@@ -1,14 +1,6 @@
 import { MailIcon, MapPinIcon, MessageSquareIcon, PhoneIcon } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Field } from './field';
 import { CLAIM, formatDate, formatDateTime } from '@/lib/scenario/claim';
+import { SectionCard, SectionTitle } from './section-card';
 
 const PREFERRED_ICON = {
   SMS: MessageSquareIcon,
@@ -20,74 +12,76 @@ export function ClaimInsuredLoss() {
   const PreferredIcon = PREFERRED_ICON[CLAIM.insured.preferred_contact];
 
   return (
-    <Card>
-      <CardHeader className="pb-4">
-        <CardTitle className="text-base">Insured & loss</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-6 pb-6 md:flex-row md:gap-8">
-        <section className="flex min-w-0 flex-1 flex-col gap-4">
-          <h3 className="text-[11px] uppercase tracking-wide text-muted-foreground">
-            Policyholder
+    <SectionCard>
+      <SectionTitle>Insured &amp; loss</SectionTitle>
+      <div className="flex flex-col gap-4 md:flex-row">
+        <div className="flex w-full flex-col gap-4 rounded-[8px] bg-white p-6 shadow-[0_0_20px_rgba(0,0,0,0.1)] md:w-[262px] md:shrink-0">
+          <h3 className="text-[16px] font-semibold text-[var(--ink)]">
+            Policy Holder
           </h3>
-          <div className="flex flex-col gap-1">
-            <span className="text-sm font-medium">{CLAIM.insured.name}</span>
-            <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-              <MapPinIcon className="size-3.5" />
-              {CLAIM.insured.address}
+          <div>
+            <span className="inline-flex items-center gap-1 rounded-full border border-[var(--status-open-fg)] bg-[var(--status-open-bg)] px-2 py-1 text-[14px] text-[var(--status-open-fg)]">
+              <PreferredIcon className="size-4" />
+              Prefers {CLAIM.insured.preferred_contact}
             </span>
           </div>
-          <div className="flex flex-col gap-2 text-sm">
-            <a
-              href={`tel:${CLAIM.insured.phone}`}
-              className="inline-flex items-center gap-2 text-foreground hover:underline"
-            >
-              <PhoneIcon className="size-3.5 text-muted-foreground" />
-              {CLAIM.insured.phone}
-            </a>
-            <a
-              href={`mailto:${CLAIM.insured.email}`}
-              className="inline-flex items-center gap-2 text-foreground hover:underline"
-            >
-              <MailIcon className="size-3.5 text-muted-foreground" />
-              {CLAIM.insured.email}
-            </a>
-          </div>
-          <div>
-            <Badge variant="secondary" className="gap-1 font-normal">
-              <PreferredIcon className="size-3" />
-              Prefers {CLAIM.insured.preferred_contact}
-            </Badge>
-          </div>
-        </section>
+          <span className="text-[18px] font-semibold text-[var(--ink)]">
+            {CLAIM.insured.name}
+          </span>
+          <span className="inline-flex items-start gap-1 text-[14px] text-[var(--ink-soft)]">
+            <MapPinIcon className="mt-0.5 size-4 shrink-0" />
+            <span>{CLAIM.insured.address}</span>
+          </span>
+          <a
+            href={`tel:${CLAIM.insured.phone}`}
+            className="inline-flex items-center gap-1 text-[14px] text-[var(--brand-blue)] hover:underline"
+          >
+            <PhoneIcon className="size-4" />
+            {CLAIM.insured.phone}
+          </a>
+          <a
+            href={`mailto:${CLAIM.insured.email}`}
+            className="inline-flex items-center gap-1 text-[14px] text-[var(--brand-blue)] hover:underline"
+          >
+            <MailIcon className="size-4" />
+            {CLAIM.insured.email}
+          </a>
+        </div>
 
-        <Separator className="hidden md:block" orientation="vertical" />
-        <Separator className="md:hidden" />
-
-        <section className="flex min-w-0 flex-[1.4] flex-col gap-4">
-          <h3 className="text-[11px] uppercase tracking-wide text-muted-foreground">
+        <div className="flex w-full flex-col gap-5 rounded-[8px] bg-white p-6 shadow-[0_0_20px_rgba(0,0,0,0.1)]">
+          <h3 className="text-[16px] font-semibold text-[var(--ink)]">
             Loss details
           </h3>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3">
-            <Field label="Peril" value={CLAIM.loss.peril} />
-            <Field
-              label="Date of loss"
+          <div className="grid grid-cols-3 gap-x-4 gap-y-2">
+            <LossField label="PERIL" value={CLAIM.loss.peril} />
+            <LossField
+              label="DATE OF LOSS"
               value={formatDate(CLAIM.loss.date_of_loss)}
             />
-            <Field
-              label="FNOL filed"
+            <LossField
+              label="FNOL FILED"
               value={formatDateTime(CLAIM.loss.fnol_filed_at)}
             />
           </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
-              Insured statement
+          <div className="flex flex-col gap-2">
+            <span className="text-[14px] text-[var(--ink-soft)]">
+              INSURED STATEMENT
             </span>
-            <p className="text-sm leading-relaxed text-foreground">
+            <p className="text-[16px] leading-snug text-[var(--ink)]">
               {CLAIM.loss.description}
             </p>
           </div>
-        </section>
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </SectionCard>
+  );
+}
+
+function LossField({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="text-[14px] text-[var(--ink-soft)]">{label}</span>
+      <span className="text-[16px] text-[var(--ink)]">{value}</span>
+    </div>
   );
 }

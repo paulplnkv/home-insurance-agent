@@ -1,13 +1,8 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { REAL_CLAIM_AGENT_KEYS } from '@/lib/scenario/dashboard-claims';
+import { SectionCard, SectionTitle } from './section-card';
 
 const DOCUMENTS_KEY = REAL_CLAIM_AGENT_KEYS.documents;
 
@@ -32,35 +27,37 @@ export function ClaimFraudRisk() {
   const m6eRan = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base">Fraud Risk</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-3 pb-4">
-        <Row label="Risk Score">
-          <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
-            Medium
+    <SectionCard>
+      <SectionTitle>Fraud Risk</SectionTitle>
+
+      <Row label="RISK SCORE">
+        <span className="inline-flex items-center rounded-full border border-[var(--status-cat-fg)] bg-[var(--status-cat-bg)] px-2 py-1 text-[14px] text-[var(--status-cat-fg)]">
+          Medium
+        </span>
+      </Row>
+      <Divider />
+      <Row label="ISO CLAIMSEARCH">
+        <span className="inline-flex items-center gap-1 rounded-full border border-[var(--status-review-fg)] bg-[var(--status-review-bg)] px-2 py-1 text-[14px] text-[var(--status-review-fg)]">
+          <span aria-hidden>⏳</span> Pending
+        </span>
+      </Row>
+      <Divider />
+      <Row label="SIU REFERRAL STATUS">
+        {m6eRan ? (
+          <span className="inline-flex items-center rounded-full border border-[var(--status-danger-fg)] bg-[var(--status-danger-bg)] px-2 py-1 text-[14px] text-[var(--status-danger-fg)]">
+            Open — 2 Critical findings
           </span>
-        </Row>
-        <Row label="ISO ClaimSearch">
-          <span className="text-sm text-muted-foreground">Pending</span>
-        </Row>
-        <Row label="SIU Referral Status">
-          {m6eRan ? (
-            <span className="text-sm font-medium text-red-600">
-              Open — 2 Critical findings
-            </span>
-          ) : (
-            <span className="text-sm text-muted-foreground">
-              Pending — awaiting M6e output
-            </span>
-          )}
-        </Row>
-        <Row label="Flag count">
-          <span className="text-sm text-muted-foreground">0 active</span>
-        </Row>
-      </CardContent>
-    </Card>
+        ) : (
+          <span className="inline-flex items-center gap-1 rounded-full border border-[var(--status-review-fg)] bg-[var(--status-review-bg)] px-2 py-1 text-[14px] text-[var(--status-review-fg)]">
+            <span aria-hidden>⏳</span> Pending
+          </span>
+        )}
+      </Row>
+      <Divider />
+      <Row label="FLAG COUNT">
+        <span className="text-[14px] text-[var(--ink)]">0 active</span>
+      </Row>
+    </SectionCard>
   );
 }
 
@@ -73,10 +70,12 @@ function Row({
 }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
-        {label}
-      </span>
+      <span className="text-[14px] text-[var(--ink-soft)]">{label}</span>
       {children}
     </div>
   );
+}
+
+function Divider() {
+  return <div className="h-px bg-[var(--line-soft)]" />;
 }

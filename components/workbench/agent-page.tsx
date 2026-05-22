@@ -45,6 +45,9 @@ interface AgentPageBodyProps {
   // output panel. Visible only while state === 'idle' — hides as soon
   // as output begins to render.
   preRunContext?: React.ReactNode;
+  // Optional content rendered in the left column under the activity
+  // feed (e.g. Coverages' "Queued documents" card).
+  leftAside?: React.ReactNode;
   children?: React.ReactNode;
 }
 
@@ -66,6 +69,7 @@ export function AgentPageBody({
   activity,
   identityBadge,
   preRunContext,
+  leftAside,
   children,
 }: AgentPageBodyProps) {
   const [now, setNow] = useState(() => Date.now());
@@ -96,7 +100,7 @@ export function AgentPageBody({
             <p className="text-xs text-muted-foreground">{description}</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            {state !== 'complete' ? (
+            {state !== 'complete' && state !== 'idle' ? (
               <Badge
                 variant={STATE_VARIANT[state]}
                 className="font-medium uppercase tracking-wide"
@@ -107,31 +111,23 @@ export function AgentPageBody({
             {state === 'running' ? (
               <Button
                 variant="outline"
-                size="sm"
+                size="lg"
                 onClick={onStop}
                 disabled={!onStop}
               >
                 Stop
               </Button>
-            ) : state === 'complete' ? (
+            ) : (
               <>
-                <Button variant="outline" size="sm" onClick={onRun}>
+                <Button size="lg" onClick={onRun}>
                   Run
                 </Button>
                 {onReset ? (
-                  <Button variant="ghost" size="sm" onClick={onReset}>
+                  <Button variant="outline" size="lg" onClick={onReset}>
                     Reset
                   </Button>
                 ) : null}
               </>
-            ) : state === 'error' ? (
-              <Button variant="outline" size="sm" onClick={onReset ?? onRun}>
-                Reset
-              </Button>
-            ) : (
-              <Button size="sm" onClick={onRun}>
-                Run analysis
-              </Button>
             )}
           </div>
         </div>
@@ -140,15 +136,20 @@ export function AgentPageBody({
       {state === 'idle' && preRunContext ? preRunContext : null}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(300px,360px)_1fr] lg:items-start">
-        {activity ? (
-          <Card className="lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
-            <CardContent className="py-4">
-              <div className="flex items-center gap-2 pb-2 text-[10px] uppercase tracking-wide text-muted-foreground/80">
-                <span>Live activity</span>
-              </div>
-              {activity}
-            </CardContent>
-          </Card>
+        {activity || leftAside ? (
+          <div className="flex flex-col gap-4 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
+            {activity ? (
+              <Card>
+                <CardContent className="py-4">
+                  <div className="flex items-center gap-2 pb-2 text-[10px] uppercase tracking-wide text-muted-foreground/80">
+                    <span>Live activity</span>
+                  </div>
+                  {activity}
+                </CardContent>
+              </Card>
+            ) : null}
+            {leftAside}
+          </div>
         ) : null}
 
         <Card>

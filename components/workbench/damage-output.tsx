@@ -393,7 +393,7 @@ function ZoneManifest({
   return (
     <div className="overflow-hidden rounded-md border">
       <table className="w-full text-sm">
-        <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
+        <thead className="bg-primary/5 text-xs uppercase tracking-wide text-primary">
           <tr>
             <th className="px-3 py-2 text-left font-medium">Zone</th>
             <th className="px-3 py-2 text-left font-medium">Severity</th>

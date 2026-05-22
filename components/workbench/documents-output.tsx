@@ -64,9 +64,11 @@ export function DocumentsOutput({
     <div className="flex flex-col gap-4 text-sm">
       <WriteBackStatusLine endedAt={endedAt} />
 
-      <HeadlineSummary memo={memo} />
-
-      <RoutingRow routing={object?.routing} streaming={isStreaming} />
+      <RoutingCard
+        routing={object?.routing}
+        headline={memo}
+        streaming={isStreaming}
+      />
 
       <FindingsList items={findings} streaming={isStreaming} />
 
@@ -94,9 +96,8 @@ function WriteBackStatusLine({ endedAt }: { endedAt: number | null }) {
 }
 
 // Pulls the bolded one-sentence headline the agent is required to write
-// at the top of summary_markdown and surfaces it above the routing badge
-// — same pattern as the Coverage panel.
-function HeadlineSummary({ memo }: { memo?: string }) {
+// at the top of summary_markdown.
+function extractHeadline(memo: string | undefined): string | null {
   if (!memo) return null;
   const firstLine = memo
     .split('\n')
@@ -104,37 +105,62 @@ function HeadlineSummary({ memo }: { memo?: string }) {
     .find((l) => l.length > 0);
   if (!firstLine) return null;
   const clean = firstLine.replace(/^\*+|\*+$/g, '').trim();
-  if (!clean) return null;
-  return (
-    <p className="text-base font-medium leading-snug text-foreground">
-      {clean}
-    </p>
-  );
+  return clean.length > 0 ? clean : null;
 }
 
-function RoutingRow({
+// Promoted "SIU referral" / "Adjuster review" card per the Figma:
+// routing decision pill + one-line headline summary in a single panel
+// at the top of the output.
+function RoutingCard({
   routing,
+  headline,
   streaming,
 }: {
   routing: string | undefined;
+  headline: string | undefined;
   streaming: boolean;
 }) {
-  if (!routing) {
+  const text = extractHeadline(headline);
+  if (!routing && !text) {
     return streaming ? (
       <Shimmer className="text-xs">Determining routing decision…</Shimmer>
     ) : null;
   }
-  const label = ROUTING_LABELS[routing] ?? routing;
-  const variant: 'default' | 'destructive' | 'secondary' =
+
+  const label = routing ? (ROUTING_LABELS[routing] ?? routing) : null;
+  const accent =
     routing === 'siu_referral' || routing === 'adjuster_review'
-      ? 'destructive'
-      : 'default';
+      ? 'border-red-300 bg-red-50/40 dark:border-red-500/40 dark:bg-red-500/5'
+      : 'border-border bg-card';
+
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs uppercase tracking-wide text-muted-foreground">
-        Routing
-      </span>
-      <Badge variant={variant}>{label}</Badge>
+    <div
+      className={cn(
+        'flex flex-col gap-2 rounded-md border p-4',
+        accent,
+      )}
+    >
+      {label ? (
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
+            Routing
+          </span>
+          <Badge
+            variant={
+              routing === 'siu_referral' || routing === 'adjuster_review'
+                ? 'destructive'
+                : 'default'
+            }
+          >
+            {label}
+          </Badge>
+        </div>
+      ) : null}
+      {text ? (
+        <p className="text-base font-medium leading-snug text-foreground">
+          {text}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -185,9 +211,15 @@ function FindingsList({
             ) : null}
             {f.evidence_a || f.evidence_b || f.evidence_c ? (
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {f.evidence_a ? <EvidenceBlock text={f.evidence_a} /> : null}
-                {f.evidence_b ? <EvidenceBlock text={f.evidence_b} /> : null}
-                {f.evidence_c ? <EvidenceBlock text={f.evidence_c} /> : null}
+                {f.evidence_a ? (
+                  <EvidenceBlock label="One document" text={f.evidence_a} />
+                ) : null}
+                {f.evidence_b ? (
+                  <EvidenceBlock label="Other document" text={f.evidence_b} />
+                ) : null}
+                {f.evidence_c ? (
+                  <EvidenceBlock label="Third document" text={f.evidence_c} />
+                ) : null}
               </div>
             ) : null}
           </li>
@@ -197,13 +229,16 @@ function FindingsList({
   );
 }
 
-function EvidenceBlock({ text }: { text: string }) {
+function EvidenceBlock({ label, text }: { label: string; text: string }) {
   const located = locateEvidence(text);
   const doc = located ? getDocumentById(located.sourceId) : undefined;
   const href = doc ? `${doc.pdfUrl}#page=${located!.page}` : undefined;
 
   return (
-    <div className="flex flex-col gap-1 rounded-md border bg-muted/30 p-2">
+    <div className="flex flex-col gap-1.5 rounded-md border bg-muted/30 p-2">
+      <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+        {label}
+      </span>
       <p className="whitespace-pre-wrap text-xs leading-snug text-foreground">
         {text}
       </p>
@@ -314,7 +349,7 @@ function FileSummary({
   }
   const headline = buildRoutingHeadline(routing, criticalCount);
   return (
-    <Accordion defaultValue={[]}>
+    <Accordion defaultValue={['summary']}>
       <AccordionItem value="summary" className="border-b-0">
         <AccordionTrigger className="text-sm font-medium">
           {headline}
