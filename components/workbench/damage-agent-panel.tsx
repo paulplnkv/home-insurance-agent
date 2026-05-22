@@ -11,7 +11,7 @@ export const damageAgentConfig = {
   schema: damageAgentOutputSchema,
   // v4 — event shape changed (tool calls now grouped + narration rows).
   storageKey: 'home-ins:damage:v4',
-  title: 'Damage Assessment',
+  title: 'Damage Photo Analysis',
   description:
     'Photo classification · zone manifest · Xactimate estimate',
   idlePlaceholder: 'Damage manifest will populate when the analysis runs.',

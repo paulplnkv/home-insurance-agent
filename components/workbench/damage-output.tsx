@@ -233,6 +233,11 @@ function PhotoCard({
           ? classification.rationale
           : undefined
       }
+      confidence={
+        typeof classification?.confidence === 'number'
+          ? classification.confidence
+          : undefined
+      }
       triggerClassName={cn(
         'flex w-full flex-col items-start gap-2 overflow-hidden rounded-lg bg-white p-3 text-left shadow-[0_0_20px_rgba(0,0,0,0.08)] transition-shadow hover:shadow-[0_0_28px_rgba(0,0,0,0.12)]',
       )}

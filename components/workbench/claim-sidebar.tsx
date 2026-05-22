@@ -96,7 +96,7 @@ function Parties() {
             Pending Assignment
           </span>
           <span className="text-[14px] text-[var(--ink)]">
-            Auto-dispatch after damage assessment runs.
+            Auto-dispatch after damage photo analysis runs.
           </span>
         </div>
       </div>
@@ -123,7 +123,7 @@ function Timeline() {
     {
       icon: CameraIcon,
       title: 'Field photos uploaded',
-      detail: `${PHOTO_MANIFEST.length} photos staged for damage assessment`,
+      detail: `${PHOTO_MANIFEST.length} photos staged for damage photo analysis`,
       meta: 'TODAY',
     },
     {

@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import Image from 'next/image';
+import { PencilIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -34,6 +36,7 @@ type FetchState =
 export function PhotoDetailDialog({
   photo,
   rationale,
+  confidence,
   triggerClassName,
   children,
 }: {
@@ -41,6 +44,8 @@ export function PhotoDetailDialog({
   /** Agent's per-photo rationale (truncated on the card, shown in full
    * here). Falls back to the manifest description when absent. */
   rationale?: string;
+  /** Per-photo classification confidence (0–1) from the agent output. */
+  confidence?: number;
   triggerClassName?: string;
   children: React.ReactNode;
 }) {
@@ -85,7 +90,14 @@ export function PhotoDetailDialog({
       </DialogTrigger>
       <DialogContent className="grid max-h-[90vh] w-full gap-4 overflow-y-auto sm:max-w-3xl">
         <div className="flex flex-col gap-3 pr-8">
-          <DialogTitle className="font-mono text-sm">{photo.id}</DialogTitle>
+          <div className="flex flex-wrap items-center gap-2">
+            <DialogTitle className="font-mono text-sm">{photo.id}</DialogTitle>
+            {typeof confidence === 'number' ? (
+              <Badge variant="metadata" className="text-xs tabular-nums">
+                Confidence {(confidence * 100).toFixed(0)}%
+              </Badge>
+            ) : null}
+          </div>
           <DialogDescription className="sr-only">
             {rationale ?? photo.description}
           </DialogDescription>
@@ -94,7 +106,7 @@ export function PhotoDetailDialog({
           </p>
         </div>
 
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md bg-muted">
+        <div className="relative mx-auto aspect-[4/3] max-h-[45vh] w-full overflow-hidden rounded-md bg-muted">
           <Image
             src={photo.publicUrl}
             alt={photo.id}
@@ -133,9 +145,18 @@ function GroundTruthSection({
 
   return (
     <section className="flex flex-col gap-3 rounded-md bg-card p-3 ring-1 ring-foreground/10">
-      <h3 className="text-xs uppercase tracking-wide text-muted-foreground">
-        AI Classification
-      </h3>
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-xs uppercase tracking-wide text-muted-foreground">
+          AI Classification
+        </h3>
+        <Button
+          variant="outline"
+          size="icon-sm"
+          aria-label="Edit classification"
+        >
+          <PencilIcon />
+        </Button>
+      </div>
       <dl className="flex flex-col gap-2.5 text-sm">
         {primary_classification ? (
           <Row label="Classification">

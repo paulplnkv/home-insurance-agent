@@ -3,15 +3,10 @@
 import { DownloadIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
 import { Shimmer } from '@/components/ai-elements/shimmer';
 import { PageCard } from '@/components/workbench/agent-page';
 import { CLAIM, formatCurrency } from '@/lib/scenario/claim';
+import { cn } from '@/lib/utils';
 import type { DamageAgentOutput } from '@/lib/agents/photos/schema';
 import {
   CATALOG_BY_SELECTOR,
@@ -84,6 +79,8 @@ export function XactimateOutput({
   const showShimmer =
     isStreaming && priced.line_count < Math.max(streamedCount, 4);
 
+  const [view, setView] = useState<'sheet' | 'xml'>('sheet');
+
   return (
     <PageCard>
       <div className="flex flex-col gap-4">
@@ -107,33 +104,50 @@ export function XactimateOutput({
               : 'No line items in this estimate.'}
           </p>
         ) : (
-          <Tabs defaultValue="sheet">
-            <TabsList
-              variant="line"
-              className="h-auto w-fit gap-1 rounded-full border border-[#d9dadc] bg-[#f6f6f6] p-0.5"
+          <div>
+            <div
+              role="tablist"
+              aria-label="Estimate view"
+              className="inline-flex w-fit items-center gap-1 rounded-full border border-[var(--line-table)] bg-[var(--surface-tab-track)] p-0.5 font-[family-name:var(--font-commissioner)]"
             >
-              <TabsTrigger
-                value="sheet"
-                className="rounded-full border-transparent px-4 py-2 text-base text-[var(--brand-blue)] data-active:bg-[var(--brand-blue)] data-active:text-white"
+              <button
+                type="button"
+                role="tab"
+                aria-selected={view === 'sheet'}
+                onClick={() => setView('sheet')}
+                className={cn(
+                  'rounded-full border px-4 py-2 text-base font-normal transition-colors',
+                  view === 'sheet'
+                    ? 'border-[var(--brand-blue)] bg-[var(--brand-blue)] text-white'
+                    : 'border-transparent bg-white text-[var(--brand-blue)]',
+                )}
               >
                 Estimate sheet
-              </TabsTrigger>
-              <TabsTrigger
-                value="xml"
-                className="rounded-full border-transparent bg-white px-4 py-2 text-base text-[var(--brand-blue)] data-active:bg-[var(--brand-blue)] data-active:text-white"
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={view === 'xml'}
+                onClick={() => setView('xml')}
+                className={cn(
+                  'rounded-full border px-4 py-2 text-base font-normal transition-colors',
+                  view === 'xml'
+                    ? 'border-[var(--brand-blue)] bg-[var(--brand-blue)] text-white'
+                    : 'border-transparent bg-white text-[var(--brand-blue)]',
+                )}
               >
                 XML
-              </TabsTrigger>
-            </TabsList>
+              </button>
+            </div>
 
-            <TabsContent value="sheet" className="mt-4">
-              <EstimateSheet priced={priced} />
-            </TabsContent>
-
-            <TabsContent value="xml" className="mt-4">
-              <XmlView xml={xml} isStreaming={isStreaming} />
-            </TabsContent>
-          </Tabs>
+            <div className="mt-4">
+              {view === 'sheet' ? (
+                <EstimateSheet priced={priced} />
+              ) : (
+                <XmlView xml={xml} isStreaming={isStreaming} />
+              )}
+            </div>
+          </div>
         )}
       </div>
     </PageCard>
