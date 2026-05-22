@@ -13,6 +13,8 @@
     "generate-pdfs": "tsx scripts/generate-pdfs.tsx"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.78",
+    "@ai-sdk/openai": "^3.0.65",
     "@ai-sdk/react": "^3.0.177",
     "@base-ui/react": "^1.4.1",
     "@radix-ui/react-use-controllable-state": "^1.2.2",

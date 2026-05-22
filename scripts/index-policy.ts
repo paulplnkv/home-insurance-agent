@@ -1,12 +1,12 @@
 // One-off indexer. Run with:
-//   npx tsx scripts/index-policy.ts
+//   npm run index-policy
 // Reads lib/scenario/policy/HO-3.txt, chunks on section headings, embeds
-// each chunk via the AI Gateway, and writes the result to
+// each chunk via OpenAI (text-embedding-3-small), and writes the result to
 // lib/policy/embeddings.json. Idempotent — safe to re-run.
 import { embedMany } from 'ai';
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { EMBEDDING_MODEL } from '../lib/ai/models';
+import { EMBEDDING_MODEL, EMBEDDING_MODEL_ID } from '../lib/ai/models';
 import { chunkPolicy, type PolicyChunk } from '../lib/policy/chunker';
 
 const POLICY_PATH = resolve('lib/scenario/policy/HO-3.txt');
@@ -32,7 +32,7 @@ async function main() {
   }));
 
   await writeFile(OUTPUT_PATH, JSON.stringify({
-    model: EMBEDDING_MODEL,
+    model: EMBEDDING_MODEL_ID,
     indexed_at: new Date().toISOString(),
     chunks: indexed,
   }, null, 2));

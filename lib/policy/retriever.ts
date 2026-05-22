@@ -5,7 +5,7 @@
 // Per PRD: ~50 chunks, in-memory cosine retrieval, total retrieval
 // latency target ~50ms warm.
 import { embed, cosineSimilarity } from 'ai';
-import { EMBEDDING_MODEL } from '@/lib/ai/models';
+import { EMBEDDING_MODEL, EMBEDDING_MODEL_ID } from '@/lib/ai/models';
 import indexFile from './embeddings.json';
 import type { PolicyChunk } from './chunker';
 
@@ -21,10 +21,10 @@ interface PolicyIndex {
 
 const INDEX = indexFile as PolicyIndex;
 
-if (INDEX.model !== EMBEDDING_MODEL) {
+if (INDEX.model !== EMBEDDING_MODEL_ID) {
   console.warn(
     `[policy-retriever] Index built with ${INDEX.model} but runtime expects ` +
-      `${EMBEDDING_MODEL}. Re-run scripts/index-policy.ts.`
+      `${EMBEDDING_MODEL_ID}. Re-run scripts/index-policy.ts.`
   );
 }
 
