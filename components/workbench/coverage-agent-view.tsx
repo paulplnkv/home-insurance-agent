@@ -34,11 +34,12 @@ export function CoverageAgentView() {
     <div className="min-h-screen bg-background">
       <AppBar />
       <ClaimSubTabs />
-      <Breadcrumb />
-      <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 px-6 py-4">
+      <main className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 px-10 pt-8 pb-12">
+        <Breadcrumb />
         <AgentPageBody
           title={coverageAgentConfig.title}
           description={coverageAgentConfig.description}
+          ownsRightColumnCards
           identityBadge={
             <Badge variant="secondary" className="font-normal">
               M2 · Coverage Agent · Tier 3 — Adjuster confirmation required

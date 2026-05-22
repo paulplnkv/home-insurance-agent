@@ -4,6 +4,7 @@ import { Fragment } from 'react';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Shimmer } from '@/components/ai-elements/shimmer';
+import { PageCard } from '@/components/workbench/agent-page';
 import { XactimateOutput } from '@/components/workbench/xactimate-output';
 import { PHOTO_MANIFEST } from '@/lib/scenario/photos';
 import {
@@ -72,15 +73,18 @@ const NOTABLE_SHOT_TYPES = new Set<ShotTypeTag>([
 const SEVERITY_BADGE: Record<
   'minor' | 'moderate' | 'major' | 'severe',
   {
-    variant: 'default' | 'secondary' | 'destructive';
+    variant:
+      | 'severity_minor'
+      | 'severity_moderate'
+      | 'severity_major'
+      | 'severity_severe';
     label: string;
-    className?: string;
   }
 > = {
-  minor: { variant: 'secondary', label: 'Minor' },
-  moderate: { variant: 'default', label: 'Moderate' },
-  major: { variant: 'destructive', label: 'Major' },
-  severe: { variant: 'destructive', label: 'Severe', className: 'uppercase' },
+  minor: { variant: 'severity_minor', label: 'Minor' },
+  moderate: { variant: 'severity_moderate', label: 'Moderate' },
+  major: { variant: 'severity_major', label: 'Major' },
+  severe: { variant: 'severity_severe', label: 'Severe' },
 };
 
 const PERIL_CONSISTENCY_BADGE: Record<
@@ -103,156 +107,164 @@ export function DamageOutput({
 }) {
   const classifications = object?.classifications ?? [];
   const zones = object?.zones ?? [];
-  const classifiedCount = classifications.filter((c) => c?.photo_id).length;
+
+  // Partition photos into Scope vs Out-of-scope buckets up front so each
+  // sub-section can report its own count and grid layout.
+  const byId = new Map<
+    string,
+    NonNullable<(typeof classifications)[number]>
+  >();
+  for (const c of classifications) {
+    if (c?.photo_id) byId.set(c.photo_id, c);
+  }
+  type ScenarioPhoto = (typeof PHOTO_MANIFEST)[number];
+  const inScope: ScenarioPhoto[] = [];
+  const outOfScope: ScenarioPhoto[] = [];
+  for (const photo of PHOTO_MANIFEST) {
+    const c = byId.get(photo.id);
+    const primary =
+      c?.primary_classification &&
+      PRIMARY_SET.has(c.primary_classification as PrimaryClassification)
+        ? (c.primary_classification as PrimaryClassification)
+        : null;
+    if (primary === 'no_damage') outOfScope.push(photo);
+    else inScope.push(photo);
+  }
 
   return (
-    <div className="flex flex-col gap-6 text-sm">
-      <WriteBackStatusLine endedAt={endedAt} />
-
-      <PerilRow consistency={object?.peril_consistency} streaming={isStreaming} />
-
-      <section className="flex flex-col gap-3">
-        <h3 className="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
-          Photo classification ({classifiedCount}/{PHOTO_MANIFEST.length})
-          {isStreaming && classifiedCount < PHOTO_MANIFEST.length ? (
-            <Shimmer className="text-xs normal-case tracking-normal">
-              classifying…
-            </Shimmer>
+    <div className="flex flex-col gap-4">
+      <PageCard>
+        <div className="flex flex-col gap-6">
+          <PhotoSection
+            heading={`Scope (${inScope.length})`}
+            photos={inScope}
+            byId={byId}
+            streaming={isStreaming}
+            isOutOfScope={false}
+          />
+          {outOfScope.length > 0 ? (
+            <PhotoSection
+              heading={`Out of scope (${outOfScope.length})`}
+              photos={outOfScope}
+              byId={byId}
+              streaming={isStreaming}
+              isOutOfScope
+            />
           ) : null}
-        </h3>
-        <PhotoGrid classifications={classifications} streaming={isStreaming} />
-      </section>
+        </div>
+      </PageCard>
 
-      <section className="flex flex-col gap-3">
-        <h3 className="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
+      <PageCard>
+        <h3 className="font-heading pb-4 text-xl font-semibold text-[var(--ink)]">
           Damage manifest ({zones.length})
           {isStreaming && zones.length === 0 ? (
-            <Shimmer className="text-xs normal-case tracking-normal">
+            <Shimmer className="ml-2 text-sm font-normal normal-case tracking-normal">
               grouping zones…
             </Shimmer>
           ) : null}
         </h3>
         <ZoneManifest zones={zones} />
-      </section>
-
-      {zones.length > 0 ? <EstimateComparison /> : null}
+      </PageCard>
 
       <XactimateOutput object={object} isStreaming={isStreaming} />
+
+      <ExtraSignals
+        consistency={object?.peril_consistency}
+        zones={zones}
+        endedAt={endedAt}
+        streaming={isStreaming}
+      />
     </div>
   );
 }
 
-function WriteBackStatusLine({ endedAt }: { endedAt: number | null }) {
-  if (endedAt == null) return null;
+function PhotoSection({
+  heading,
+  photos,
+  byId,
+  streaming,
+  isOutOfScope,
+}: {
+  heading: string;
+  photos: (typeof PHOTO_MANIFEST)[number][];
+  byId: Map<string, NonNullable<StreamingDamage['classifications']>[number]>;
+  streaming: boolean;
+  isOutOfScope: boolean;
+}) {
   return (
-    <p className="text-xs text-muted-foreground">
-      <span aria-hidden>✅ </span>
-      Damage manifest written to claim file by M6b ·{' '}
-      {formatDateTime(new Date(endedAt).toISOString())}
-    </p>
+    <section className="flex flex-col gap-4">
+      <h3 className="font-heading text-xl font-semibold text-[var(--ink)]">
+        {heading}
+      </h3>
+      <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+        {photos.map((p) => (
+          <li key={p.id} className="contents">
+            <PhotoCard
+              photo={p}
+              classification={byId.get(p.id)}
+              streaming={streaming}
+              isOutOfScope={isOutOfScope}
+            />
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
-function PerilRow({
-  consistency,
+function PhotoCard({
+  photo,
+  classification,
   streaming,
+  isOutOfScope,
 }: {
-  consistency: string | undefined;
+  photo: (typeof PHOTO_MANIFEST)[number];
+  classification:
+    | NonNullable<NonNullable<StreamingDamage['classifications']>[number]>
+    | undefined;
   streaming: boolean;
+  isOutOfScope: boolean;
 }) {
-  if (!consistency) {
-    return streaming ? (
-      <Shimmer className="text-xs">
-        Assessing peril consistency from photo set…
-      </Shimmer>
-    ) : null;
-  }
-  const cfg = PERIL_CONSISTENCY_BADGE[consistency as keyof typeof PERIL_CONSISTENCY_BADGE];
-  if (!cfg) return null;
-  return <Badge variant={cfg.variant}>{cfg.label}</Badge>;
-}
-
-function PhotoGrid({
-  classifications,
-  streaming,
-}: {
-  classifications: NonNullable<StreamingDamage['classifications']>;
-  streaming: boolean;
-}) {
-  const byId = new Map<string, NonNullable<typeof classifications[number]>>();
-  for (const c of classifications) {
-    if (c?.photo_id) byId.set(c.photo_id, c);
-  }
-
-  // Out-of-scope photos sink to the bottom of the grid once classified
-  // as no_damage — preserves manifest order otherwise. Stable sort so
-  // unclassified photos stay where the adjuster expects them while the
-  // model is still streaming.
-  const ordered = [...PHOTO_MANIFEST]
-    .map((p, idx) => {
-      const c = byId.get(p.id);
-      const primary =
-        c?.primary_classification &&
-        PRIMARY_SET.has(c.primary_classification as PrimaryClassification)
-          ? (c.primary_classification as PrimaryClassification)
-          : null;
-      return { p, idx, bucket: primary === 'no_damage' ? 1 : 0 };
-    })
-    .sort((a, b) => a.bucket - b.bucket || a.idx - b.idx);
-
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-      {ordered.map(({ p }) => {
-        const c = byId.get(p.id);
-        const primary =
-          c?.primary_classification && PRIMARY_SET.has(c.primary_classification as PrimaryClassification)
-            ? (c.primary_classification as PrimaryClassification)
-            : null;
-        const shotTypes = filterValid(c?.shot_types, SHOT_TYPE_SET);
-        const isOutOfScope = primary === 'no_damage';
-        const isRedundant = shotTypes.includes('redundant_view');
-
-        return (
-          <li key={p.id} className="contents">
-            <PhotoDetailDialog
-              photo={p}
-              rationale={typeof c?.rationale === 'string' ? c.rationale : undefined}
-              triggerClassName={cn(
-                'flex w-full flex-col gap-1.5 overflow-hidden rounded-md border bg-card p-2 transition-all hover:border-foreground/30',
-                isOutOfScope && 'opacity-50 grayscale',
-                !isOutOfScope && isRedundant && 'opacity-75'
-              )}
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded">
-                <Image
-                  src={p.publicUrl}
-                  alt={p.id}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  className="object-cover"
-                />
-              </div>
-              <div className="flex items-center justify-between gap-2">
-                <code className="truncate font-mono text-[10px] text-muted-foreground">
-                  {p.id}
-                </code>
-                {typeof c?.confidence === 'number' ? (
-                  <span className="text-[10px] tabular-nums text-muted-foreground">
-                    {(c.confidence * 100).toFixed(0)}%
-                  </span>
-                ) : null}
-              </div>
-              <PhotoChips classification={c} streaming={streaming} />
-              {c?.rationale ? (
-                <span className="line-clamp-2 block text-[11px] leading-snug text-muted-foreground">
-                  {c.rationale}
-                </span>
-              ) : null}
-            </PhotoDetailDialog>
-          </li>
-        );
-      })}
-    </ul>
+    <PhotoDetailDialog
+      photo={photo}
+      rationale={
+        typeof classification?.rationale === 'string'
+          ? classification.rationale
+          : undefined
+      }
+      triggerClassName={cn(
+        'flex w-full flex-col items-start gap-2 overflow-hidden rounded-lg bg-white p-3 text-left shadow-[0_0_20px_rgba(0,0,0,0.08)] transition-shadow hover:shadow-[0_0_28px_rgba(0,0,0,0.12)]',
+      )}
+    >
+      <div
+        className={cn(
+          'relative aspect-[4/3] w-full overflow-hidden rounded',
+          isOutOfScope && 'opacity-50',
+        )}
+      >
+        <Image
+          src={photo.publicUrl}
+          alt={photo.id}
+          fill
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className="object-cover"
+        />
+      </div>
+      <code className="font-mono text-sm text-[var(--ink-soft)]">
+        {photo.id}
+      </code>
+      {isOutOfScope ? (
+        <Badge variant="severity_minor">Out of scope</Badge>
+      ) : (
+        <PhotoChips classification={classification} streaming={streaming} />
+      )}
+      {classification?.rationale ? (
+        <span className="line-clamp-3 block text-sm leading-snug text-[var(--ink-soft)]">
+          {classification.rationale}
+        </span>
+      ) : null}
+    </PhotoDetailDialog>
   );
 }
 
@@ -267,9 +279,9 @@ function PhotoChips({
 }) {
   if (!classification) {
     return (
-      <div className="min-h-[20px]">
+      <div className="min-h-[24px]">
         {streaming ? (
-          <Shimmer className="text-[10px]">classifying…</Shimmer>
+          <Shimmer className="text-sm">classifying…</Shimmer>
         ) : null}
       </div>
     );
@@ -303,70 +315,52 @@ function PhotoChips({
 
   if (empty) {
     return (
-      <div className="min-h-[20px]">
+      <div className="min-h-[24px]">
         {streaming ? (
-          <Shimmer className="text-[10px]">classifying…</Shimmer>
+          <Shimmer className="text-sm">classifying…</Shimmer>
         ) : null}
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-[20px] flex-wrap gap-1">
+    <div className="flex min-h-[24px] flex-wrap gap-1.5">
       {perilTags.map((t) => (
-        <Chip key={`p-${t}`} variant="peril">
+        <Badge key={`p-${t}`} variant="peril" className="text-sm">
           {PERIL_LABEL[t]}
-        </Chip>
+        </Badge>
       ))}
       {nonPerilTags.map((t) => (
-        <Chip key={`np-${t}`} variant="non_peril">
+        <Badge key={`np-${t}`} variant="non_peril" className="text-sm">
           {NON_PERIL_LABEL[t]}
-        </Chip>
+        </Badge>
       ))}
       {noDamageTags.map((t) => (
-        <Chip key={`nd-${t}`} variant="no_damage">
+        <Badge key={`nd-${t}`} variant="no_damage" className="text-sm">
           {NO_DAMAGE_LABEL[t]}
-        </Chip>
+        </Badge>
       ))}
       {findings.map((t) => (
-        <Chip key={`f-${t}`} variant="finding">
+        <Badge key={`f-${t}`} variant="finding" className="text-sm">
           {FINDING_LABEL[t]}
-        </Chip>
+        </Badge>
       ))}
       {component ? (
-        <Chip variant="component">{COMPONENT_LABEL[component]}</Chip>
+        <Badge variant="component" className="text-sm">
+          {COMPONENT_LABEL[component]}
+        </Badge>
       ) : null}
       {material ? (
-        <Chip variant="material">{MATERIAL_LABEL[material]}</Chip>
+        <Badge variant="material" className="text-sm">
+          {MATERIAL_LABEL[material]}
+        </Badge>
       ) : null}
       {shotTypes.map((t) => (
-        <Chip key={`s-${t}`} variant="shot">
+        <Badge key={`s-${t}`} variant="shot" className="text-sm">
           {SHOT_TYPE_LABEL[t]}
-        </Chip>
+        </Badge>
       ))}
     </div>
-  );
-}
-
-function Chip({
-  variant,
-  children,
-}: {
-  variant:
-    | 'peril'
-    | 'non_peril'
-    | 'no_damage'
-    | 'material'
-    | 'shot'
-    | 'component'
-    | 'finding'
-    | 'metadata';
-  children: React.ReactNode;
-}) {
-  return (
-    <Badge variant={variant} className="text-[10px]">
-      {children}
-    </Badge>
   );
 }
 
@@ -387,25 +381,27 @@ function ZoneManifest({
 }) {
   if (zones.length === 0) {
     return (
-      <p className="text-xs italic text-muted-foreground">No zones yet.</p>
+      <p className="text-sm italic text-muted-foreground">No zones yet.</p>
     );
   }
   return (
-    <div className="overflow-hidden rounded-md border">
+    <div className="overflow-hidden rounded-2xl border border-[var(--line-soft)]">
       <table className="w-full text-sm">
-        <thead className="bg-primary/5 text-xs uppercase tracking-wide text-primary">
+        <thead className="bg-[#edf3ff] text-base">
           <tr>
-            <th className="px-3 py-2 text-left font-medium">Zone</th>
-            <th className="px-3 py-2 text-left font-medium">Severity</th>
-            <th className="px-3 py-2 text-left font-medium">Photos</th>
-            <th className="px-3 py-2 text-left font-medium">Findings</th>
-            <th className="px-3 py-2 text-left font-medium">Recommendation</th>
+            <th className="px-3 py-4 text-left font-semibold text-[var(--brand-blue)]">
+              ZONE
+            </th>
+            <th className="w-[140px] px-3 py-4 text-left font-semibold text-[var(--brand-blue)]">
+              SEVERITY
+            </th>
+            <th className="px-3 py-4 text-left font-semibold text-[var(--brand-blue)]">
+              EVIDENCE
+            </th>
           </tr>
         </thead>
         <tbody>
           {zones.map((z, i) => {
-            // Partial-string streaming guards: severity / zone arrive
-            // mid-token and can briefly be a non-key string.
             const rawSev = z?.severity;
             const sev =
               rawSev && rawSev in SEVERITY_BADGE
@@ -420,33 +416,27 @@ function ZoneManifest({
               typeof z?.confidence === 'number' ? z.confidence : null;
             return zone ? (
               <Fragment key={`${zone}-${i}`}>
-                <tr className="border-t align-top">
-                  <td className="px-3 py-2 font-medium">{ZONE_LABELS[zone]}</td>
-                  <td className="px-3 py-2">
+                <tr className="border-t border-[var(--line-soft)] align-top">
+                  <td className="px-3 py-4 text-base text-[var(--ink)]">
+                    {ZONE_LABELS[zone]}
+                  </td>
+                  <td className="px-3 py-4">
                     {sev ? (
-                      <Badge
-                        variant={SEVERITY_BADGE[sev].variant}
-                        className={SEVERITY_BADGE[sev].className}
-                      >
+                      <Badge variant={SEVERITY_BADGE[sev].variant}>
                         {SEVERITY_BADGE[sev].label}
                       </Badge>
                     ) : null}
                   </td>
-                  <td className="px-3 py-2 tabular-nums text-muted-foreground">
-                    {typeof z?.photo_count === 'number'
-                      ? `${z.photo_count} photos`
-                      : ''}
-                  </td>
-                  <td className="px-3 py-2 text-muted-foreground">
+                  <td className="px-3 py-4 text-base text-[var(--ink)]">
                     {z?.findings_summary ?? ''}
-                  </td>
-                  <td className="px-3 py-2 text-muted-foreground">
-                    {z?.recommendation ?? ''}
                   </td>
                 </tr>
                 {confidence !== null ? (
                   <tr>
-                    <td colSpan={5} className="px-3 pb-2 pt-0">
+                    <td
+                      colSpan={3}
+                      className="border-t border-dashed border-[var(--line-soft)] px-3 pb-3 pt-2"
+                    >
                       {confidence >= CONFIDENCE_ROUTING_THRESHOLD ? (
                         <span className="text-xs text-muted-foreground">
                           Confidence {confidence.toFixed(2)} — autonomous output
@@ -469,13 +459,70 @@ function ZoneManifest({
   );
 }
 
+// Sections retained for backend signal (peril check, write-back receipt,
+// contractor variance). Not in Figma; rendered below the Figma-defined
+// blocks so they remain visible while preserving the canonical layout.
+function ExtraSignals({
+  consistency,
+  zones,
+  endedAt,
+  streaming,
+}: {
+  consistency: string | undefined;
+  zones: NonNullable<StreamingDamage['zones']>;
+  endedAt: number | null;
+  streaming: boolean;
+}) {
+  const hasPeril = Boolean(consistency);
+  const hasEstimate = zones.length > 0;
+  const hasWriteBack = endedAt != null;
+  const showShimmer = streaming && !consistency;
+  if (!hasPeril && !hasEstimate && !hasWriteBack && !showShimmer) return null;
+
+  return (
+    <PageCard>
+      <div className="flex flex-col gap-4">
+        {showShimmer ? (
+          <Shimmer className="text-sm">
+            Assessing peril consistency from photo set…
+          </Shimmer>
+        ) : null}
+        {hasPeril ? <PerilRow consistency={consistency!} /> : null}
+        {hasEstimate ? <EstimateComparison /> : null}
+        {hasWriteBack ? <WriteBackStatusLine endedAt={endedAt!} /> : null}
+      </div>
+    </PageCard>
+  );
+}
+
+function WriteBackStatusLine({ endedAt }: { endedAt: number }) {
+  return (
+    <p className="text-sm text-muted-foreground">
+      <span aria-hidden>✅ </span>
+      Damage manifest written to claim file by M6b ·{' '}
+      {formatDateTime(new Date(endedAt).toISOString())}
+    </p>
+  );
+}
+
+function PerilRow({ consistency }: { consistency: string }) {
+  const cfg =
+    PERIL_CONSISTENCY_BADGE[consistency as keyof typeof PERIL_CONSISTENCY_BADGE];
+  if (!cfg) return null;
+  return (
+    <div>
+      <Badge variant={cfg.variant}>{cfg.label}</Badge>
+    </div>
+  );
+}
+
 function EstimateComparison() {
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="text-xs uppercase tracking-wide text-muted-foreground">
+      <h3 className="font-heading text-base font-semibold text-[var(--ink)]">
         Estimate comparison
       </h3>
-      <div className="flex flex-col gap-2 rounded-md border bg-card p-3 text-sm">
+      <div className="flex flex-col gap-2 rounded-lg border border-[var(--line-soft)] bg-card p-3 text-sm">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <span className="text-muted-foreground">
             M6b Independent Estimate (photo-based)

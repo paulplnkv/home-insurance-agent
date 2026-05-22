@@ -12,7 +12,7 @@ export const documentsAgentConfig = {
   // v3 — event shape changed (tool calls now grouped + narration rows).
   storageKey: 'home-ins:documents:v3',
   title: 'Document Review',
-  description: 'Cross-document consistency · missing documents · routing',
+  description: 'Cross-document consistency · Missing documents · Routing',
   idlePlaceholder: 'Document review will populate when the analysis runs.',
 } as const;
 

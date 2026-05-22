@@ -29,13 +29,13 @@ export function DamageAgentView() {
     <div className="min-h-screen bg-background">
       <AppBar />
       <ClaimSubTabs />
-      <Breadcrumb />
-      <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 px-6 py-4">
+      <main className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 px-10 pt-8 pb-12">
+        <Breadcrumb />
         <AgentPageBody
           title={damageAgentConfig.title}
           description={damageAgentConfig.description}
           identityBadge={
-            <Badge variant="secondary" className="font-normal">
+            <Badge variant="identity" className="h-auto px-3 py-1 text-sm">
               M6b · Photo Intel Agent · Tier 2 — Draft output, adjuster review required
             </Badge>
           }
@@ -48,6 +48,7 @@ export function DamageAgentView() {
           onRun={agent.submit}
           onStop={agent.stop}
           onReset={agent.reset}
+          ownsRightColumnCards
           activity={
             <ActivityFeed
               events={agent.events}

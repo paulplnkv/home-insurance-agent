@@ -194,17 +194,17 @@ function StepRow({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex items-start gap-2.5">
+      <div className="flex items-center gap-2">
         <StepCircle number={stepNumber} state={state} />
-        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1 pt-0.5">
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
           {state === 'pending' ? (
-            <Shimmer as="span" className="text-sm font-medium leading-snug">
+            <Shimmer as="span" className="text-base font-semibold leading-snug">
               {title}
             </Shimmer>
           ) : (
             <span
               className={cn(
-                'text-sm font-medium leading-snug',
+                'text-base font-semibold leading-snug',
                 state === 'error' ? 'text-destructive' : 'text-foreground',
               )}
             >
@@ -216,12 +216,12 @@ function StepRow({
         </div>
       </div>
       {subtitle ? (
-        <p className="pl-[34px] text-xs leading-snug text-muted-foreground">
+        <p className="pl-[40px] text-sm leading-snug text-foreground">
           {subtitle}
         </p>
       ) : null}
       {errorText ? (
-        <p className="pl-[34px] text-xs leading-snug text-destructive/80">
+        <p className="pl-[40px] text-sm leading-snug text-destructive/80">
           {errorText}
         </p>
       ) : null}
@@ -236,17 +236,15 @@ function StepCircle({
   number: number;
   state: RowState;
 }) {
-  // Figma uses a neutral outlined circle regardless of state — color is
-  // carried entirely by the status pill on the right.
   const tone =
     state === 'error'
-      ? 'border-destructive/40 text-destructive'
-      : 'border-border bg-background text-muted-foreground';
+      ? 'border-destructive/40 text-destructive bg-background'
+      : 'border-[var(--brand-blue)] bg-[#edf3ff] text-[var(--brand-blue)]';
   return (
     <span
       aria-hidden
       className={cn(
-        'mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full border text-[11px] font-medium tabular-nums',
+        'inline-flex size-8 shrink-0 items-center justify-center rounded-full border text-base font-semibold tabular-nums',
         tone,
       )}
     >
@@ -257,7 +255,7 @@ function StepCircle({
 
 function CountPill({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide tabular-nums text-muted-foreground">
+    <span className="inline-flex items-center rounded-full bg-[#f6f6f6] px-2 py-0.5 text-sm font-normal tabular-nums text-[#161826]">
       {children}
     </span>
   );
@@ -266,20 +264,20 @@ function CountPill({ children }: { children: React.ReactNode }) {
 function StatusPill({ state }: { state: RowState }) {
   if (state === 'done') {
     return (
-      <span className="inline-flex items-center gap-1 rounded-full border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-300">
+      <span className="inline-flex items-center gap-1 rounded-full border border-[#3b9e38] bg-[#f3fff0] px-2 py-0.5 text-sm font-normal text-[#3b9e38]">
         <span aria-hidden>✅</span> Done
       </span>
     );
   }
   if (state === 'error') {
     return (
-      <span className="inline-flex items-center gap-1 rounded-full border border-red-300 bg-red-50 px-2 py-0.5 text-[11px] font-medium text-red-700 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-300">
+      <span className="inline-flex items-center gap-1 rounded-full border border-[#9e3838] bg-[#fff0f0] px-2 py-0.5 text-sm font-normal text-[#9e3838]">
         <span aria-hidden>⚠️</span> Error
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-300">
+    <span className="inline-flex items-center gap-1 rounded-full border border-[#ac9602] bg-[#fffdf0] px-2 py-0.5 text-sm font-normal text-[#ac9602]">
       <span aria-hidden>⏳</span> Pending
     </span>
   );

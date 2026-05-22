@@ -1,27 +1,13 @@
 'use client';
 
-import {
-  ExternalLinkIcon,
-  FileQuestionIcon,
-  FileTextIcon,
-} from 'lucide-react';
-import { Streamdown } from 'streamdown';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
+import { ExternalLinkIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { Shimmer } from '@/components/ai-elements/shimmer';
 import type { CrossDocFindings } from '@/lib/agents/documents/schema';
 import { formatDateTime } from '@/lib/scenario/claim';
-import {
-  DOCUMENT_KIND_LABELS,
-  getDocumentById,
-} from '@/lib/scenario/documents';
+import { getDocumentById } from '@/lib/scenario/documents';
 import { locateEvidence } from '@/lib/scenario/documents/page-lookup';
-import { cn } from '@/lib/utils';
 
 type DeepPartial<T> = T extends object
   ? { [K in keyof T]?: DeepPartial<T[K]> }
@@ -32,8 +18,8 @@ const SEVERITY_BADGE: Record<
   'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW',
   { variant: 'default' | 'secondary' | 'destructive'; label: string }
 > = {
-  CRITICAL: { variant: 'destructive', label: 'Critical' },
-  HIGH: { variant: 'destructive', label: 'High' },
+  CRITICAL: { variant: 'destructive', label: '🚨 Critical' },
+  HIGH: { variant: 'destructive', label: '🚨 High' },
   MEDIUM: { variant: 'secondary', label: 'Medium' },
   LOW: { variant: 'secondary', label: 'Low' },
 };
@@ -44,8 +30,6 @@ const ROUTING_LABELS: Record<string, string> = {
   siu_referral: 'SIU referral',
 };
 
-const KIND_LABELS = DOCUMENT_KIND_LABELS as Record<string, string>;
-
 export function DocumentsOutput({
   object,
   isStreaming,
@@ -55,31 +39,17 @@ export function DocumentsOutput({
   isStreaming: boolean;
   endedAt: number | null;
 }) {
-  const inventory = object?.document_inventory ?? [];
   const findings = object?.findings ?? [];
-  const memo = object?.summary_markdown;
-  const criticalCount = findings.filter((f) => f?.severity === 'CRITICAL').length;
 
   return (
-    <div className="flex flex-col gap-4 text-sm">
+    <div className="flex flex-col gap-5 text-sm">
       <WriteBackStatusLine endedAt={endedAt} />
-
-      <RoutingCard
+      <RoutingHeadline
         routing={object?.routing}
-        headline={memo}
+        headline={object?.summary_markdown}
         streaming={isStreaming}
       />
-
       <FindingsList items={findings} streaming={isStreaming} />
-
-      <DocumentInventory items={inventory} streaming={isStreaming} />
-
-      <FileSummary
-        markdown={memo}
-        routing={object?.routing}
-        criticalCount={criticalCount}
-        streaming={isStreaming}
-      />
     </div>
   );
 }
@@ -95,8 +65,6 @@ function WriteBackStatusLine({ endedAt }: { endedAt: number | null }) {
   );
 }
 
-// Pulls the bolded one-sentence headline the agent is required to write
-// at the top of summary_markdown.
 function extractHeadline(memo: string | undefined): string | null {
   if (!memo) return null;
   const firstLine = memo
@@ -108,10 +76,9 @@ function extractHeadline(memo: string | undefined): string | null {
   return clean.length > 0 ? clean : null;
 }
 
-// Promoted "SIU referral" / "Adjuster review" card per the Figma:
-// routing decision pill + one-line headline summary in a single panel
-// at the top of the output.
-function RoutingCard({
+// Big headline paragraph + small "ROUTING" label/badge row — no boxed
+// accent panel, per Figma.
+function RoutingHeadline({
   routing,
   headline,
   streaming,
@@ -128,38 +95,25 @@ function RoutingCard({
   }
 
   const label = routing ? (ROUTING_LABELS[routing] ?? routing) : null;
-  const accent =
-    routing === 'siu_referral' || routing === 'adjuster_review'
-      ? 'border-red-300 bg-red-50/40 dark:border-red-500/40 dark:bg-red-500/5'
-      : 'border-border bg-card';
+  const isHighRisk =
+    routing === 'siu_referral' || routing === 'adjuster_review';
 
   return (
-    <div
-      className={cn(
-        'flex flex-col gap-2 rounded-md border p-4',
-        accent,
-      )}
-    >
+    <div className="flex flex-col gap-3">
+      {text ? (
+        <p className="text-base font-medium leading-relaxed text-foreground">
+          {text}
+        </p>
+      ) : null}
       {label ? (
         <div className="flex items-center gap-2">
           <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
             Routing
           </span>
-          <Badge
-            variant={
-              routing === 'siu_referral' || routing === 'adjuster_review'
-                ? 'destructive'
-                : 'default'
-            }
-          >
+          <Badge variant={isHighRisk ? 'destructive' : 'default'}>
             {label}
           </Badge>
         </div>
-      ) : null}
-      {text ? (
-        <p className="text-base font-medium leading-snug text-foreground">
-          {text}
-        </p>
       ) : null}
     </div>
   );
@@ -178,7 +132,7 @@ function FindingsList({
     ) : null;
   }
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="flex flex-col gap-4">
       {items.map((f, i) => {
         if (!f?.title) return null;
         const rawSev = f.severity;
@@ -187,41 +141,48 @@ function FindingsList({
             ? (rawSev as keyof typeof SEVERITY_BADGE)
             : null;
         return (
-          <li
-            key={`${f.title}-${i}`}
-            className="flex flex-col gap-2 rounded-md border bg-card p-3"
-          >
-            <div className="flex flex-wrap items-center gap-2">
-              {sev ? (
-                <Badge variant={SEVERITY_BADGE[sev].variant}>
-                  {SEVERITY_BADGE[sev].label}
-                </Badge>
-              ) : null}
-              <span className="text-sm font-semibold">{f.title}</span>
-            </div>
-            {f.suggested_action ? (
-              <p className="text-xs leading-snug text-muted-foreground">
-                {f.suggested_action}
-                {f.financial_impact ? (
-                  <span className="ml-1 text-muted-foreground/70">
-                    · {f.financial_impact}
-                  </span>
+          <li key={`${f.title}-${i}`}>
+            <Card>
+              <CardContent className="flex flex-col gap-3 py-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  {sev ? (
+                    <Badge variant={SEVERITY_BADGE[sev].variant}>
+                      {SEVERITY_BADGE[sev].label}
+                    </Badge>
+                  ) : null}
+                  <span className="text-sm font-semibold">{f.title}</span>
+                </div>
+                {f.suggested_action ? (
+                  <p className="text-xs leading-snug text-muted-foreground">
+                    {f.suggested_action}
+                    {f.financial_impact ? (
+                      <span className="ml-1 text-muted-foreground/70">
+                        · {f.financial_impact}
+                      </span>
+                    ) : null}
+                  </p>
                 ) : null}
-              </p>
-            ) : null}
-            {f.evidence_a || f.evidence_b || f.evidence_c ? (
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {f.evidence_a ? (
-                  <EvidenceBlock label="One document" text={f.evidence_a} />
+                {f.evidence_a || f.evidence_b || f.evidence_c ? (
+                  <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+                    {f.evidence_a ? (
+                      <EvidenceBlock label="One document" text={f.evidence_a} />
+                    ) : null}
+                    {f.evidence_b ? (
+                      <EvidenceBlock
+                        label="Other document"
+                        text={f.evidence_b}
+                      />
+                    ) : null}
+                    {f.evidence_c ? (
+                      <EvidenceBlock
+                        label="Third document"
+                        text={f.evidence_c}
+                      />
+                    ) : null}
+                  </div>
                 ) : null}
-                {f.evidence_b ? (
-                  <EvidenceBlock label="Other document" text={f.evidence_b} />
-                ) : null}
-                {f.evidence_c ? (
-                  <EvidenceBlock label="Third document" text={f.evidence_c} />
-                ) : null}
-              </div>
-            ) : null}
+              </CardContent>
+            </Card>
           </li>
         );
       })}
@@ -235,11 +196,11 @@ function EvidenceBlock({ label, text }: { label: string; text: string }) {
   const href = doc ? `${doc.pdfUrl}#page=${located!.page}` : undefined;
 
   return (
-    <div className="flex flex-col gap-1.5 rounded-md border bg-muted/30 p-2">
-      <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+    <div className="flex flex-col gap-2 rounded-md border bg-muted/40 p-3">
+      <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
         {label}
       </span>
-      <p className="whitespace-pre-wrap text-xs leading-snug text-foreground">
+      <p className="whitespace-pre-wrap text-xs leading-relaxed text-foreground">
         {text}
       </p>
       {href ? (
@@ -247,141 +208,12 @@ function EvidenceBlock({ label, text }: { label: string; text: string }) {
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex w-fit items-center gap-1 text-[10px] font-medium text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+          className="inline-flex w-fit items-center gap-1 text-xs font-medium text-foreground underline-offset-2 hover:underline"
         >
+          <ExternalLinkIcon className="size-3.5" />
           Open
-          <ExternalLinkIcon className="size-3" />
         </a>
       ) : null}
     </div>
   );
-}
-
-function DocumentInventory({
-  items,
-  streaming,
-}: {
-  items: NonNullable<StreamingFindings['document_inventory']>;
-  streaming: boolean;
-}) {
-  if (items.length === 0 && !streaming) return null;
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-baseline justify-between">
-        <span className="text-xs uppercase tracking-wide text-muted-foreground">
-          Document inventory
-        </span>
-        {streaming && items.length === 0 ? (
-          <Shimmer className="text-xs">Classifying documents…</Shimmer>
-        ) : null}
-      </div>
-      <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        {items.map((row, i) => {
-          if (!row?.id) return null;
-          const present = row.present !== false;
-          const kindLabel =
-            (row.kind && KIND_LABELS[row.kind]) ||
-            row.kind ||
-            'Unknown document type';
-          // Match the inventory row to the scenario manifest to surface
-          // the rendered PDF facsimile when the document is present.
-          const scenarioDoc = present ? getDocumentById(row.id) : undefined;
-          return (
-            <li
-              key={`${row.id}-${i}`}
-              className={cn(
-                'flex items-start gap-2 rounded-md border p-2',
-                present ? 'bg-card' : 'border-dashed bg-muted/30'
-              )}
-            >
-              <div className="mt-0.5 text-muted-foreground">
-                {present ? (
-                  <FileTextIcon className="size-4" />
-                ) : (
-                  <FileQuestionIcon className="size-4" />
-                )}
-              </div>
-              <div className="flex flex-1 flex-col gap-0.5">
-                <span className="text-sm font-medium">
-                  {row.title ?? kindLabel}
-                </span>
-                <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
-                  {kindLabel}
-                </span>
-                {scenarioDoc ? (
-                  <a
-                    href={scenarioDoc.pdfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-1 inline-flex w-fit items-center gap-1 text-[11px] font-medium text-foreground underline-offset-2 hover:underline"
-                  >
-                    Open PDF
-                    <ExternalLinkIcon className="size-3" />
-                  </a>
-                ) : null}
-              </div>
-              <Badge variant={present ? 'secondary' : 'destructive'}>
-                {present ? 'Present' : 'Missing'}
-              </Badge>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
-}
-
-function FileSummary({
-  markdown,
-  routing,
-  criticalCount,
-  streaming,
-}: {
-  markdown: string | undefined;
-  routing: string | undefined;
-  criticalCount: number;
-  streaming: boolean;
-}) {
-  if (!markdown) {
-    return streaming ? (
-      <Shimmer className="text-xs">Drafting file summary…</Shimmer>
-    ) : null;
-  }
-  const headline = buildRoutingHeadline(routing, criticalCount);
-  return (
-    <Accordion defaultValue={['summary']}>
-      <AccordionItem value="summary" className="border-b-0">
-        <AccordionTrigger className="text-sm font-medium">
-          {headline}
-        </AccordionTrigger>
-        <AccordionContent>
-          <div className="rounded-md border bg-card p-3">
-            <Streamdown className="markdown-memo" parseIncompleteMarkdown>
-              {markdown}
-            </Streamdown>
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
-  );
-}
-
-function buildRoutingHeadline(
-  routing: string | undefined,
-  criticalCount: number,
-): string {
-  const findingsClause =
-    criticalCount === 0
-      ? 'no Critical findings'
-      : `${criticalCount} Critical finding${criticalCount === 1 ? '' : 's'}`;
-  if (routing === 'siu_referral') {
-    return `Routing: SIU Referral — ${findingsClause}. This claim must not be settled until SIU review is complete.`;
-  }
-  if (routing === 'adjuster_review') {
-    return `Routing: Adjuster review required — ${findingsClause}.`;
-  }
-  if (routing === 'auto_settle') {
-    return `Routing: Auto-settle — ${findingsClause}.`;
-  }
-  return `Routing pending — ${findingsClause}.`;
 }

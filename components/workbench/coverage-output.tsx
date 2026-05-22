@@ -8,15 +8,10 @@ import {
 } from 'lucide-react';
 import { useSyncExternalStore } from 'react';
 import { Streamdown } from 'streamdown';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { PageCard } from '@/components/workbench/agent-page';
 import { CoverageScaffold } from '@/components/workbench/coverage-scaffold';
 import type { CoveragePosition } from '@/lib/agents/coverage/schema';
 import { CLAIM, formatDateTime } from '@/lib/scenario/claim';
@@ -60,98 +55,76 @@ export function CoverageOutput({
   const hasClauses = !!object?.cited_clauses?.length;
   const hasMemo = !!object?.memo_markdown;
   const hasFlags = !!object?.flags?.length;
+  const hasDeductible = !!object?.applicable_deductible?.kind;
 
   return (
-    <div className="flex flex-col gap-4 text-sm">
-      <WriteBackStatusLine endedAt={endedAt} />
+    <>
+      <PageCard className="flex flex-col gap-4">
+        <WriteBackStatusLine endedAt={endedAt} />
+        <Tier3Banner />
+        <CoverageScaffold lines={object?.coverage_lines} />
+        <PositionSummaryParagraph memo={object?.memo_markdown} />
+        <PositionRow
+          position={object?.position}
+          confidence={object?.confidence}
+        />
+      </PageCard>
 
-      <Tier3Banner />
-
-      <CoverageScaffold lines={object?.coverage_lines} />
-
-      <HeadlineSummary memo={object?.memo_markdown} />
-
-      <PositionRow
-        position={object?.position}
-        confidence={object?.confidence}
-      />
-
-      <DeductibleRow deductible={object?.applicable_deductible} />
+      {hasDeductible ? (
+        <DeductibleCard deductible={object!.applicable_deductible} />
+      ) : null}
 
       {hasClauses ? (
-        <section className="flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-wide text-muted-foreground">
+        <PageCard className="flex flex-col gap-4">
+          <SectionHeading>
             Cited clauses ({object!.cited_clauses!.length})
-          </span>
-          <div className="flex flex-wrap gap-1.5">
+          </SectionHeading>
+          <div className="flex flex-wrap gap-2">
             {object!.cited_clauses!.map((clause, i) =>
               clause?.section ? (
-                <ClauseChip key={`${clause.section}-${i}`} section={clause.section} />
+                <ClauseChip
+                  key={`${clause.section}-${i}`}
+                  section={clause.section}
+                />
               ) : null,
             )}
           </div>
-        </section>
+        </PageCard>
       ) : null}
 
-      {hasMemo || hasFlags ? (
-        <Accordion multiple defaultValue={['memo', 'flags']}>
-          {hasMemo ? (
-            <AccordionItem value="memo">
-              <AccordionTrigger className="text-xs uppercase tracking-wide text-muted-foreground">
-                Coverage memo
-              </AccordionTrigger>
-              <AccordionContent>
-                {/* Streamdown handles partial/incomplete markdown gracefully
-                    (unterminated bold, half-written tables) — exactly what we
-                    need while the model is mid-stream. */}
-                <Streamdown className="markdown-memo" parseIncompleteMarkdown>
-                  {object!.memo_markdown!}
-                </Streamdown>
-              </AccordionContent>
-            </AccordionItem>
-          ) : null}
-
-          {hasFlags ? (
-            <AccordionItem value="flags" className="border-b-0">
-              <AccordionTrigger className="text-xs uppercase tracking-wide text-muted-foreground">
-                Considerations ({object!.flags!.length})
-              </AccordionTrigger>
-              <AccordionContent>
-                <ul className="flex flex-col gap-2">
-                  {object!.flags!.map((flag, i) =>
-                    flag?.title ? (
-                      <li
-                        key={`${flag.title}-${i}`}
-                        className="rounded-md border bg-muted/40 p-3"
-                      >
-                        <div className="mb-1 flex items-center gap-2">
-                          <Badge
-                            variant={
-                              FLAG_BADGE[flag.severity ?? 'INFO']?.variant ??
-                              'secondary'
-                            }
-                          >
-                            {FLAG_BADGE[flag.severity ?? 'INFO']?.label ?? 'Info'}
-                          </Badge>
-                          <span className="text-sm font-medium text-foreground">
-                            {flag.title}
-                          </span>
-                        </div>
-                        {flag.rationale ? (
-                          <p className="text-sm text-muted-foreground">
-                            {flag.rationale}
-                          </p>
-                        ) : null}
-                      </li>
-                    ) : null,
-                  )}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-          ) : null}
-        </Accordion>
+      {hasMemo ? (
+        <PageCard className="flex flex-col gap-4">
+          <SectionHeading>Coverage memo</SectionHeading>
+          {/* Streamdown handles partial/incomplete markdown gracefully
+              (unterminated bold, half-written tables) — exactly what we
+              need while the model is mid-stream. */}
+          <Streamdown className="markdown-memo" parseIncompleteMarkdown>
+            {object!.memo_markdown!}
+          </Streamdown>
+        </PageCard>
       ) : null}
-    </div>
+
+      {hasFlags ? (
+        <PageCard className="flex flex-col gap-4">
+          <SectionHeading>
+            Considerations ({object!.flags!.length})
+          </SectionHeading>
+          <ul className="flex flex-col gap-3">
+            {object!.flags!.map((flag, i) =>
+              flag?.title ? (
+                <li key={`${flag.title}-${i}`}>
+                  <FlagCard
+                    title={flag.title}
+                    severity={flag.severity ?? 'INFO'}
+                    rationale={flag.rationale}
+                  />
+                </li>
+              ) : null,
+            )}
+          </ul>
+        </PageCard>
+      ) : null}
+    </>
   );
 }
 
@@ -164,6 +137,14 @@ export function shouldShowQueuedDocuments(
   return !!object?.memo_markdown;
 }
 
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="font-heading text-xl font-semibold leading-snug text-[var(--ink)]">
+      {children}
+    </h2>
+  );
+}
+
 function WriteBackStatusLine({ endedAt }: { endedAt: number | null }) {
   const confirmedAt = useSyncExternalStore(
     subscribeTier3,
@@ -173,14 +154,14 @@ function WriteBackStatusLine({ endedAt }: { endedAt: number | null }) {
   if (endedAt == null) return null;
   if (!confirmedAt) {
     return (
-      <p className="text-xs text-amber-700 dark:text-amber-400">
+      <p className="text-sm text-amber-700 dark:text-amber-400">
         <span aria-hidden>⏳ </span>
         Awaiting adjuster confirmation before writing to claim file.
       </p>
     );
   }
   return (
-    <p className="text-xs text-muted-foreground">
+    <p className="text-sm text-muted-foreground">
       <span aria-hidden>✅ </span>
       Coverage position written to claim file by M2 ·{' '}
       {formatDateTime(new Date(endedAt).toISOString())}
@@ -229,12 +210,10 @@ function Tier3Banner() {
 
 function QueuedDocuments() {
   return (
-    <section className="flex flex-col gap-3 rounded-md border bg-card p-4">
-      <h3 className="text-xs uppercase tracking-wide text-muted-foreground">
-        Queued documents (1)
-      </h3>
-      <div className="flex items-start gap-2">
-        <FileTextIcon className="mt-0.5 size-4 text-muted-foreground" />
+    <PageCard className="flex flex-col gap-4">
+      <SectionHeading>Queued documents (1)</SectionHeading>
+      <div className="flex items-start gap-3 rounded-md border border-[var(--line-soft)] bg-white p-3">
+        <FileTextIcon className="mt-0.5 size-5 text-muted-foreground" />
         <div className="flex min-w-0 flex-col gap-1">
           <span className="text-sm font-medium leading-tight">
             Reservation of Rights Letter — Draft
@@ -242,22 +221,22 @@ function QueuedDocuments() {
           <span className="text-xs text-muted-foreground">
             Wind/Hail Percentage Deductible Disclosure (HE-7 §6)
           </span>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Required: Written disclosure to insured of percentage deductible
+            before any settlement payment is issued.
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Button size="sm" variant="outline">
+              Review Draft
+            </Button>
+            <Button size="sm" variant="outline">
+              Edit
+            </Button>
+            <Button size="sm">Send</Button>
+          </div>
         </div>
       </div>
-      <p className="text-xs text-muted-foreground">
-        Required: Written disclosure to insured of percentage deductible before
-        any settlement payment is issued.
-      </p>
-      <div className="flex flex-wrap gap-2">
-        <Button size="sm" variant="outline">
-          Review Draft
-        </Button>
-        <Button size="sm" variant="outline">
-          Edit
-        </Button>
-        <Button size="sm">Send</Button>
-      </div>
-    </section>
+    </PageCard>
   );
 }
 
@@ -306,24 +285,21 @@ function formatConfirmTimestamp(iso: string): string {
   return CONFIRM_TIMESTAMP_FORMATTER.format(date);
 }
 
-// Pulls the bolded one-sentence headline the agent is required to write
-// at the top of `memo_markdown` (per the system prompt) and surfaces it
-// above the structured rows. Streams in shortly after the position badge.
-function HeadlineSummary({ memo }: { memo?: string }) {
+// Renders the first paragraph of the streamed memo as plain prose. The
+// agent is prompted to lead the memo with a single "Position: …" sentence
+// that doubles as a headline + position summary, so surfacing it inside
+// Card A — directly above the position badge — matches the Figma.
+function PositionSummaryParagraph({ memo }: { memo?: string }) {
   if (!memo) return null;
-  const firstLine = memo
-    .split('\n')
-    .map((l) => l.trim())
-    .find((l) => l.length > 0);
-  if (!firstLine) return null;
-  // Strip surrounding `**` (and stray trailing `*` while the token is
-  // still mid-stream) so the line renders as plain prose.
-  const clean = firstLine.replace(/^\*+|\*+$/g, '').trim();
-  if (!clean) return null;
+  const firstParagraph = memo.split(/\n\s*\n/)[0]?.trim();
+  if (!firstParagraph) return null;
   return (
-    <p className="text-base font-medium leading-snug text-foreground">
-      {clean}
-    </p>
+    <Streamdown
+      className="markdown-memo text-sm text-foreground"
+      parseIncompleteMarkdown
+    >
+      {firstParagraph}
+    </Streamdown>
   );
 }
 
@@ -354,7 +330,7 @@ function PositionRow({
   );
 }
 
-function DeductibleRow({
+function DeductibleCard({
   deductible,
 }: {
   deductible?: {
@@ -372,23 +348,46 @@ function DeductibleRow({
           ? 'Hurricane percentage'
           : 'Other';
   return (
-    <div className="rounded-md border bg-muted/40 p-3">
-      <div className="text-xs uppercase tracking-wide text-muted-foreground">
-        Applicable deductible
-      </div>
-      <div className="mt-1 flex flex-wrap items-baseline gap-2">
-        <span className="text-base font-medium">{kindLabel}</span>
-      </div>
+    <PageCard className="flex flex-col gap-2">
+      <SectionHeading>Applicable deductible</SectionHeading>
+      <span className="text-base font-medium text-foreground">{kindLabel}</span>
       {deductible.citation ? (
         <a
           href={citationPdfUrl(deductible.citation)}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+          className="inline-flex w-fit items-center gap-1.5 text-sm text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
         >
           {deductible.citation}
-          <ExternalLinkIcon className="size-3" />
+          <ExternalLinkIcon className="size-3.5" />
         </a>
+      ) : null}
+    </PageCard>
+  );
+}
+
+function FlagCard({
+  title,
+  severity,
+  rationale,
+}: {
+  title: string;
+  severity: 'INFO' | 'REVIEW' | 'BLOCK';
+  rationale?: string;
+}) {
+  const badge = FLAG_BADGE[severity] ?? FLAG_BADGE.INFO;
+  return (
+    <div className="flex flex-col gap-2 rounded-md border border-[var(--line-soft)] bg-white p-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <Badge variant={badge.variant}>{badge.label}</Badge>
+        <span className="text-sm font-medium leading-snug text-foreground">
+          {title}
+        </span>
+      </div>
+      {rationale ? (
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          {rationale}
+        </p>
       ) : null}
     </div>
   );
@@ -400,10 +399,10 @@ function ClauseChip({ section }: { section: string }) {
       href={citationPdfUrl(section)}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1 rounded-md border bg-muted px-2 py-1 text-xs font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+      className="inline-flex items-center gap-1.5 rounded-md border border-[var(--line-soft)] bg-muted px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
     >
       {shortenSection(section)}
-      <ExternalLinkIcon className="size-3 text-muted-foreground" />
+      <ExternalLinkIcon className="size-3.5 text-muted-foreground" />
     </a>
   );
 }

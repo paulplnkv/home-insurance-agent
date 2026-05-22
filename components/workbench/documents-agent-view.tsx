@@ -7,8 +7,10 @@ import { ClaimSubTabs } from '@/components/workbench/claim-sub-tabs';
 import { ActivityFeed } from '@/components/workbench/activity-feed';
 import { AgentPageBody } from '@/components/workbench/agent-page';
 import { AgentPreRunContext } from '@/components/workbench/agent-pre-run-context';
+import { DocumentInventoryCard } from '@/components/workbench/document-inventory-card';
 import { documentsAgentConfig } from '@/components/workbench/documents-agent-panel';
 import { DocumentsOutput } from '@/components/workbench/documents-output';
+import { FileSummaryCard } from '@/components/workbench/file-summary-card';
 import { useAgentChat } from '@/hooks/use-agent-chat';
 
 const DOCUMENTS_PRE_RUN_CONTEXT = [
@@ -27,8 +29,8 @@ export function DocumentsAgentView() {
     <div className="min-h-screen bg-background">
       <AppBar />
       <ClaimSubTabs />
-      <Breadcrumb />
-      <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 px-6 py-4">
+      <main className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 px-10 pt-8 pb-12">
+        <Breadcrumb />
         <AgentPageBody
           title={documentsAgentConfig.title}
           description={documentsAgentConfig.description}
@@ -51,6 +53,18 @@ export function DocumentsAgentView() {
               events={agent.events}
               isStreaming={agent.state === 'running'}
               pendingCopy="Listing the claim file…"
+            />
+          }
+          leftAside={
+            <DocumentInventoryCard
+              items={agent.object?.document_inventory ?? []}
+              streaming={agent.state === 'running'}
+            />
+          }
+          rightFooter={
+            <FileSummaryCard
+              markdown={agent.object?.summary_markdown}
+              streaming={agent.state === 'running'}
             />
           }
         >

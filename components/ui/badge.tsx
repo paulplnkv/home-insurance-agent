@@ -29,6 +29,15 @@ const badgeVariants = cva(
         component: "bg-[#9FE1CB] text-[#085041]",
         finding: "bg-[#F4C0D1] text-[#72243E]",
         metadata: "bg-[#F5C4B3] text-[#712B13]",
+        // Severity (damage manifest) — outlined + light-bg per Figma.
+        severity_minor: "border-[#7c7c7c] bg-[#f6f6f6] text-[#7c7c7c]",
+        severity_moderate: "border-[#ac6502] bg-[#fff7f0] text-[#ac6502]",
+        severity_major: "border-[#9e3838] bg-[#fff0f0] text-[#9e3838]",
+        severity_severe: "border-[#5e1a1a] bg-[#fde0e0] text-[#5e1a1a] uppercase tracking-wide",
+        // Identity pill next to the agent page title.
+        identity: "border-[#7c7c7c] bg-[#f6f6f6] text-[#161826] font-normal",
+        // Dark zone tag used in the Xactimate per-zone table header.
+        zone_tag: "bg-[#161826] text-white",
       },
     },
     defaultVariants: {
