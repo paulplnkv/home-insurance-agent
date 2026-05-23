@@ -1,11 +1,12 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import type { ComponentType, SVGProps } from 'react';
 import {
-  CircleCheckIcon,
-  FolderIcon,
-  LoaderIcon,
-} from 'lucide-react';
+  InvestigationIcon,
+  OpenClaimsIcon,
+  PendingReviewIcon,
+} from '@/components/icons/claim-status-icons';
 import { ClaimRow } from '@/components/workbench/claim-row';
 import {
   DASHBOARD_CLAIMS,
@@ -13,48 +14,20 @@ import {
 } from '@/lib/scenario/dashboard-claims';
 import { cn } from '@/lib/utils';
 
-type KpiTone = 'open' | 'investigation' | 'review';
-
-const TONE_STYLES: Record<KpiTone, { bg: string; fg: string }> = {
-  open: {
-    bg: 'bg-[var(--status-open-bg)]',
-    fg: 'text-[var(--status-open-fg)]',
-  },
-  investigation: {
-    bg: 'bg-[var(--status-investigation-bg)]',
-    fg: 'text-[var(--status-investigation-fg)]',
-  },
-  review: {
-    bg: 'bg-[var(--status-review-bg)]',
-    fg: 'text-[var(--status-review-fg)]',
-  },
-};
-
 function KpiTile({
   label,
   value,
   hint,
   icon: Icon,
-  tone,
 }: {
   label: string;
   value: string;
   hint: string;
-  icon: typeof FolderIcon;
-  tone: KpiTone;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
 }) {
-  const { bg, fg } = TONE_STYLES[tone];
   return (
     <div className="flex h-[123px] items-center gap-4 rounded-lg bg-white p-4 shadow-[0_0_20px_0_rgba(0,0,0,0.1)]">
-      <div
-        aria-hidden
-        className={cn(
-          'flex size-[91px] shrink-0 items-center justify-center rounded-full border border-[var(--line-soft)]',
-          bg,
-        )}
-      >
-        <Icon className={cn('size-10', fg)} strokeWidth={1.5} />
-      </div>
+      <Icon aria-hidden className="size-[91px] shrink-0" />
       <div className="flex min-w-0 flex-col gap-2">
         <span className="text-sm font-normal uppercase text-[var(--ink)]">
           {label}
@@ -113,22 +86,19 @@ export function ClaimsDashboard() {
           label="Open claims"
           value={String(openClaims.length)}
           hint="Active workload"
-          icon={FolderIcon}
-          tone="open"
+          icon={OpenClaimsIcon}
         />
         <KpiTile
           label="In investigation"
           value={String(investigating)}
           hint="Field review underway"
-          icon={CircleCheckIcon}
-          tone="investigation"
+          icon={InvestigationIcon}
         />
         <KpiTile
           label="Pending review"
           value={String(pendingReview)}
           hint="Awaiting adjuster sign-off"
-          icon={LoaderIcon}
-          tone="review"
+          icon={PendingReviewIcon}
         />
       </div>
 

@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { useSyncExternalStore } from 'react';
+import type { ComponentType, SVGProps } from 'react';
+import { ArrowRightIcon } from 'lucide-react';
 import {
-  ArrowRightIcon,
-  FileSearchIcon,
-  HammerIcon,
-  ShieldCheckIcon,
-} from 'lucide-react';
+  CoverageAgentIcon,
+  DamageAgentIcon,
+  DocumentAgentIcon,
+} from '@/components/icons/ai-agent-icons';
 import { REAL_CLAIM_AGENT_KEYS } from '@/lib/scenario/dashboard-claims';
 import { TIER3_CONFIRMED_KEY } from '@/lib/scenario/tier3';
 import { CLAIM, formatDateTime } from '@/lib/scenario/claim';
@@ -17,7 +18,7 @@ type Action = {
   href: string;
   title: string;
   description: string;
-  icon: typeof ShieldCheckIcon;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
 };
 
 const ACTIONS: ReadonlyArray<Action> = [
@@ -25,19 +26,19 @@ const ACTIONS: ReadonlyArray<Action> = [
     href: `/claims/${CLAIM.claim_number}/coverages`,
     title: 'Run coverage check',
     description: 'Verify the HO-3 covers hail to roof, gutters, and skylight.',
-    icon: ShieldCheckIcon,
+    icon: CoverageAgentIcon,
   },
   {
     href: `/claims/${CLAIM.claim_number}/damages`,
     title: 'Assess damages',
     description: 'Score field photos and call out replacement candidates.',
-    icon: HammerIcon,
+    icon: DamageAgentIcon,
   },
   {
     href: `/claims/${CLAIM.claim_number}/documents`,
     title: 'Review documents',
     description: 'Cross-check the file for inconsistencies and missing paperwork.',
-    icon: FileSearchIcon,
+    icon: DocumentAgentIcon,
   },
 ];
 
@@ -163,7 +164,7 @@ export function AiAgentsPanel() {
               href={action.href}
               className="group flex items-start justify-between gap-3 rounded-[8px] bg-white p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)] transition-colors hover:bg-[#fafbff]"
             >
-              <action.icon className="mt-0.5 size-6 shrink-0 text-[var(--ink)]" />
+              <action.icon className="mt-0.5 size-6 shrink-0" />
               <div className="flex min-w-0 flex-1 flex-col gap-2">
                 <span className="text-[16px] font-semibold text-[var(--ink)]">
                   {action.title}
