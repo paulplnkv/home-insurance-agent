@@ -104,7 +104,7 @@ export const FINALIZE_FIELD_NARRATIONS: Record<
   report_findings: {
     document_inventory: { pending: 'Classifying documents…' },
     findings: { pending: 'Cross-referencing documents…' },
-    routing: { pending: 'Determining routing decision…' },
+    routing: { pending: 'Determining AI recommendation…' },
     summary_markdown: { pending: 'Drafting file summary…' },
   },
   report_position: {

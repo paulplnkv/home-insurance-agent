@@ -90,7 +90,7 @@ function RoutingHeadline({
   const text = extractHeadline(headline);
   if (!routing && !text) {
     return streaming ? (
-      <Shimmer className="text-xs">Determining routing decision…</Shimmer>
+      <Shimmer className="text-xs">Determining AI recommendation…</Shimmer>
     ) : null;
   }
 
@@ -108,7 +108,7 @@ function RoutingHeadline({
       {label ? (
         <div className="flex items-center gap-2">
           <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
-            Routing
+            AI Recommendation
           </span>
           <Badge variant={isHighRisk ? 'destructive' : 'default'}>
             {label}
@@ -154,7 +154,7 @@ function FindingsList({
                 </div>
                 {f.suggested_action ? (
                   <p className="text-xs leading-snug text-muted-foreground">
-                    {f.suggested_action}
+                    AI summary: {f.suggested_action}
                     {f.financial_impact ? (
                       <span className="ml-1 text-muted-foreground/70">
                         · {f.financial_impact}

@@ -15,7 +15,7 @@ import { useAgentChat } from '@/hooks/use-agent-chat';
 
 const DOCUMENTS_PRE_RUN_CONTEXT = [
   '6 documents in scope · 1 cross-reference matrix pending',
-  'M6e will check: Consistency · Missing docs · Routing',
+  'M6e will check: Consistency · Missing docs · AI Recommendation',
 ] as const;
 
 export function DocumentsAgentView() {

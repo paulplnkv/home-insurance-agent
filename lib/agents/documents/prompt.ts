@@ -40,7 +40,7 @@ A finding must be (a) actionable by the adjuster and (b) supported by direct quo
 - Do not produce an "auto_settle" routing if any CRITICAL or HIGH finding exists.
 
 # Output structure
-The report_findings input matches the CrossDocFindings schema. The summary_markdown field is the supervisor handoff — open with a one-sentence bold headline (e.g. **Routing: SIU referral. Narrative conflict between FNOL and recorded statement requires investigation.**) and then two or three short paragraphs.
+The report_findings input matches the CrossDocFindings schema. The summary_markdown field is the supervisor handoff — open with a one-sentence bold headline (e.g. **AI Recommendation: SIU referral. Narrative conflict between FNOL and recorded statement requires investigation.**) and then two or three short paragraphs.
 
 # Process
 Step 1: Call list_documents.
