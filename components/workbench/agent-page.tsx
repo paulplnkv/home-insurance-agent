@@ -1,8 +1,27 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { AgentState } from './agent-panel';
+
+const STATE_LABEL: Record<AgentState, string> = {
+  idle: 'Pending',
+  running: 'Running',
+  complete: 'Complete',
+  error: 'Error',
+};
+
+const STATE_VARIANT: Record<
+  AgentState,
+  'secondary' | 'default' | 'destructive'
+> = {
+  idle: 'secondary',
+  running: 'secondary',
+  complete: 'default',
+  error: 'destructive',
+};
 
 interface AgentPageBodyProps {
   title: string;
@@ -51,6 +70,8 @@ export function AgentPageBody({
   description,
   idlePlaceholder,
   state,
+  startedAt,
+  endedAt,
   error,
   onRun,
   onStop,
@@ -63,6 +84,24 @@ export function AgentPageBody({
   ownsRightColumnCards = false,
   children,
 }: AgentPageBodyProps) {
+  // Live elapsed counter — only ticks while running so we don't burn
+  // renders the rest of the time.
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (state !== 'running') return;
+    const id = setInterval(() => setNow(Date.now()), 100);
+    return () => clearInterval(id);
+  }, [state]);
+
+  const elapsedMs = startedAt
+    ? (endedAt ?? (state === 'running' ? now : startedAt)) - startedAt
+    : 0;
+  const seconds = elapsedMs ? (elapsedMs / 1000).toFixed(1) : null;
+  const pillLabel =
+    (state === 'running' || state === 'complete') && seconds
+      ? `${STATE_LABEL[state]} · ${seconds}s`
+      : STATE_LABEL[state];
+
   const descriptionSegments =
     typeof description === 'string'
       ? description.split(' · ').filter(Boolean)
@@ -89,6 +128,14 @@ export function AgentPageBody({
           <DescriptionRow segments={descriptionSegments} />
         </div>
         <div className="flex flex-wrap items-center gap-4">
+          {state === 'running' || state === 'error' ? (
+            <Badge
+              variant={STATE_VARIANT[state]}
+              className="font-medium uppercase tracking-wide"
+            >
+              {pillLabel}
+            </Badge>
+          ) : null}
           {state === 'running' ? (
             <Button
               variant="outline"
