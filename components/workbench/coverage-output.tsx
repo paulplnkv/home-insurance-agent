@@ -3,14 +3,28 @@
 import {
   AlertTriangleIcon,
   CheckCircle2Icon,
+  CopyIcon,
   ExternalLinkIcon,
   FileTextIcon,
+  MailIcon,
 } from 'lucide-react';
-import { useSyncExternalStore } from 'react';
+import { useState, useSyncExternalStore } from 'react';
+import { toast } from 'sonner';
 import { Streamdown } from 'streamdown';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { PageCard } from '@/components/workbench/agent-page';
 import { CoverageScaffold } from '@/components/workbench/coverage-scaffold';
 import type { CoveragePosition } from '@/lib/agents/coverage/schema';
@@ -44,6 +58,40 @@ const FLAG_BADGE: Record<
   REVIEW: { variant: 'destructive', label: 'Needs review' },
   BLOCK: { variant: 'destructive', label: 'Blocked' },
 };
+
+const ROR_DRAFT_BODY = `Hi Maria,
+
+Just to clarify the deductible position on this claim:
+
+Under the base HO-3 policy, the All Other Perils deductible is $1,000. Your policy also carries endorsement HE-7 (Wind/Hail Percentage Deductible §6), which applies whenever the loss is caused by wind or hail.
+
+Because the April 22 loss is a hailstorm, HE-7 §6 controls — and the wind/hail deductible is 2% of the Coverage A dwelling limit of $480,000, which equals $9,600.
+
+If this had been a non-wind/hail peril, the standard $1,000 deductible would have applied instead.
+
+In short: the deductible applicable to this claim is $9,600, not $1,000, because the loss is wind/hail-driven and HE-7 §6 supersedes the base deductible.
+
+Pacific States Mutual is continuing to investigate the claim and reserves all rights under the policy. This letter is not an admission of coverage and does not waive any policy terms, conditions, or defenses.
+
+Let me know if you need any further clarification.
+
+— Maria Wells
+  Pacific States Mutual · Property · North TX`;
+
+function buildMailto({
+  to,
+  subject,
+  body,
+}: {
+  to: string;
+  subject: string;
+  body: string;
+}): string {
+  // RFC 6068: mailto: query fields use percent-encoding (spaces → %20).
+  // URLSearchParams encodes spaces as `+`, which mail clients render literally.
+  const query = `subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return `mailto:${encodeURIComponent(to)}?${query}`;
+}
 
 export function CoverageOutput({
   object,
@@ -208,12 +256,35 @@ function Tier3Banner() {
   );
 }
 
+const ROR_DRAFT_SUBJECT =
+  'Reservation of Rights — Wind/Hail Percentage Deductible Disclosure';
+
 function QueuedDocuments() {
+  const [subject, setSubject] = useState(ROR_DRAFT_SUBJECT);
+  const [body, setBody] = useState(ROR_DRAFT_BODY);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(body);
+      toast.success('Draft copied to clipboard.');
+    } catch {
+      toast.error('Could not copy to clipboard.');
+    }
+  };
+
+  const handleOpenInMail = () => {
+    window.location.href = buildMailto({
+      to: CLAIM.insured.email,
+      subject,
+      body,
+    });
+  };
+
   return (
     <PageCard className="flex flex-col gap-4">
       <SectionHeading>Queued documents (1)</SectionHeading>
       <div className="flex items-start gap-3 rounded-md border border-[var(--line-soft)] bg-white p-3">
-        <FileTextIcon className="mt-0.5 size-5 text-muted-foreground" />
+        <FileTextIcon className="mt-0.5 size-8 text-muted-foreground" />
         <div className="flex min-w-0 flex-col gap-1">
           <span className="text-sm font-medium leading-tight">
             Reservation of Rights Letter — Draft
@@ -226,13 +297,63 @@ function QueuedDocuments() {
             before any settlement payment is issued.
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
-            <Button size="sm" variant="outline">
-              Review Draft
+            <Dialog>
+              <DialogTrigger
+                render={<Button size="sm" variant="outline" />}
+              >
+                Review Draft
+              </DialogTrigger>
+              <DialogContent className="grid max-h-[90vh] w-full gap-4 overflow-y-auto sm:max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>
+                    Reservation of Rights Letter — Draft
+                  </DialogTitle>
+                  <DialogDescription>
+                    To: {CLAIM.insured.name} &lt;{CLAIM.insured.email}&gt;
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="flex flex-col gap-3">
+                  <label className="flex flex-col gap-1">
+                    <span className="text-xs font-medium text-muted-foreground">
+                      Subject
+                    </span>
+                    <Input
+                      value={subject}
+                      onChange={(e) => setSubject(e.target.value)}
+                    />
+                  </label>
+                  <label className="flex flex-col gap-1">
+                    <span className="text-xs font-medium text-muted-foreground">
+                      Body
+                    </span>
+                    <Textarea
+                      value={body}
+                      onChange={(e) => setBody(e.target.value)}
+                      rows={18}
+                      className="min-h-[320px] text-sm leading-relaxed"
+                    />
+                  </label>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={handleCopy}>
+                    <CopyIcon />
+                    Copy
+                  </Button>
+                  <Button onClick={handleOpenInMail}>
+                    <MailIcon />
+                    Open in mail
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            <Button
+              size="sm"
+              onClick={() => {
+                toast.success('The email sent.');
+              }}
+            >
+              Send
             </Button>
-            <Button size="sm" variant="outline">
-              Edit
-            </Button>
-            <Button size="sm">Send</Button>
           </div>
         </div>
       </div>
