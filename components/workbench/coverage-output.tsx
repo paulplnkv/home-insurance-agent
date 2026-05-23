@@ -31,6 +31,7 @@ import type { CoveragePosition } from '@/lib/agents/coverage/schema';
 import { CLAIM, formatDateTime } from '@/lib/scenario/claim';
 import { TIER3_CONFIRMED_KEY } from '@/lib/scenario/tier3';
 import POLICY_PAGE_MAP from '@/lib/policy/page-map.json';
+import { buildMailto } from '@/lib/utils/mailto';
 
 // PDF facsimile of the HO-3 policy text — the same source the retriever
 // indexes. Generated at build time by `npm run generate-pdfs`.
@@ -77,21 +78,6 @@ Let me know if you need any further clarification.
 
 — Maria Wells
   Pacific States Mutual · Property · North TX`;
-
-function buildMailto({
-  to,
-  subject,
-  body,
-}: {
-  to: string;
-  subject: string;
-  body: string;
-}): string {
-  // RFC 6068: mailto: query fields use percent-encoding (spaces → %20).
-  // URLSearchParams encodes spaces as `+`, which mail clients render literally.
-  const query = `subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  return `mailto:${encodeURIComponent(to)}?${query}`;
-}
 
 export function CoverageOutput({
   object,
