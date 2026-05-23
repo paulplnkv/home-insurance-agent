@@ -1,10 +1,19 @@
 import Link from 'next/link';
-import { CameraIcon, ExternalLinkIcon, FileTextIcon } from 'lucide-react';
+import {
+  CameraIcon,
+  ExternalLinkIcon,
+  FileTextIcon,
+  MailIcon,
+} from 'lucide-react';
 import {
   DOCUMENT_KIND_LABELS,
   SCENARIO_DOCUMENTS,
 } from '@/lib/scenario/documents';
-import { CLAIM } from '@/lib/scenario/claim';
+import { CLAIM, formatDate } from '@/lib/scenario/claim';
+import {
+  CORRESPONDENCE_LOG,
+  type CorrespondenceEmail,
+} from '@/lib/scenario/correspondence';
 import { PHOTO_MANIFEST } from '@/lib/scenario/photos';
 import { SectionCard, SectionTitle } from './section-card';
 
@@ -55,7 +64,39 @@ export function ClaimFile() {
           </Link>
         </div>
       </SectionCard>
+
+      <SectionCard>
+        <SectionTitle>
+          Correspondence log ({CORRESPONDENCE_LOG.length})
+        </SectionTitle>
+        <ul className="flex flex-col gap-3">
+          {CORRESPONDENCE_LOG.map((email) => (
+            <MailRow key={email.id} email={email} />
+          ))}
+        </ul>
+      </SectionCard>
     </>
+  );
+}
+
+function MailRow({ email }: { email: CorrespondenceEmail }) {
+  return (
+    <li className="flex items-center justify-between gap-4 rounded-[8px] bg-white p-4 shadow-[0_0_20px_rgba(0,0,0,0.1)]">
+      <div className="flex min-w-0 items-center gap-4">
+        <MailIcon className="size-6 shrink-0 text-[var(--ink)]" />
+        <div className="flex min-w-0 flex-col gap-1">
+          <span className="truncate text-[16px] font-semibold text-[var(--ink)]">
+            {email.subject}
+          </span>
+          <span className="truncate text-[14px] text-[var(--ink-soft)]">
+            From {email.from_name} · {email.from_role}
+          </span>
+        </div>
+      </div>
+      <span className="shrink-0 text-[14px] text-[var(--ink-soft)]">
+        {formatDate(email.sent_at)}
+      </span>
+    </li>
   );
 }
 
