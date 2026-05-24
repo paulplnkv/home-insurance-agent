@@ -26,7 +26,7 @@ function isActive(
 export function ClaimSubTabs() {
   const pathname = usePathname();
   return (
-    <div className="border-b border-[var(--line-soft)] bg-[var(--surface-tab-track)]">
+    <div className="sticky top-[49px] z-20 border-b border-[var(--line-soft)] bg-[var(--surface-tab-track)]">
       <div className="mx-auto flex w-full max-w-[1600px] gap-6 px-10 text-xs">
         {TABS.map((tab) => {
           const active = isActive(pathname, tab.href, tab.exact);

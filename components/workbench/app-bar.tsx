@@ -4,7 +4,7 @@ const GLOBAL_NAV = ['Dashboard', 'Queue', 'Reports'] as const;
 
 export function AppBar() {
   return (
-    <div className="border-b border-[var(--line-soft)] bg-white">
+    <div className="sticky top-0 z-30 border-b border-[var(--line-soft)] bg-white">
       <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-6 px-10 py-4 text-xs">
         <div className="flex items-center">
           <span className="font-bold tracking-wider text-[var(--brand-blue)]">

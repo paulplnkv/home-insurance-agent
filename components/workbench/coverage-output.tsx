@@ -128,7 +128,15 @@ export function CoverageOutput({
 
       {hasMemo ? (
         <PageCard className="flex flex-col gap-4">
-          <SectionHeading>Coverage memo</SectionHeading>
+          <div className="flex items-center justify-between gap-4">
+            <SectionHeading>Coverage memo</SectionHeading>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="outline">
+                Edit
+              </Button>
+              <Button size="sm">Save</Button>
+            </div>
+          </div>
           {/* Streamdown handles partial/incomplete markdown gracefully
               (unterminated bold, half-written tables) — exactly what we
               need while the model is mid-stream. */}

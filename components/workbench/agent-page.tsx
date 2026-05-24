@@ -166,7 +166,7 @@ export function AgentPageBody({
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(300px,443px)_1fr] lg:items-start">
         {activity || leftAside ? (
-          <div className="flex flex-col gap-4 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
+          <div className="flex flex-col gap-4 lg:sticky lg:top-[114px] lg:max-h-[calc(100vh-7.5rem)] lg:overflow-y-auto">
             {activity ? (
               <PageCard>
                 <h2 className="font-heading pb-4 text-xl font-semibold leading-snug text-[var(--ink)]">
