@@ -39,7 +39,9 @@ interface AgentPageBodyProps {
   onRun: () => void;
   onStop?: () => void;
   onReset?: () => void;
-  // Live-activity slot rendered as a sticky sidebar on the left at lg+.
+  // Live-activity slot rendered in the left column at lg+. Shares the
+  // page scroll with the right-column output rather than pinning to the
+  // viewport.
   activity?: React.ReactNode;
   // Optional badge rendered beside the title so the audience can map
   // the page to its agent identity (e.g. "M2 · Coverage Agent · Tier 3").
@@ -62,9 +64,9 @@ interface AgentPageBodyProps {
 }
 
 // Full-page agent layout used on /agents/<name>. Top row carries the
-// title and toolbar; below it the activity feed is pinned to a sticky
-// left column at lg+ while the streaming output fills the right
-// column. On narrower screens both stack vertically.
+// title and toolbar; below it the activity feed sits in the left column
+// at lg+ and shares the page scroll with the streaming output on the
+// right. On narrower screens both stack vertically.
 export function AgentPageBody({
   title,
   description,
@@ -166,7 +168,7 @@ export function AgentPageBody({
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(300px,443px)_1fr] lg:items-start">
         {activity || leftAside ? (
-          <div className="flex flex-col gap-4 lg:sticky lg:top-[114px] lg:max-h-[calc(100vh-7.5rem)] lg:overflow-y-auto">
+          <div className="flex flex-col gap-4">
             {activity ? (
               <PageCard>
                 <h2 className="font-heading pb-4 text-xl font-semibold leading-snug text-[var(--ink)]">
