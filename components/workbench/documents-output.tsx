@@ -16,12 +16,24 @@ type StreamingFindings = DeepPartial<CrossDocFindings>;
 
 const SEVERITY_BADGE: Record<
   'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW',
-  { variant: 'default' | 'secondary' | 'destructive'; label: string }
+  { className: string; label: string }
 > = {
-  CRITICAL: { variant: 'destructive', label: '🚨 Critical' },
-  HIGH: { variant: 'destructive', label: '🚨 High' },
-  MEDIUM: { variant: 'secondary', label: 'Medium' },
-  LOW: { variant: 'secondary', label: 'Low' },
+  CRITICAL: {
+    className: 'border-[#dc2626] bg-[#fee2e2] text-[#991b1b]',
+    label: 'Critical',
+  },
+  HIGH: {
+    className: 'border-[#f87171] bg-[#fef2f2] text-[#b91c1c]',
+    label: 'High',
+  },
+  MEDIUM: {
+    className: 'border-[#eab308] bg-[#fef9c3] text-[#854d0e]',
+    label: 'Medium',
+  },
+  LOW: {
+    className: 'border-[#7c7c7c] bg-[#f6f6f6] text-[#7c7c7c]',
+    label: 'Low',
+  },
 };
 
 const ROUTING_LABELS: Record<string, string> = {
@@ -146,7 +158,7 @@ function FindingsList({
               <CardContent className="flex flex-col gap-3 py-4">
                 <div className="flex flex-wrap items-center gap-2">
                   {sev ? (
-                    <Badge variant={SEVERITY_BADGE[sev].variant}>
+                    <Badge className={SEVERITY_BADGE[sev].className}>
                       {SEVERITY_BADGE[sev].label}
                     </Badge>
                   ) : null}
