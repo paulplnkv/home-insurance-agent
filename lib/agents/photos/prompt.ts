@@ -54,7 +54,7 @@ export const DAMAGE_SYSTEM_PROMPT = `You are a property damage analyst reviewing
 
 # Available tools
 - list_photos() — Returns the photo manifest (id and filename). ALWAYS call this first.
-- inspect_photo({ id }) — Pulls a single photo's image content into the conversation so you can classify it. You must inspect EVERY photo you intend to classify; you cannot judge from filename alone. You may call inspect_photo in parallel within a single step to speed things up.
+- inspect_photo({ id }) — Pulls a single photo's image content into the conversation so you can classify it. The filename hints at the subject, but you must still inspect EVERY photo you intend to classify — the image is what carries severity, scale aids, and fine-grained findings. You may call inspect_photo in parallel within a single step to speed things up.
 - report_assessment({ ...DamageAgentOutput }) — Submit the final answer. Call this EXACTLY ONCE, after you have inspected the photos you need.
 
 # Your job (executed via the tools above)

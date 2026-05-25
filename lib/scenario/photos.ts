@@ -124,62 +124,62 @@ function extend(
 
 export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
   {
-    id: 'roof-south-1',
+    id: 'image-1',
     filename: 'roof-south-1.jpg',
     publicUrl: '/photos/roof-south-1.jpg',
     groundTruth: HAIL_ROOF_SOUTH,
     description: 'South slope roof, severe hail impacts across mid field.',
   },
   {
-    id: 'roof-south-2',
+    id: 'image-2',
     filename: 'roof-south-2.jpg',
     publicUrl: '/photos/roof-south-2.jpg',
     groundTruth: HAIL_ROOF_SOUTH,
     description: 'South slope roof, second angle showing granule loss.',
   },
   {
-    id: 'roof-west-1',
+    id: 'image-3',
     filename: 'roof-west-1.jpg',
     publicUrl: '/photos/roof-west-1.jpg',
     groundTruth: HAIL_ROOF_WEST,
     description: 'West slope roof, moderate hail impacts.',
   },
   {
-    id: 'gutter-1',
+    id: 'image-4',
     filename: 'gutter-1.jpg',
     publicUrl: '/photos/gutter-1.jpg',
     groundTruth: HAIL_GUTTER_FRONT,
     description: 'Front aluminum gutter, dented along 24 lf run.',
   },
   {
-    id: 'roof-south-near-1',
+    id: 'image-5',
     filename: 'roof-south-near-1.jpg',
     publicUrl: '/photos/roof-south-near-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
       shot_types: ['mid_range', 'redundant_view'],
     }),
-    description: 'Near-duplicate of roof-south-1 (slight angle shift).',
+    description: 'Near-duplicate of image-1 (slight angle shift).',
   },
   {
-    id: 'roof-south-near-2',
+    id: 'image-6',
     filename: 'roof-south-near-2.jpg',
     publicUrl: '/photos/roof-south-near-2.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
       shot_types: ['close_up', 'redundant_view'],
     }),
-    description: 'Near-duplicate of roof-south-1 (closer crop).',
+    description: 'Near-duplicate of image-1 (closer crop).',
   },
   {
-    id: 'roof-south-near-3',
+    id: 'image-7',
     filename: 'roof-south-near-3.jpg',
     publicUrl: '/photos/roof-south-near-3.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
       shot_types: ['mid_range', 'redundant_view'],
     }),
-    description: 'Near-duplicate of roof-south-1 (different exposure).',
+    description: 'Near-duplicate of image-1 (different exposure).',
   },
   {
-    id: 'scale-coin-1',
+    id: 'image-8',
     filename: 'scale-coin-1.jpg',
     publicUrl: '/photos/scale-coin-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
@@ -189,7 +189,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Quarter coin placed beside hail impact crater for scale.',
   },
   {
-    id: 'scale-tape-1',
+    id: 'image-9',
     filename: 'scale-tape-1.jpg',
     publicUrl: '/photos/scale-tape-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
@@ -199,28 +199,28 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Tape measure across hail impact, reads ~1.5" diameter.',
   },
   {
-    id: 'skylight-1',
+    id: 'image-10',
     filename: 'skylight-1.jpg',
     publicUrl: '/photos/skylight-1.jpg',
     groundTruth: HAIL_SKYLIGHT_KITCHEN,
     description: 'Damaged kitchen skylight, cracked glazing and seal.',
   },
   {
-    id: 'interior-water-1',
+    id: 'image-11',
     filename: 'interior-water-1.jpg',
     publicUrl: '/photos/interior-water-1.jpg',
     groundTruth: INTERIOR_WATER,
     description: 'Interior kitchen ceiling under skylight — water staining.',
   },
   {
-    id: 'neighbor-fence-1',
+    id: 'image-12',
     filename: 'neighbor-fence-1.jpg',
     publicUrl: '/photos/neighbor-fence-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
     description: 'Neighbor property fence — no relevance to this loss.',
   },
   {
-    id: 'parked-car-1',
+    id: 'image-13',
     filename: 'parked-car-1.jpg',
     publicUrl: '/photos/parked-car-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
@@ -230,14 +230,14 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
   // --- expansion to 30 total for richer demo ---
 
   {
-    id: 'roof-south-3',
+    id: 'image-14',
     filename: 'roof-south-3.jpg',
     publicUrl: '/photos/roof-south-3.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, { shot_types: ['overview'] }),
     description: 'South slope roof, wide overhead view from the ridge.',
   },
   {
-    id: 'roof-south-detail-1',
+    id: 'image-15',
     filename: 'roof-south-detail-1.jpg',
     publicUrl: '/photos/roof-south-detail-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
@@ -247,35 +247,35 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Macro of a single hail impact crater on south slope.',
   },
   {
-    id: 'roof-west-2',
+    id: 'image-16',
     filename: 'roof-west-2.jpg',
     publicUrl: '/photos/roof-west-2.jpg',
     groundTruth: HAIL_ROOF_WEST,
     description: 'West slope roof, closer angle showing scuffing.',
   },
   {
-    id: 'roof-west-3',
+    id: 'image-17',
     filename: 'roof-west-3.jpg',
     publicUrl: '/photos/roof-west-3.jpg',
     groundTruth: HAIL_ROOF_WEST,
     description: 'Corner where west and south slopes meet, both impacted.',
   },
   {
-    id: 'gutter-2',
+    id: 'image-18',
     filename: 'gutter-2.jpg',
     publicUrl: '/photos/gutter-2.jpg',
     groundTruth: HAIL_GUTTER_FRONT,
     description: 'Front gutter, second section with more dents from below.',
   },
   {
-    id: 'gutter-3',
+    id: 'image-19',
     filename: 'gutter-3.jpg',
     publicUrl: '/photos/gutter-3.jpg',
     groundTruth: extend(HAIL_GUTTER_FRONT, { component: 'downspout' }),
     description: 'Front downspout, dented from falling hail.',
   },
   {
-    id: 'interior-water-2',
+    id: 'image-20',
     filename: 'interior-water-2.jpg',
     publicUrl: '/photos/interior-water-2.jpg',
     groundTruth: INTERIOR_WATER,
@@ -283,26 +283,26 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
   },
 
   {
-    id: 'roof-south-near-4',
+    id: 'image-21',
     filename: 'roof-south-near-4.jpg',
     publicUrl: '/photos/roof-south-near-4.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
       shot_types: ['overview', 'redundant_view'],
     }),
-    description: 'Near-duplicate of roof-south-1 (wider crop).',
+    description: 'Near-duplicate of image-1 (wider crop).',
   },
   {
-    id: 'gutter-near-1',
+    id: 'image-22',
     filename: 'gutter-near-1.jpg',
     publicUrl: '/photos/gutter-near-1.jpg',
     groundTruth: extend(HAIL_GUTTER_FRONT, {
       shot_types: ['mid_range', 'redundant_view'],
     }),
-    description: 'Near-duplicate of gutter-1 (slight angle shift).',
+    description: 'Near-duplicate of image-4 (slight angle shift).',
   },
 
   {
-    id: 'scale-ruler-1',
+    id: 'image-23',
     filename: 'scale-ruler-1.jpg',
     publicUrl: '/photos/scale-ruler-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
@@ -312,7 +312,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Metal ruler across hail impacts, ~1.5–2 inch diameter.',
   },
   {
-    id: 'scale-card-1',
+    id: 'image-24',
     filename: 'scale-card-1.jpg',
     publicUrl: '/photos/scale-card-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
@@ -323,42 +323,42 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
   },
 
   {
-    id: 'unrelated-mailbox-1',
+    id: 'image-25',
     filename: 'unrelated-mailbox-1.jpg',
     publicUrl: '/photos/unrelated-mailbox-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
     description: 'Undamaged mailbox at curb — not part of dwelling claim.',
   },
   {
-    id: 'unrelated-pool-1',
+    id: 'image-26',
     filename: 'unrelated-pool-1.jpg',
     publicUrl: '/photos/unrelated-pool-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
     description: 'Backyard pool deck, no storm damage.',
   },
   {
-    id: 'unrelated-grill-1',
+    id: 'image-27',
     filename: 'unrelated-grill-1.jpg',
     publicUrl: '/photos/unrelated-grill-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
     description: 'Propane grill on patio, no damage.',
   },
   {
-    id: 'unrelated-trashcan-1',
+    id: 'image-28',
     filename: 'unrelated-trashcan-1.jpg',
     publicUrl: '/photos/unrelated-trashcan-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
     description: 'Rolling trash bins at curb, undamaged.',
   },
   {
-    id: 'unrelated-driveway-1',
+    id: 'image-29',
     filename: 'unrelated-driveway-1.jpg',
     publicUrl: '/photos/unrelated-driveway-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
     description: 'Empty driveway and closed garage door, undamaged.',
   },
   {
-    id: 'unrelated-flowerbed-1',
+    id: 'image-30',
     filename: 'unrelated-flowerbed-1.jpg',
     publicUrl: '/photos/unrelated-flowerbed-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
@@ -368,7 +368,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
   // --- expansion to 60 total: broader damage surfaces + more variety ---
 
   {
-    id: 'roof-ridge-cap-1',
+    id: 'image-31',
     filename: 'roof-ridge-cap-1.jpg',
     publicUrl: '/photos/roof-ridge-cap-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
@@ -379,7 +379,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Ridge-cap shingles along the peak, hail impacts visible.',
   },
   {
-    id: 'roof-valley-1',
+    id: 'image-32',
     filename: 'roof-valley-1.jpg',
     publicUrl: '/photos/roof-valley-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
@@ -389,7 +389,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Valley between south and west slopes, impacts on both sides.',
   },
   {
-    id: 'roof-vent-1',
+    id: 'image-33',
     filename: 'roof-vent-1.jpg',
     publicUrl: '/photos/roof-vent-1.jpg',
     groundTruth: {
@@ -406,7 +406,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Metal turbine roof vent, dome dented and blades bent.',
   },
   {
-    id: 'roof-flashing-1',
+    id: 'image-34',
     filename: 'roof-flashing-1.jpg',
     publicUrl: '/photos/roof-flashing-1.jpg',
     groundTruth: {
@@ -423,7 +423,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Chimney step-flashing dented and lifted, cracked sealant.',
   },
   {
-    id: 'roof-dormer-1',
+    id: 'image-35',
     filename: 'roof-dormer-1.jpg',
     publicUrl: '/photos/roof-dormer-1.jpg',
     groundTruth: extend(HAIL_ROOF_WEST, {
@@ -433,7 +433,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Dormer roof face, hail impacts and granule loss.',
   },
   {
-    id: 'roof-soffit-1',
+    id: 'image-36',
     filename: 'roof-soffit-1.jpg',
     publicUrl: '/photos/roof-soffit-1.jpg',
     groundTruth: {
@@ -450,7 +450,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'White vinyl soffit panel cracked and dented from hail.',
   },
   {
-    id: 'siding-1',
+    id: 'image-37',
     filename: 'siding-1.jpg',
     publicUrl: '/photos/siding-1.jpg',
     groundTruth: {
@@ -467,7 +467,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Beige vinyl siding with hail impact dings and small cracks.',
   },
   {
-    id: 'garage-door-1',
+    id: 'image-38',
     filename: 'garage-door-1.jpg',
     publicUrl: '/photos/garage-door-1.jpg',
     groundTruth: {
@@ -484,7 +484,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Steel two-car garage door, dented across upper panels.',
   },
   {
-    id: 'ac-condenser-1',
+    id: 'image-39',
     filename: 'ac-condenser-1.jpg',
     publicUrl: '/photos/ac-condenser-1.jpg',
     groundTruth: {
@@ -501,7 +501,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'AC condenser unit, aluminum cooling fins bent from hail.',
   },
   {
-    id: 'window-screen-1',
+    id: 'image-40',
     filename: 'window-screen-1.jpg',
     publicUrl: '/photos/window-screen-1.jpg',
     groundTruth: {
@@ -518,14 +518,14 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Window screen with hailstone punctures and dented frame.',
   },
   {
-    id: 'skylight-2',
+    id: 'image-41',
     filename: 'skylight-2.jpg',
     publicUrl: '/photos/skylight-2.jpg',
     groundTruth: HAIL_SKYLIGHT_KITCHEN,
     description: 'Second skylight unit, moderate glazing damage and chipped frame.',
   },
   {
-    id: 'roof-south-edge-1',
+    id: 'image-42',
     filename: 'roof-south-edge-1.jpg',
     publicUrl: '/photos/roof-south-edge-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
@@ -535,7 +535,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'South-slope eave row, hail impacts plus lifted shingle tabs.',
   },
   {
-    id: 'interior-water-3',
+    id: 'image-43',
     filename: 'interior-water-3.jpg',
     publicUrl: '/photos/interior-water-3.jpg',
     groundTruth: INTERIOR_WATER,
@@ -543,53 +543,53 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
   },
 
   {
-    id: 'roof-west-near-1',
+    id: 'image-44',
     filename: 'roof-west-near-1.jpg',
     publicUrl: '/photos/roof-west-near-1.jpg',
     groundTruth: extend(HAIL_ROOF_WEST, {
       shot_types: ['mid_range', 'redundant_view'],
     }),
-    description: 'Near-duplicate of roof-west-1 (slight angle shift).',
+    description: 'Near-duplicate of image-3 (slight angle shift).',
   },
   {
-    id: 'roof-west-near-2',
+    id: 'image-45',
     filename: 'roof-west-near-2.jpg',
     publicUrl: '/photos/roof-west-near-2.jpg',
     groundTruth: extend(HAIL_ROOF_WEST, {
       shot_types: ['close_up', 'redundant_view'],
     }),
-    description: 'Near-duplicate of roof-west-1 (closer crop).',
+    description: 'Near-duplicate of image-3 (closer crop).',
   },
   {
-    id: 'gutter-near-2',
+    id: 'image-46',
     filename: 'gutter-near-2.jpg',
     publicUrl: '/photos/gutter-near-2.jpg',
     groundTruth: extend(HAIL_GUTTER_FRONT, {
       shot_types: ['mid_range', 'redundant_view'],
     }),
-    description: 'Near-duplicate of gutter-1 (different framing).',
+    description: 'Near-duplicate of image-4 (different framing).',
   },
   {
-    id: 'skylight-near-1',
+    id: 'image-47',
     filename: 'skylight-near-1.jpg',
     publicUrl: '/photos/skylight-near-1.jpg',
     groundTruth: extend(HAIL_SKYLIGHT_KITCHEN, {
       shot_types: ['mid_range', 'redundant_view'],
     }),
-    description: 'Near-duplicate of skylight-1 (slight angle shift).',
+    description: 'Near-duplicate of image-10 (slight angle shift).',
   },
   {
-    id: 'interior-water-near-1',
+    id: 'image-48',
     filename: 'interior-water-near-1.jpg',
     publicUrl: '/photos/interior-water-near-1.jpg',
     groundTruth: extend(INTERIOR_WATER, {
       shot_types: ['mid_range', 'redundant_view'],
     }),
-    description: 'Near-duplicate of interior-water-1 (different exposure).',
+    description: 'Near-duplicate of image-11 (different exposure).',
   },
 
   {
-    id: 'scale-hand-1',
+    id: 'image-49',
     filename: 'scale-hand-1.jpg',
     publicUrl: '/photos/scale-hand-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
@@ -599,7 +599,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Adult hand beside hail impact crater for scale.',
   },
   {
-    id: 'scale-keys-1',
+    id: 'image-50',
     filename: 'scale-keys-1.jpg',
     publicUrl: '/photos/scale-keys-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
@@ -609,7 +609,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Car key fob laid next to hail impact crater.',
   },
   {
-    id: 'scale-pen-1',
+    id: 'image-51',
     filename: 'scale-pen-1.jpg',
     publicUrl: '/photos/scale-pen-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
@@ -618,7 +618,7 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Ballpoint pen across a row of three hail impact craters.',
   },
   {
-    id: 'scale-callipers-1',
+    id: 'image-52',
     filename: 'scale-callipers-1.jpg',
     publicUrl: '/photos/scale-callipers-1.jpg',
     groundTruth: extend(HAIL_ROOF_SOUTH, {
@@ -629,35 +629,35 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
   },
 
   {
-    id: 'unrelated-shed-1',
+    id: 'image-53',
     filename: 'unrelated-shed-1.jpg',
     publicUrl: '/photos/unrelated-shed-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
     description: 'Backyard storage shed, undamaged.',
   },
   {
-    id: 'unrelated-playset-1',
+    id: 'image-54',
     filename: 'unrelated-playset-1.jpg',
     publicUrl: '/photos/unrelated-playset-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
     description: 'Wooden backyard playset (swing + slide), undamaged.',
   },
   {
-    id: 'unrelated-patio-furniture-1',
+    id: 'image-55',
     filename: 'unrelated-patio-furniture-1.jpg',
     publicUrl: '/photos/unrelated-patio-furniture-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
     description: 'Patio dining set (table + four chairs), undamaged.',
   },
   {
-    id: 'unrelated-hose-1',
+    id: 'image-56',
     filename: 'unrelated-hose-1.jpg',
     publicUrl: '/photos/unrelated-hose-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
     description: 'Coiled garden hose on wall-mounted reel, undamaged.',
   },
   {
-    id: 'unrelated-porch-light-1',
+    id: 'image-57',
     filename: 'unrelated-porch-light-1.jpg',
     publicUrl: '/photos/unrelated-porch-light-1.jpg',
     groundTruth: {
@@ -674,21 +674,21 @@ export const PHOTO_MANIFEST: readonly ScenarioPhoto[] = [
     description: 'Front-porch wall sconce fixture, undamaged.',
   },
   {
-    id: 'unrelated-doormat-1',
+    id: 'image-58',
     filename: 'unrelated-doormat-1.jpg',
     publicUrl: '/photos/unrelated-doormat-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
     description: 'Coir welcome mat at the front door, undamaged.',
   },
   {
-    id: 'unrelated-bird-feeder-1',
+    id: 'image-59',
     filename: 'unrelated-bird-feeder-1.jpg',
     publicUrl: '/photos/unrelated-bird-feeder-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,
     description: 'Wooden bird feeder on a garden pole, undamaged.',
   },
   {
-    id: 'unrelated-bicycle-1',
+    id: 'image-60',
     filename: 'unrelated-bicycle-1.jpg',
     publicUrl: '/photos/unrelated-bicycle-1.jpg',
     groundTruth: NA_OUT_OF_SCOPE,

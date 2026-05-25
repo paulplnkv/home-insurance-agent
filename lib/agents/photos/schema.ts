@@ -128,7 +128,7 @@ export const damageAgentOutputSchema = z.object({
         photo_id: z
           .string()
           .describe(
-            'The id from the field photo set (e.g., "roof-south-1"). Use the IDs as given.'
+            'The id from the field photo set (e.g., "image-1"). Use the IDs as given.'
           ),
         primary_classification: z
           .enum(PRIMARY_CLASSIFICATIONS)
@@ -216,7 +216,7 @@ export const damageAgentOutputSchema = z.object({
         evidence: z
           .string()
           .describe(
-            'Photo IDs and short observations supporting this zone, e.g. "roof-south-1, roof-south-2: granule loss across mid-field; impact craters consistent with hail."'
+            'Photo IDs and short observations supporting this zone, e.g. "image-1, image-2: granule loss across mid-field; impact craters consistent with hail."'
           ),
         confidence: z
           .number()
