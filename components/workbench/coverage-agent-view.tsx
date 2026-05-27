@@ -18,7 +18,7 @@ import { useAgentChat } from '@/hooks/use-agent-chat';
 
 const COVERAGE_PRE_RUN_CONTEXT = [
   'Policy in scope: PSM-HO-7842113 · HO-3 · $480,000 Coverage A',
-  'Peril: Hailstorm · Date of Loss: Apr 22, 2026',
+  'Peril: Hailstorm · Date of Loss: May 25, 2026',
   'M2 will evaluate: Coverage A, B, C, D + 3 endorsements',
   'RAG source: HO-3 Policy PDF (18 pages) loaded',
 ] as const;

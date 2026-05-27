@@ -1,0 +1,83 @@
+import { dateOffsetFromLoss } from '../claim';
+
+// Field inspection happened 4 days after loss; insured-tarp note refers
+// to the day after loss (loss + 1) — same day FNOL was filed.
+const INSPECTION_DATE = dateOffsetFromLoss(4);
+const TARP_DATE = dateOffsetFromLoss(1);
+const TARP_DATE_SHORT = TARP_DATE.slice(5).replace('-', '/');
+
+const fieldInspection = {
+  id: 'field-inspection',
+  kind: 'field_inspection_report',
+  title: 'Field Inspection Report — Independent Adjuster',
+  filename: `FieldInspection_Chen_${INSPECTION_DATE}.pdf`,
+  metadata: {
+    claim_number: 'HO-2026-04-04217',
+    inspector_name: 'Greg Tomlin',
+    inspector_firm: 'North Texas Independent Adjusters',
+    inspector_license: 'TX-AA-77321',
+    inspection_date: INSPECTION_DATE,
+    inspection_time: '10:30 CDT',
+    weather_at_inspection: 'Sunny, 78F, light wind',
+    property_address: '4521 Oak Ridge Dr, Plano TX 75024',
+    insured_present: true,
+    ladder_assist_used: true,
+    drone_imagery_collected: true,
+  },
+  summary:
+    'Property is a one-story brick veneer single-family residence with composite asphalt shingle roof, four roof slopes (north, south, east, west), aluminum gutters and downspouts, and one fixed kitchen skylight on the south slope. Inspection scope was limited to the south slope of the roof, the front (south-facing) gutter run, the kitchen skylight assembly, and the interior ceiling beneath the skylight. Hail impact damage of moderate severity was confirmed on the south slope only. The west, north, and east slopes show isolated impacts within tolerance and do not appear to require replacement at this time. Recommend slope-by-slope repair, not full roof replacement.',
+  scope_of_inspection: [
+    'Roof — south slope (full ladder assist + drone)',
+    "Roof — west slope (drone only, isolated review at insured's request — see notes)",
+    'Front aluminum gutter run (south side)',
+    'Kitchen skylight assembly',
+    'Interior ceiling beneath skylight (kitchen)',
+  ],
+  explicitly_out_of_scope: [
+    'North slope — no reported damage, no inspection performed',
+    'East slope — no reported damage, no inspection performed',
+    'Rear gutter & downspout runs — no impact reported and ground review showed no denting',
+    'Other interior rooms — no reported water intrusion at time of inspection',
+  ],
+  findings: [
+    {
+      zone: 'roof_south_slope',
+      severity: 'moderate',
+      observations:
+        'Approximately 14 hail impacts per 10x10 test square. Granule loss visible across the mid-field. Several mat-fractured shingles. Damage is consistent with a hail event in the 1.0"–1.5" diameter range. Damage limited to the south slope.',
+      recommended_repair:
+        'Slope-only replacement (south). Approximately 12 squares of composition shingle, underlayment, and flashing as required.',
+    },
+    {
+      zone: 'roof_west_slope',
+      severity: 'minor',
+      observations:
+        'Drone imagery shows scattered isolated impacts but no systemic granule loss or mat damage. Test square count below replacement threshold (4 impacts per 10x10). Slope is serviceable.',
+      recommended_repair: 'No repair recommended. Continue normal maintenance.',
+    },
+    {
+      zone: 'gutter_front',
+      severity: 'moderate',
+      observations:
+        'Front aluminum gutter run shows hail denting along approximately 24 linear feet. Not pierced; cosmetic and slight functional impact (pooling).',
+      recommended_repair:
+        'Replace front gutter run only (approx. 24 LF). Rear gutter not affected.',
+    },
+    {
+      zone: 'skylight_kitchen',
+      severity: 'major',
+      observations: `Kitchen skylight glazing cracked. Interior seal compromised. Active water staining on kitchen ceiling beneath unit (approx. 8 sq ft). Insured states a roofer placed a tarp on ${TARP_DATE_SHORT}.`,
+      recommended_repair:
+        'Replace skylight unit and flashing kit. R&R drywall and paint approximately 96 SF of kitchen ceiling.',
+    },
+  ],
+  scope_recommendation:
+    "The damage observed supports south-slope replacement, front gutter run replacement, skylight replacement, and limited interior drywall repair. The contractor's bid for full-roof replacement is not supported by the field findings on the west, north, or east slopes.",
+  signature_block: {
+    signed_by: 'Greg Tomlin, AIC',
+    signed_title: 'Independent Field Adjuster',
+    signed_date: INSPECTION_DATE,
+  },
+} as const;
+
+export default fieldInspection;

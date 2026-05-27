@@ -1,8 +1,10 @@
 'use client';
 
-import { DownloadIcon } from 'lucide-react';
+import { DownloadIcon, Loader2Icon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Shimmer } from '@/components/ai-elements/shimmer';
 import { PageCard } from '@/components/workbench/agent-page';
 import { CLAIM, formatCurrency } from '@/lib/scenario/claim';
@@ -37,6 +39,12 @@ function moneyCents(n: number): string {
 function moneyWhole(n: number): string {
   return formatCurrency(n);
 }
+
+const PLACEHOLDER = '—';
+const showMoney = (sent: boolean, n: number): string =>
+  sent ? moneyCents(n) : PLACEHOLDER;
+const showQty = (sent: boolean, n: number): string =>
+  sent ? n.toFixed(2) : PLACEHOLDER;
 
 // Filter the streamed line items to those that are fully formed enough
 // to price. The model emits partial tokens during streaming — selector
@@ -80,6 +88,28 @@ export function XactimateOutput({
     isStreaming && priced.line_count < Math.max(streamedCount, 4);
 
   const [view, setView] = useState<'sheet' | 'xml'>('sheet');
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  const handleSend = () => {
+    if (sending || sent) return;
+    setSending(true);
+    toast.promise(
+      new Promise<void>((resolve) => setTimeout(resolve, 2500)),
+      {
+        loading: 'Sending to Xactimate…',
+        success: () => {
+          setSent(true);
+          setSending(false);
+          return 'Sent to Xactimate.';
+        },
+        error: () => {
+          setSending(false);
+          return 'Failed to send to Xactimate.';
+        },
+      },
+    );
+  };
 
   return (
     <PageCard>
@@ -94,7 +124,26 @@ export function XactimateOutput({
               </Shimmer>
             ) : null}
           </h3>
-          {priced.line_count > 0 ? <DownloadLink xml={xml} /> : null}
+          <div className="flex items-center gap-2">
+            {priced.line_count > 0 ? <DownloadLink xml={xml} /> : null}
+            <Button size="sm" variant="outline" disabled={sending}>
+              Edit
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleSend}
+              disabled={sending || sent || priced.line_count === 0}
+            >
+              {sending ? (
+                <>
+                  <Loader2Icon className="size-4 animate-spin" />
+                  Sending…
+                </>
+              ) : (
+                'Send'
+              )}
+            </Button>
+          </div>
         </div>
 
         {priced.line_count === 0 ? (
@@ -142,7 +191,7 @@ export function XactimateOutput({
 
             <div className="mt-4">
               {view === 'sheet' ? (
-                <EstimateSheet priced={priced} />
+                <EstimateSheet priced={priced} sent={sent} />
               ) : (
                 <XmlView xml={xml} isStreaming={isStreaming} />
               )}
@@ -154,7 +203,13 @@ export function XactimateOutput({
   );
 }
 
-function EstimateSheet({ priced }: { priced: PricedEstimate }) {
+function EstimateSheet({
+  priced,
+  sent,
+}: {
+  priced: PricedEstimate;
+  sent: boolean;
+}) {
   const { rooms, summary } = priced;
   return (
     <div className="flex flex-col gap-4">
@@ -173,7 +228,7 @@ function EstimateSheet({ priced }: { priced: PricedEstimate }) {
               </code>
             </div>
             <span className="text-base tabular-nums text-[var(--ink)]">
-              Subtotal: {moneyCents(room.subtotal_rcv)}
+              Subtotal: {showMoney(sent, room.subtotal_rcv)}
             </span>
           </div>
           <table className="w-full text-sm">
@@ -212,16 +267,16 @@ function EstimateSheet({ priced }: { priced: PricedEstimate }) {
                     {li.catalog.description}
                   </td>
                   <td className="px-3 py-4 text-right tabular-nums text-[var(--ink)]">
-                    {li.quantity.toFixed(2)}
+                    {showQty(sent, li.quantity)}
                   </td>
                   <td className="px-3 py-4 text-right text-[var(--ink)]">
                     {li.catalog.unit}
                   </td>
                   <td className="px-3 py-4 text-right tabular-nums text-[var(--ink)]">
-                    {moneyCents(li.catalog.unit_price)}
+                    {showMoney(sent, li.catalog.unit_price)}
                   </td>
                   <td className="px-3 py-4 text-right tabular-nums font-medium text-[var(--ink)]">
-                    {moneyCents(li.rcv)}
+                    {showMoney(sent, li.rcv)}
                   </td>
                 </tr>
               ))}
@@ -230,35 +285,44 @@ function EstimateSheet({ priced }: { priced: PricedEstimate }) {
         </div>
       ))}
 
-      <SummaryTable summary={summary} />
+      <SummaryTable summary={summary} sent={sent} />
     </div>
   );
 }
 
-function SummaryTable({ summary }: { summary: PricedEstimate['summary'] }) {
+function SummaryTable({
+  summary,
+  sent,
+}: {
+  summary: PricedEstimate['summary'];
+  sent: boolean;
+}) {
   const rows: Array<{ label: string; value: string; emphasis?: boolean }> = [
-    { label: 'Line items subtotal (RCV)', value: moneyCents(summary.subtotal_rcv) },
-    { label: 'Sales tax (8.25%)', value: moneyCents(summary.sales_tax) },
-    { label: 'Overhead (10%)', value: moneyCents(summary.overhead) },
-    { label: 'Profit (10%)', value: moneyCents(summary.profit) },
+    { label: 'Line items subtotal (RCV)', value: showMoney(sent, summary.subtotal_rcv) },
+    { label: 'Sales tax (8.25%)', value: showMoney(sent, summary.sales_tax) },
+    { label: 'Overhead (10%)', value: showMoney(sent, summary.overhead) },
+    { label: 'Profit (10%)', value: showMoney(sent, summary.profit) },
     {
       label: 'Replacement cost (RCV)',
-      value: moneyCents(summary.total_rcv),
+      value: showMoney(sent, summary.total_rcv),
       emphasis: true,
     },
-    { label: 'Depreciation', value: `−${moneyCents(summary.total_depreciation)}` },
+    {
+      label: 'Depreciation',
+      value: sent ? `−${moneyCents(summary.total_depreciation)}` : PLACEHOLDER,
+    },
     {
       label: 'Actual cash value (ACV)',
-      value: moneyCents(summary.acv),
+      value: showMoney(sent, summary.acv),
       emphasis: true,
     },
     {
       label: `Deductible (greater of AOP ${moneyWhole(CLAIM.policy.deductibles.aop_standard)} / Wind-Hail 2% of ${moneyWhole(CLAIM.policy.coverage_a_dwelling)})`,
-      value: `−${moneyCents(summary.deductible)}`,
+      value: sent ? `−${moneyCents(summary.deductible)}` : PLACEHOLDER,
     },
     {
       label: 'Net claim payable',
-      value: moneyCents(summary.net_claim),
+      value: showMoney(sent, summary.net_claim),
       emphasis: true,
     },
   ];

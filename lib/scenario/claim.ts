@@ -36,12 +36,12 @@ export const CLAIM = {
   },
   loss: {
     peril: 'Hailstorm',
-    date_of_loss: '2026-04-22',
-    fnol_filed_at: '2026-04-23T14:14:00-05:00',
+    date_of_loss: '2026-05-25',
+    fnol_filed_at: '2026-05-26T14:14:00-05:00',
     location_state: 'TX',
     description:
-      'Severe hailstorm with reported 1.75" stones swept across Collin County the afternoon of April 22. Insured reports impact dents across roof shingles, bent gutters on the north elevation, and cracked skylight glass.',
-    cat_event: 'TX Hail Event Apr 2026 · CAT-2026-022',
+      'Severe hailstorm with reported 1.75" stones swept across Collin County the afternoon of May 25. Insured reports impact dents across roof shingles, bent gutters on the north elevation, and cracked skylight glass.',
+    cat_event: 'TX Hail Event May 2026 · CAT-2026-031',
   },
   adjuster: {
     name: 'Maria Wells',
@@ -82,8 +82,3 @@ export function formatDateTime(iso: string): string {
   })}`;
 }
 
-export function daysSince(iso: string): number {
-  const start = new Date(iso).getTime();
-  const ms = Date.now() - start;
-  return Math.max(0, Math.floor(ms / (1000 * 60 * 60 * 24)));
-}

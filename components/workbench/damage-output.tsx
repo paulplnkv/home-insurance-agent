@@ -3,6 +3,7 @@
 import { Fragment } from 'react';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Shimmer } from '@/components/ai-elements/shimmer';
 import { PageCard } from '@/components/workbench/agent-page';
 import { XactimateOutput } from '@/components/workbench/xactimate-output';
@@ -154,15 +155,23 @@ export function DamageOutput({
         </div>
       </PageCard>
 
-      <PageCard>
-        <h3 className="font-heading pb-4 text-xl font-semibold text-[var(--ink)]">
-          Damage manifest ({zones.length})
-          {isStreaming && zones.length === 0 ? (
-            <Shimmer className="ml-2 text-sm font-normal normal-case tracking-normal">
-              grouping zones…
-            </Shimmer>
-          ) : null}
-        </h3>
+      <PageCard className="flex flex-col gap-4">
+        <div className="flex items-center justify-between gap-4">
+          <h3 className="font-heading text-xl font-semibold text-[var(--ink)]">
+            Damage manifest ({zones.length})
+            {isStreaming && zones.length === 0 ? (
+              <Shimmer className="ml-2 text-sm font-normal normal-case tracking-normal">
+                grouping zones…
+              </Shimmer>
+            ) : null}
+          </h3>
+          <div className="flex items-center gap-2">
+            <Button size="sm" variant="outline">
+              Edit
+            </Button>
+            <Button size="sm">Save</Button>
+          </div>
+        </div>
         <ZoneManifest zones={zones} />
       </PageCard>
 

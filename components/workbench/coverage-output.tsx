@@ -66,7 +66,7 @@ Just to clarify the deductible position on this claim:
 
 Under the base HO-3 policy, the All Other Perils deductible is $1,000. Your policy also carries endorsement HE-7 (Wind/Hail Percentage Deductible §6), which applies whenever the loss is caused by wind or hail.
 
-Because the April 22 loss is a hailstorm, HE-7 §6 controls — and the wind/hail deductible is 2% of the Coverage A dwelling limit of $480,000, which equals $9,600.
+Because the May 25 loss is a hailstorm, HE-7 §6 controls — and the wind/hail deductible is 2% of the Coverage A dwelling limit of $480,000, which equals $9,600.
 
 If this had been a non-wind/hail peril, the standard $1,000 deductible would have applied instead.
 

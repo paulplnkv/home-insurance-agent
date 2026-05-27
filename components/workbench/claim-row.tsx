@@ -5,24 +5,13 @@ import { useRouter } from 'next/navigation';
 import { DashboardAiStatusCell } from '@/components/workbench/dashboard-ai-status-cell';
 import { StatusBadge } from '@/components/workbench/status-badge';
 import { formatCurrency, formatDate } from '@/lib/scenario/claim';
-import { type ClaimSummary } from '@/lib/scenario/dashboard-claims';
+import { daysSinceLoss, type ClaimSummary } from '@/lib/scenario/dashboard-claims';
 import { cn } from '@/lib/utils';
-
-function pseudoDaysOpen(claimNumber: string): number {
-  let h = 0;
-  for (let i = 0; i < claimNumber.length; i++) {
-    h = (h * 31 + claimNumber.charCodeAt(i)) | 0;
-  }
-  return (Math.abs(h) % 8) + 1;
-}
 
 export function ClaimRow({ claim }: { claim: ClaimSummary }) {
   const router = useRouter();
   const detailHref = `/claims/${claim.claim_number}`;
-  const days =
-    claim.is_real || claim.status === 'Open'
-      ? 1
-      : pseudoDaysOpen(claim.claim_number);
+  const days = daysSinceLoss(claim.date_of_loss);
 
   const navigate = () => {
     if (claim.is_real) router.push(detailHref);

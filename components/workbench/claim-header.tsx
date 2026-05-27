@@ -2,7 +2,8 @@ import { AlertTriangleIcon, MailIcon, PhoneIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ConsistencyCheckBadge } from './consistency-check-badge';
 import { StatusBadge } from './status-badge';
-import { CLAIM, daysSince, formatDate, formatDateTime } from '@/lib/scenario/claim';
+import { CLAIM, formatDate, formatDateTime } from '@/lib/scenario/claim';
+import { daysSinceLoss } from '@/lib/scenario/dashboard-claims';
 
 function initials(name: string): string {
   return name
@@ -88,7 +89,7 @@ function AdjusterCard() {
 }
 
 export function ClaimStatsBar() {
-  const open = daysSince(CLAIM.loss.fnol_filed_at);
+  const open = daysSinceLoss(CLAIM.loss.date_of_loss);
   const reportedVia = (
     <>
       <span>{CLAIM.insured.preferred_contact}</span>
