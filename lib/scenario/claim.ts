@@ -82,3 +82,41 @@ export function formatDateTime(iso: string): string {
   })}`;
 }
 
+const LOSS_TZ_OFFSET = '-05:00';
+
+function ordinalSuffix(n: number): string {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return s[(v - 20) % 10] ?? s[v] ?? s[0];
+}
+
+export function dateOffsetFromLoss(offsetDays: number): string {
+  const [y, m, d] = CLAIM.loss.date_of_loss.split('-').map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d + offsetDays));
+  const yy = dt.getUTCFullYear();
+  const mm = String(dt.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(dt.getUTCDate()).padStart(2, '0');
+  return `${yy}-${mm}-${dd}`;
+}
+
+export function timestampOffsetFromLoss(
+  offsetDays: number,
+  time: string,
+): string {
+  return `${dateOffsetFromLoss(offsetDays)}T${time}${LOSS_TZ_OFFSET}`;
+}
+
+export function lossDateUsSlash(): string {
+  const [y, m, d] = CLAIM.loss.date_of_loss.split('-');
+  return `${m}/${d}/${y}`;
+}
+
+export function lossDateMonthOrdinal(): string {
+  const [y, m, d] = CLAIM.loss.date_of_loss.split('-').map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  const month = dt
+    .toLocaleString('en-US', { month: 'long', timeZone: 'UTC' })
+    .toLowerCase();
+  return `${month} ${d}${ordinalSuffix(d)}`;
+}
+
