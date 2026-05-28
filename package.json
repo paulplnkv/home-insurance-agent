@@ -10,7 +10,8 @@
     "index-policy": "node --env-file=.env.local --import tsx scripts/index-policy.ts",
     "inspect-chunks": "tsx scripts/inspect-chunks.ts",
     "generate-photos": "node --env-file=.env.local --import tsx scripts/generate-photos.ts",
-    "generate-pdfs": "tsx scripts/generate-pdfs.tsx"
+    "generate-pdfs": "tsx scripts/generate-pdfs.tsx",
+    "optimize-photos": "tsx scripts/optimize-photos.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.78",
@@ -58,6 +59,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5"

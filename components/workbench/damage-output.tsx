@@ -142,6 +142,7 @@ export function DamageOutput({
             byId={byId}
             streaming={isStreaming}
             isOutOfScope={false}
+            eagerCount={8}
           />
           {outOfScope.length > 0 ? (
             <PhotoSection
@@ -150,6 +151,7 @@ export function DamageOutput({
               byId={byId}
               streaming={isStreaming}
               isOutOfScope
+              eagerCount={0}
             />
           ) : null}
         </div>
@@ -193,12 +195,14 @@ function PhotoSection({
   byId,
   streaming,
   isOutOfScope,
+  eagerCount,
 }: {
   heading: string;
   photos: (typeof PHOTO_MANIFEST)[number][];
   byId: Map<string, NonNullable<StreamingDamage['classifications']>[number]>;
   streaming: boolean;
   isOutOfScope: boolean;
+  eagerCount: number;
 }) {
   return (
     <section className="flex flex-col gap-4">
@@ -206,13 +210,14 @@ function PhotoSection({
         {heading}
       </h3>
       <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-        {photos.map((p) => (
+        {photos.map((p, i) => (
           <li key={p.id} className="contents">
             <PhotoCard
               photo={p}
               classification={byId.get(p.id)}
               streaming={streaming}
               isOutOfScope={isOutOfScope}
+              eager={i < eagerCount}
             />
           </li>
         ))}
@@ -226,6 +231,7 @@ function PhotoCard({
   classification,
   streaming,
   isOutOfScope,
+  eager,
 }: {
   photo: (typeof PHOTO_MANIFEST)[number];
   classification:
@@ -233,6 +239,7 @@ function PhotoCard({
     | undefined;
   streaming: boolean;
   isOutOfScope: boolean;
+  eager: boolean;
 }) {
   return (
     <PhotoDetailDialog
@@ -262,6 +269,9 @@ function PhotoCard({
           alt={photo.id}
           fill
           sizes="(max-width: 768px) 50vw, 25vw"
+          quality={75}
+          priority={eager}
+          fetchPriority={eager ? 'high' : 'auto'}
           className="object-cover"
         />
       </div>
