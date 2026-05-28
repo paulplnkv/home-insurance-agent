@@ -142,7 +142,7 @@ export function DamageOutput({
             byId={byId}
             streaming={isStreaming}
             isOutOfScope={false}
-            eagerCount={8}
+            eagerCount={2}
           />
           {outOfScope.length > 0 ? (
             <PhotoSection

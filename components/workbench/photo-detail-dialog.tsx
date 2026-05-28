@@ -113,7 +113,6 @@ export function PhotoDetailDialog({
             fill
             sizes="(max-width: 768px) 90vw, 720px"
             className="object-contain"
-            priority
           />
         </div>
 
